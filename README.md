@@ -1,34 +1,36 @@
-**AltoRouter is an alternative router to PHP-Router, also lightning fast and flexible. 
-AltoRouter is heavily inspired by [klein.php](https://github.com/chriso/klein.php/).
+# AltoRouter 
+AltoRouter is a small but powerful routing class for PHP 5.3+, heavily inspired by [klein.php](https://github.com/chriso/klein.php/).
 
-* Flexible regular expression routing (inspired by [Sinatra](http://www.sinatrarb.com/))
+* Dynamic routing with named parameters
 * Reversed routing
-* Named parameter in routes
+* Flexible regular expression routing (inspired by [Sinatra](http://www.sinatrarb.com/))
 
 ## Getting started
 
 1. PHP 5.3.x is required
 2. Setup URL rewriting so that all requests are handled by **index.php**
-3. Include AltoRouter, map your routes and match a request.
-4. Have a look at the supplied example file (index.php).
-
-
+3. Create an instance of AltoRouter, map your routes and match a request.
+4. Have a look at the supplied example file for a better understanding on how to use AltoRouter(index.php).
 
 ## Routing
 ```php
 $router = new AltoRouter();
 $router->setBasePath('/AltoRouter');
+
+// mapping routes
 $router->map('GET|POST','/', 'home#index', array('name' => 'home'));
 $router->map('GET','/users/', array('c' => 'UserController', 'a' => 'ListAction'));
 $router->map('GET','/users/[i:id]', 'users#show', array('name' => 'users_show'));
 $router->map('POST','/users/[i:id]/[delete|update:action]', 'usersController#doAction', array('name' => 'users_do'));
 
+
+// reversed routing
+$router->generate('users_show', array('id' => 5));
+
 ```
 
 You can use the following limits on your named parameters. AltoRouter will create the correct regexes.
 ```php
-Some examples
-
     *                    // Match all request URIs
     [i]                  // Match an integer
     [i:id]               // Match an integer as 'id'
@@ -48,6 +50,9 @@ Some more complicated examples
     /[:controller]?/[:action]? // Matches the typical /controller/action format
 
 ```
+
+## Additional info
+If you like AltoRouter, you might also like [PHP Router](//github.com/dannyvankooten/PHP-Router).
 
 ## License
 
