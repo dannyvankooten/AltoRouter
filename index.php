@@ -4,10 +4,10 @@ require 'AltoRouter.php';
 
 $router = new AltoRouter();
 $router->setBasePath('/AltoRouter');
-$router->map('GET|POST','/', 'home#index', array('name' => 'home'));
+$router->map('GET|POST','/', 'home#index', 'home');
 $router->map('GET','/users/', array('c' => 'UserController', 'a' => 'ListAction'));
-$router->map('GET','/users/[i:id]', 'users#show', array('name' => 'users_show'));
-$router->map('POST','/users/[i:id]/[delete|update:action]', 'usersController#doAction', array('name' => 'users_do'));
+$router->map('GET','/users/[i:id]', 'users#show', 'users_show');
+$router->map('POST','/users/[i:id]/[delete|update:action]', 'usersController#doAction', 'users_do');
 
 // match current request
 $match = $router->match();
@@ -18,6 +18,7 @@ $match = $router->match();
 <pre>
 	Target: <?php var_dump($match['target']); ?>
 	Params: <?php var_dump($match['params']); ?>
+	Name: 	<?php var_dump($match['name']); ?>
 </pre>
 
 <h3>Try these requests: </h3>

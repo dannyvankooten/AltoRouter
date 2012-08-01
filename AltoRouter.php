@@ -11,13 +11,19 @@ class AltoRouter {
 	/**
 	* Map a route to a target
 	*/
-	public function map($method, $route, $target, array $args = array()) {
+	public function map($method, $route, $target, $name = null) {
 		
 		$route = $this->basePath . $route;
-		$this->routes[] = array($method, $route, $target);
+
+		$this->routes[] = array($method, $route, $target, $name);
 		
-		if(isset($args['name'])) {
-			$this->namedRoutes[$args['name']] = $route;
+		if($name) {
+			if(isset($this->namedRoutes[$name])) { 
+				throw new \Exception("Can not redeclare route '{$name}'"); 
+			} else {
+				$this->namedRoutes[$name] = $route;
+			}
+			
 		}
 	}
 
@@ -58,6 +64,9 @@ class AltoRouter {
 	*/
 	public function match($requestUrl = null, $requestMethod = null) {
 
+		$params = array();
+		$match = false;
+
 		// set Request Url if it isn't passed as parameter
 		if($requestUrl === null) {
 			$requestUrl = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '/';
@@ -78,7 +87,7 @@ class AltoRouter {
     	$_REQUEST = array_merge($_GET, $_POST);
 
     	foreach($this->routes as $handler) {
-    		list($method, $_route, $target) = $handler;
+    		list($method, $_route, $target, $name) = $handler;
 
     		$methods = explode('|', $method);
     		$method_match = false;
@@ -131,15 +140,18 @@ class AltoRouter {
 
       		
 
-      		if(isset($match) && $match > 0) {
+      		if(($match == true || $match > 0)) {
+      			
       			if($params) {
       				foreach($params as $key => $value) {
       					if(is_numeric($key)) unset($params[$key]);
       				}
       			}
+
       			return array(
       				'target' => $target,
-      				'params' => $params
+      				'params' => $params,
+      				'name' => $name
       			);
       		}
 
