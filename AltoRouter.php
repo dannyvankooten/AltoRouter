@@ -65,8 +65,14 @@ class AltoRouter {
 			foreach($matches as $match) {
 				list($block, $pre, $type, $param, $optional) = $match;
 
+				if ($pre) {
+					$block = substr($block, 1);
+				}
+
 				if(isset($params[$param])) {
-					$url = str_replace(substr($block,1), $params[$param], $url);
+					$url = str_replace($block, $params[$param], $url);
+				} elseif ($optional) {
+					$url = str_replace($block, '', $url);
 				}
 			}
 			
