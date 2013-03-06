@@ -23,18 +23,18 @@ class AltoRouter {
 	*
 	*/
 	public function map($method, $route, $target, $name = null) {
-		
+
 		$route = $this->basePath . $route;
 
 		$this->routes[] = array($method, $route, $target, $name);
-		
+
 		if($name) {
-			if(isset($this->namedRoutes[$name])) { 
-				throw new \Exception("Can not redeclare route '{$name}'"); 
+			if(isset($this->namedRoutes[$name])) {
+				throw new \Exception("Can not redeclare route '{$name}'");
 			} else {
 				$this->namedRoutes[$name] = $route;
 			}
-			
+
 		}
 
 		return;
@@ -61,7 +61,7 @@ class AltoRouter {
 		$url = $route;
 
 		if (preg_match_all('`(/|\.|)\[([^:\]]*+)(?::([^:\]]*+))?\](\?|)`', $route, $matches, PREG_SET_ORDER)) {
-			
+
 			foreach($matches as $match) {
 				list($block, $pre, $type, $param, $optional) = $match;
 
@@ -75,7 +75,7 @@ class AltoRouter {
 					$url = str_replace($block, '', $url);
 				}
 			}
-			
+
 
 		}
 
