@@ -1,0 +1,23 @@
+{
+   "name": "niahoo/altorouter",
+   "description": "A lightning fast router for PHP",
+   "keywords": ["router", "routing", "lightweight"],
+   "homepage": "https://github.com/niahoo/AltoRouter",
+   "authors": [
+      {
+         "name": "Danny van Kooten",
+         "email": "dannyvankooten@gmail.com",
+         "homepage": "http://dannyvankooten.com/"
+      },
+      {
+         "name": "niahoo",
+         "email": "dev@ooha.in"
+      }
+   ],
+   "require": {
+      "php": ">=5.3.0"
+   },
+   "autoload": {
+      "files": ["AltoRouter.php"]
+   }
+}
