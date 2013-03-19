@@ -3,11 +3,13 @@
 require 'AltoRouter.php';
 
 $router = new AltoRouter();
-$router->setBasePath('/AltoRouter');
+$router->setBasePath('/php-projects/AltoRouter');
 $router->map('GET|POST','/', 'home#index', 'home');
 $router->map('GET','/users/', array('c' => 'UserController', 'a' => 'ListAction'));
 $router->map('GET','/users/[i:id]', 'users#show', 'users_show');
 $router->map('POST','/users/[i:id]/[delete|update:action]', 'usersController#doAction', 'users_do');
+$router->map('GET','/error/', 'whatever');
+$router->map('GET','/error/[i:code]/', 'whatever');
 
 // match current request
 $match = $router->match();
