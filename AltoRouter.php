@@ -23,7 +23,7 @@ class AltoRouter {
 	 * @param string $name Optional name of this route. Supply if you want to reverse route this url in your application.
 	 *
 	 */
-	public function map($method, $route, $target, $name = null) {
+	public function map($method, $route, $target = null, $name = null) {
 
 		$route = $this->basePath . $route;
 
