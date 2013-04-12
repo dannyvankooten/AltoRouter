@@ -27,6 +27,11 @@ $router->map('POST','/users/[i:id]/[delete|update:action]', 'usersController#doA
 // reversed routing
 $router->generate('users_show', array('id' => 5));
 
+
+// matching routes
+$match = $router->match(); // match against server request uri/method
+$match = $router->match('/', 'GET');
+
 ```
 
 You can use the following limits on your named parameters. AltoRouter will create the correct regexes.
