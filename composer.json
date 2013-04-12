@@ -1,8 +1,8 @@
 {
-   "name": "niahoo/altorouter",
+   "name": "dannyvankooten/altorouter",
    "description": "A lightning fast router for PHP",
    "keywords": ["router", "routing", "lightweight"],
-   "homepage": "https://github.com/niahoo/AltoRouter",
+   "homepage": "https://github.com/dannyvankooten/AltoRouter",
    "authors": [
       {
          "name": "Danny van Kooten",
