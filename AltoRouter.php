@@ -11,7 +11,7 @@ class AltoRouter {
 	 * Useful if you are running your application from a subdirectory.
 	 */
 	public function setBasePath($basePath) {
-		$this->basePath = $basePath;
+		$this->basePath = rtrim($basePath, '/');
 	}
 
 	/**
