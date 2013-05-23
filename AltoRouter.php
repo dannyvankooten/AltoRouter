@@ -25,7 +25,9 @@ class AltoRouter {
 	 */
 	public function map($method, $route, $target, $name = null) {
 
-		$route = $this->basePath . $route;
+		if($route != '*') {
+			$route = $this->basePath . $route;
+		}
 
 		$this->routes[] = array($method, $route, $target, $name);
 
