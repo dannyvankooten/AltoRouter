@@ -2,9 +2,9 @@
 
 class AltoRouter {
 
-	private $routes = array();
-	private $namedRoutes = array();
-	private $basePath = '';
+	protected $routes = array();
+	protected $namedRoutes = array();
+	protected $basePath = '';
 
 	/**
 	 * Set the base path.
@@ -73,7 +73,7 @@ class AltoRouter {
 				if(isset($params[$param])) {
 					$url = str_replace($block, $params[$param], $url);
 				} elseif ($optional) {
-					$url = str_replace($block, '', $url);
+					$url = str_replace($pre . $block, '', $url);
 				}
 			}
 
