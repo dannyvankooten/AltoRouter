@@ -3,6 +3,7 @@
    "description": "A lightning fast router for PHP",
    "keywords": ["router", "routing", "lightweight"],
    "homepage": "https://github.com/dannyvankooten/AltoRouter",
+   "license": "MIT",
    "authors": [
       {
          "name": "Danny van Kooten",
