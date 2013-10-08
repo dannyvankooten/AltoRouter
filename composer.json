@@ -24,6 +24,5 @@
    },
    "autoload": {
       "classmap": ["AltoRouter.php"]
-   },
-   "license" : "MIT"
+   }
 }
