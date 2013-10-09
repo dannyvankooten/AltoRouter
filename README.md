@@ -8,7 +8,7 @@ AltoRouter is a small but powerful routing class for PHP 5.3+, heavily inspired 
 ## Getting started
 
 1. PHP 5.3.x is required
-2. Setup URL rewriting so that all requests are handled by **index.php**
+2. Setup [URL rewriting so that all requests](https://gist.github.com/chriso/874000) are handled by **index.php**
 3. Create an instance of AltoRouter, map your routes and match a request.
 4. Have a look at the supplied example file for a better understanding on how to use AltoRouter(index.php).
 
@@ -26,6 +26,9 @@ $router->map('POST','/users/[i:id]/[delete|update:action]', 'usersController#doA
 
 // reversed routing
 $router->generate('users_show', array('id' => 5));
+
+// Match the current request.
+$match = $router->match();
 
 ```
 
