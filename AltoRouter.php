@@ -25,10 +25,6 @@ class AltoRouter {
 	 */
 	public function map($method, $route, $target, $name = null) {
 
-		if($route != '*') {
-			$route = $this->basePath . $route;
-		}
-
 		$this->routes[] = array($method, $route, $target, $name);
 
 		if($name) {
@@ -61,7 +57,9 @@ class AltoRouter {
 
 		// Replace named parameters
 		$route = $this->namedRoutes[$routeName];
-		$url = $route;
+		
+		// prepend base path to route url again
+		$url = $this->basePath . $route;
 
 		if (preg_match_all('`(/|\.|)\[([^:\]]*+)(?::([^:\]]*+))?\](\?|)`', $route, $matches, PREG_SET_ORDER)) {
 
@@ -100,6 +98,9 @@ class AltoRouter {
 		if($requestUrl === null) {
 			$requestUrl = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '/';
 		}
+
+		// strip base path from request url
+		$requestUrl = substr($requestUrl, strlen($this->basePath));
 
 		// Strip query string (?a=b) from Request Url
 		if (($strpos = strpos($requestUrl, '?')) !== false) {
