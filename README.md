@@ -4,32 +4,33 @@ AltoRouter is a small but powerful routing class for PHP 5.3+, heavily inspired 
 * Dynamic routing with named parameters
 * Reversed routing
 * Flexible regular expression routing (inspired by [Sinatra](http://www.sinatrarb.com/))
+* Custom regexes
 
 ## Getting started
 
 1. PHP 5.3.x is required
+2. Install AltoRouter using Composer or manually
 2. Setup URL rewriting so that all requests are handled by **index.php**
 3. Create an instance of AltoRouter, map your routes and match a request.
-4. Have a look at the supplied example file for a better understanding on how to use AltoRouter(index.php).
+4. Have a look at the example `index.php` file for a better understanding on how to use AltoRouter(index.php).
 
 ## Routing
 ```php
 $router = new AltoRouter();
-$router->setBasePath('/AltoRouter');
+$router->setBasePath('/AltoRouter'); // (optional) the subdir AltoRouter lives in
 
 // mapping routes
 $router->map('GET|POST','/', 'home#index', 'home');
-$router->map('GET','/users/', array('c' => 'UserController', 'a' => 'ListAction'));
+$router->map('GET','/users', array('c' => 'UserController', 'a' => 'ListAction'));
 $router->map('GET','/users/[i:id]', 'users#show', 'users_show');
 $router->map('POST','/users/[i:id]/[delete|update:action]', 'usersController#doAction', 'users_do');
-
 
 // reversed routing
 $router->generate('users_show', array('id' => 5));
 
 ```
 
-You can use the following limits on your named parameters. AltoRouter will create the correct regexes.
+You can use the following limits on your named parameters. AltoRouter will create the correct regexes for you.
 ```php
     *                    // Match all request URIs
     [i]                  // Match an integer
@@ -44,21 +45,24 @@ You can use the following limits on your named parameters. AltoRouter will creat
     .[:format]?          // Match an optional parameter 'format' - a / or . before the block is also optional
 
 Some more complicated examples
-
+    @/(?[A-Za-z]{2}_[A-Za-z]{2})$ // custom regex, matches language codes like "en_us" etc.
     /posts/[*:title][i:id]     // Matches "/posts/this-is-a-title-123"
     /output.[xml|json:format]? // Matches "/output", "output.xml", "output.json"
     /[:controller]?/[:action]? // Matches the typical /controller/action format
 
 ```
 
-## Additional info
-If you like AltoRouter, you might also like [PHP Router](//github.com/dannyvankooten/PHP-Router).
+## Contributors
+- [Danny van Kooten](https://github.com/dannyvankooten)
+- [Koen Punt](https://github.com/koenpunt)
+- [John Long](https://github.com/adduc)
+- [Niahoo Osef](https://github.com/niahoo)
 
 ## License
 
 (MIT License)
 
-Copyright (c) 2012-2013 Danny van Kooten <dannyvankooten@gmail.com>
+Copyright (c) 2012-2013 Danny van Kooten <hi@dannyvankooten.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
