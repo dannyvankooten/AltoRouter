@@ -7,6 +7,19 @@ class AltoRouter {
 	protected $basePath = '';
 
 	/**
+	  * Create router in one call from config.
+	  *
+	  * @param array $routes
+	  * @param string $basePath
+	  */
+	public function __construct( $routes = array(), $basePath = '' ) {
+		$this->basePath = $basePath;
+		foreach( $routes as $route ) {
+			call_user_func_array(array($this,'map'),$route);
+		}
+	}
+
+	/**
 	 * Set the base path.
 	 * Useful if you are running your application from a subdirectory.
 	 */
