@@ -9,12 +9,12 @@ class AltoRouter {
 	/**
 	  * Create router in one call from config.
 	  *
-	  * @param array $arRoute
+	  * @param array $routes
 	  * @param string $basePath
 	  */
-	public function __construct( $arRoute = array(), $basePath = '' ) {
+	public function __construct( $routes = array(), $basePath = '' ) {
 		$this->basePath = $basePath;
-		foreach( $arRoute as $route ) {
+		foreach( $routes as $route ) {
 			call_user_func_array(array($this,'map'),$route);
 		}
 	}
