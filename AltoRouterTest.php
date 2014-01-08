@@ -268,7 +268,7 @@ class AltoRouterTest extends PHPUnit_Framework_TestCase
 
 	public function testMatchWithCustomNamedRegex()
 	{
-		$this->router->addMatchType(array('cId' => '[a-zA-Z]{2}[0-9](?:_[0-9]++)?'));
+		$this->router->addMatchTypes(array('cId' => '[a-zA-Z]{2}[0-9](?:_[0-9]++)?'));
 		$this->router->map('GET', '/bar/[cId:customId]', 'bar_action', 'bar_route');
 		
 		$this->assertEquals(array(

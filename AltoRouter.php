@@ -22,8 +22,8 @@ class AltoRouter {
 	  * @param array $matchTypes
 	  */
 	public function __construct( $routes = array(), $basePath = '', $matchTypes = array() ) {
-		$this->basePath = $basePath;
-		$this->matchTypes = array_merge($this->matchTypes, $matchTypes);
+		$this->setBasePath($basePath);
+		$this->addMatchTypes($matchTypes);
 
 		foreach( $routes as $route ) {
 			call_user_func_array(array($this,'map'),$route);
@@ -39,11 +39,11 @@ class AltoRouter {
 	}
 
 	/**
-	 * Add a new named match type. It uses array_merge so keys can be overwritten.
+	 * Add named match types. It uses array_merge so keys can be overwritten.
 	 *
-	 * @param array $matchType The key is the name and the value is the regex.
+	 * @param array $matchTypes The key is the name and the value is the regex.
 	 */
-	public function addMatchType($matchTypes) {
+	public function addMatchTypes($matchTypes) {
 		$this->matchTypes = array_merge($this->matchTypes, $matchTypes);
 	}
 
