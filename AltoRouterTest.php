@@ -3,7 +3,7 @@
 require 'AltoRouter.php';
 
 class AltoRouterDebug extends AltoRouter{
-	
+
 	public function getNamedRoutes(){
 		return $this->namedRoutes;
 	}
@@ -15,6 +15,7 @@ class AltoRouterDebug extends AltoRouter{
 	public function getBasePath(){
 		return $this->basePath;
 	}
+
 }
 
 /**
@@ -260,6 +261,31 @@ class AltoRouterTest extends PHPUnit_Framework_TestCase
 			'params' => array(),
 			'name' => 'bar_route'
 		), $this->router->match('/everything', 'GET'));
+		
+		$this->assertFalse($this->router->match('/some-other-thing', 'GET'));
+		
+	}
+
+	public function testMatchWithCustomNamedRegex()
+	{
+		$this->router->addMatchType(array('cId' => '[a-zA-Z]{2}[0-9](?:_[0-9]++)?'));
+		$this->router->map('GET', '/bar/[cId:customId]', 'bar_action', 'bar_route');
+		
+		$this->assertEquals(array(
+			'target' => 'bar_action',
+			'params' => array(
+				'customId' => 'AB1',
+			),
+			'name' => 'bar_route'
+		), $this->router->match('/bar/AB1', 'GET'));
+
+		$this->assertEquals(array(
+			'target' => 'bar_action',
+			'params' => array(
+				'customId' => 'AB1_0123456789',
+			),
+			'name' => 'bar_route'
+		), $this->router->match('/bar/AB1_0123456789', 'GET'));
 		
 		$this->assertFalse($this->router->match('/some-other-thing', 'GET'));
 		
