@@ -5,15 +5,26 @@ class AltoRouter {
 	protected $routes = array();
 	protected $namedRoutes = array();
 	protected $basePath = '';
+	protected $matchTypes = array(
+		'i'  => '[0-9]++',
+		'a'  => '[0-9A-Za-z]++',
+		'h'  => '[0-9A-Fa-f]++',
+		'*'  => '.+?',
+		'**' => '.++',
+		''   => '[^/\.]++'
+	);
 
 	/**
 	  * Create router in one call from config.
 	  *
 	  * @param array $routes
 	  * @param string $basePath
+	  * @param array $matchTypes
 	  */
-	public function __construct( $routes = array(), $basePath = '' ) {
+	public function __construct( $routes = array(), $basePath = '', $matchTypes = array() ) {
 		$this->basePath = $basePath;
+		$this->matchTypes = array_merge($this->matchTypes, $matchTypes);
+
 		foreach( $routes as $route ) {
 			call_user_func_array(array($this,'map'),$route);
 		}
@@ -25,6 +36,15 @@ class AltoRouter {
 	 */
 	public function setBasePath($basePath) {
 		$this->basePath = $basePath;
+	}
+
+	/**
+	 * Add a new named match type. It uses array_merge so keys can be overwritten.
+	 *
+	 * @param array $matchType The key is the name and the value is the regex.
+	 */
+	public function addMatchType($matchTypes) {
+		$this->matchTypes = array_merge($this->matchTypes, $matchTypes);
 	}
 
 	/**
@@ -205,20 +225,12 @@ class AltoRouter {
 	private function compileRoute($route) {
 		if (preg_match_all('`(/|\.|)\[([^:\]]*+)(?::([^:\]]*+))?\](\?|)`', $route, $matches, PREG_SET_ORDER)) {
 
-			$match_types = array(
-				'i'  => '[0-9]++',
-				'a'  => '[0-9A-Za-z]++',
-				'h'  => '[0-9A-Fa-f]++',
-				'*'  => '.+?',
-				'**' => '.++',
-				''   => '[^/\.]++'
-			);
-
+			$matchTypes = $this->matchTypes;
 			foreach ($matches as $match) {
 				list($block, $pre, $type, $param, $optional) = $match;
 
-				if (isset($match_types[$type])) {
-					$type = $match_types[$type];
+				if (isset($matchTypes[$type])) {
+					$type = $matchTypes[$type];
 				}
 				if ($pre === '.') {
 					$pre = '\.';
