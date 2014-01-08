@@ -23,7 +23,7 @@ class AltoRouter {
 	  */
 	public function __construct( $routes = array(), $basePath = '', $matchTypes = array() ) {
 		$this->basePath = $basePath;
-		$this->matchTypes = array_merge($this->matchTypes, $matchTypes);
+		$this->addMatchTypes($matchTypes);
 
 		foreach( $routes as $route ) {
 			call_user_func_array(array($this,'map'),$route);
@@ -43,7 +43,7 @@ class AltoRouter {
 	 *
 	 * @param array $matchType The key is the name and the value is the regex.
 	 */
-	public function addMatchType($matchTypes) {
+	public function addMatchTypes($matchTypes) {
 		$this->matchTypes = array_merge($this->matchTypes, $matchTypes);
 	}
 
