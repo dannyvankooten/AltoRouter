@@ -12,7 +12,7 @@ AltoRouter is a small but powerful routing class for PHP 5.3+, heavily inspired 
 2. Install AltoRouter using Composer or manually
 2. Setup URL rewriting so that all requests are handled by **index.php**
 3. Create an instance of AltoRouter, map your routes and match a request.
-4. Have a look at the example `index.php` file for a better understanding on how to use AltoRouter(index.php).
+4. Have a look at the basic example in the `examples` directory for a better understanding on how to use AltoRouter.
 
 ## Routing
 ```php
