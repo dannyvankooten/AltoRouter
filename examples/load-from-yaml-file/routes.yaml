@@ -1,0 +1,4 @@
+
+home:		[ "GET|POST", "/", "homeController#index" ]
+users_show: [ "GET", "/users/[i:id]", "usersController#show" ]
+users_do: 	[ "POST", "/users/[i:id]/[delete|update:action]", "usersController#doAction" ]

@@ -1,0 +1,6 @@
+{
+    "require": {
+        "altorouter/altorouter": "1.x",
+        "symfony/yaml": "2.x"
+    }
+}
