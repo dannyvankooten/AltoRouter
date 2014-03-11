@@ -12,7 +12,7 @@ $router->map('POST','/users/[i:id]/[delete|update:action]', 'usersController#doA
 // match current request
 $match = $router->match();
 ?>
-<h1>AltoRouter</h3>
+<h1>AltoRouter</h1>
 
 <h3>Current request: </h3>
 <pre>
