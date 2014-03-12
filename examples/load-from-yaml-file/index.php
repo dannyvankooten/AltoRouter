@@ -21,7 +21,7 @@ foreach ( $routes as $route_name => $params ) {
 // match current request
 $match = $router->match();
 ?>
-<h1>AltoRouter</h3>
+<h1>AltoRouter</h1>
 
 <h3>Current request: </h3>
 <pre>
