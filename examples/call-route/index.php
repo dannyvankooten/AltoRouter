@@ -7,8 +7,8 @@ require 'example_controller.php';
 	
 $router = new AltoRouter();
 $router->setBasePath('/AltoRouter/examples/call-route');
-$router->map('GET|POST','/', 'example_controller#myMethodIndex', 'users_index');
-$router->map('GET|POST','/users/[i:id]/[:action]', 'example_controller#myMethod', 'users_do');
+$router->map('GET|POST', '/', 'example_controller#myMethodIndex', 'users_index');
+$router->map('GET|POST', '/users/[i:id]/[:action]', 'example_controller#myMethod', 'users_do');
 
 // match current request
 $match = $router->match();
@@ -61,7 +61,7 @@ list( $controller, $method ) = explode( '#', $match['target'] );
 // if controller->action is callable then make the call and pass params
 if ( is_callable(array($controller, $method)) ) {
     $obj = new $controller();
-    call_user_func_array(array($obj,$method), array($match['params']));
+    call_user_func_array(array($obj, $method), array($match['params']));
 
 // if controller->action is NOT callable then throw an error    
 } else {
