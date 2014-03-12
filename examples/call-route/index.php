@@ -7,8 +7,8 @@ require 'example_controller.php';
 	
 $router = new AltoRouter();
 $router->setBasePath('/AltoRouter/examples/call-route');
-$router->map('GET|POST', '/', 'example_controller#myMethodIndex', 'users_index');
-$router->map('GET|POST', '/users/[i:id]/[:action]', 'example_controller#myMethod', 'users_do');
+$router->map('GET|POST', '/', 'ExampleController#myMethodIndex', 'users_index');
+$router->map('GET|POST', '/users/[i:id]/[:action]', 'ExampleController#myMethod', 'users_do');
 
 // match current request
 $match = $router->match();
@@ -70,4 +70,3 @@ if ( is_callable(array($controller, $method)) ) {
 }
 
 ?>
-
