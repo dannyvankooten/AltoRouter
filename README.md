@@ -72,6 +72,29 @@ $router->generate('users_show', array('id' => 5));
 $router->addMatchTypes(array('cId' => '[a-zA-Z]{2}[0-9](?:_[0-9]++)?'));
 ```
 
+**loading routes from an external yaml file**
+
+```php
+
+//make sure to load symphony yaml component via composer
+use Symfony\Component\Yaml\Yaml;
+$yaml_file = 'routes.yaml';
+$routes = Yaml::parse(file_get_contents($yaml_file));
+foreach ($routes as $route_name => $params) {
+	$router->map($params[0],$params[1], $params[2], $route_name);
+} 
+ 
+```
+
+routes.yaml file
+
+```yaml
+home: 		  ["GET|POST", "/", "home#index"]
+users_show: ["GET", "/users/[i:id", "users#show"]
+users_do: 	["POST", "/users/[i:id]/[delete|update:action]", "usersController#doAction"]
+```
+
+
 
 ## Contributors
 - [Danny van Kooten](https://github.com/dannyvankooten)
