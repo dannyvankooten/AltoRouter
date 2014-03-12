@@ -3,7 +3,7 @@
 require '../../AltoRouter.php';
 
 //include our example controller
-require 'example_controller.php';
+require 'ExampleController.php';
 	
 $router = new AltoRouter();
 $router->setBasePath('/AltoRouter/examples/call-route');
