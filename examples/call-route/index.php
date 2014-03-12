@@ -15,7 +15,7 @@ $match = $router->match();
 
 ?>
 
-<h1>AltoRouter</h3>
+<h1>AltoRouter</h1>
 
 <h3>Try these requests: </h3>
 <p>
