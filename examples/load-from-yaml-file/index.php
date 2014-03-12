@@ -15,7 +15,7 @@ $router->setBasePath('/AltoRouter/examples/load-from-yaml-file');
 $yaml_file = 'routes.yaml';
 $routes = Yaml::parse( file_get_contents($yaml_file) );
 foreach ( $routes as $route_name => $params ) {
-	$router->map( $params[0],$params[1], $params[2], $route_name );
+	$router->map( $params[0], $params[1], $params[2], $route_name );
 } 
 
 // match current request
