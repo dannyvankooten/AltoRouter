@@ -22,6 +22,7 @@ class AltoRouter {
 	  * @param array $matchTypes
 	  */
 	public function __construct( $routes = array(), $basePath = '', $matchTypes = array() ) {
+		$basePath = ($basePath=='') ? $this->discoverBasePath() : $basePath ;
 		$this->setBasePath($basePath);
 		$this->addMatchTypes($matchTypes);
 
@@ -38,6 +39,15 @@ class AltoRouter {
 		$this->basePath = $basePath;
 	}
 
+	/**
+	 * auto discover the base path.
+	 * this relies on server SCRIPT_FILENAME and DOCUMENT_ROOT
+	 */
+	public function discoverBasePath() {
+		$basePath = str_replace ( $_SERVER["DOCUMENT_ROOT"], '', dirname($_SERVER["SCRIPT_FILENAME"]) );
+		return $basePath;
+	}
+	
 	/**
 	 * Add named match types. It uses array_merge so keys can be overwritten.
 	 *
