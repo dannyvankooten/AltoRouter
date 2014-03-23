@@ -4,6 +4,7 @@ class AltoRouter {
 
 	protected $routes = array();
 	protected $namedRoutes = array();
+	protected $domain = null;
 	protected $basePath = '';
 	protected $matchTypes = array(
 		'i'  => '[0-9]++',
@@ -31,6 +32,16 @@ class AltoRouter {
 	}
 
 	/**
+	 * Sets the domain, necessary for matching against subdomains.
+         * 
+         * Will activate subdomain/domain vs. Host matching if $domain does not equal null.
+         * 
+	 */
+	public function setDomain($domain) {
+		$this->domain = $domain;
+	}
+
+	/**
 	 * Set the base path.
 	 * Useful if you are running your application from a subdirectory.
 	 */
@@ -51,14 +62,15 @@ class AltoRouter {
 	 * Map a route to a target
 	 *
 	 * @param string $method One of 4 HTTP Methods, or a pipe-separated list of multiple HTTP Methods (GET|POST|PUT|DELETE)
+	 * @param string $subdomain The subdomain of this route or null to match all domains.
 	 * @param string $route The route regex, custom regex must start with an @. You can use multiple pre-set regex filters, like [i:id]
 	 * @param mixed $target The target where this route should point to. Can be anything.
 	 * @param string $name Optional name of this route. Supply if you want to reverse route this url in your application.
 	 *
 	 */
-	public function map($method, $route, $target, $name = null) {
+	public function map($method, $subdomain, $route, $target, $name = null) {
 
-		$this->routes[] = array($method, $route, $target, $name);
+		$this->routes[] = array($method, $subdomain, $route, $target, $name);
 
 		if($name) {
 			if(isset($this->namedRoutes[$name])) {
@@ -118,15 +130,27 @@ class AltoRouter {
 
 	/**
 	 * Match a given Request Url against stored routes
+	 * @param string $requestHost
 	 * @param string $requestUrl
 	 * @param string $requestMethod
 	 * @return array|boolean Array with route information on success, false on failure (no match).
 	 */
-	public function match($requestUrl = null, $requestMethod = null) {
+	public function match($requestHost = null, $requestUrl = null, $requestMethod = null) {
 
 		$params = array();
 		$match = false;
 
+		// set Request Host if it isn't passed as parameter
+		if($this->domain !== null && $requestHost === null) {
+                    
+                        if(!isset($_SERVER['HTTP_HOST']))
+                        {
+				throw new \Exception("Subdomain matching active but no host specified.");
+                        }
+                    
+			$requestHost = $_SERVER['HTTP_HOST'];
+		}
+                
 		// set Request Url if it isn't passed as parameter
 		if($requestUrl === null) {
 			$requestUrl = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '/';
@@ -150,8 +174,14 @@ class AltoRouter {
 		$_REQUEST = array_merge($_GET, $_POST);
 
 		foreach($this->routes as $handler) {
-			list($method, $_route, $target, $name) = $handler;
+			list($method, $subdomain, $_route, $target, $name) = $handler;
 
+			// Check if request domain matches. If not, abandon early. (CHEAPER)
+                        if($this->domain !== null && $subdomain !== null && $requestHost !== $subdomain . '.' . $this->domain)
+                        {
+                            continue;
+                        }
+                        
 			$methods = explode('|', $method);
 			$method_match = false;
 
@@ -165,7 +195,7 @@ class AltoRouter {
 
 			// Method did not match, continue to next route.
 			if(!$method_match) continue;
-
+                        
 			// Check for a wildcard (matches all)
 			if ($_route === '*') {
 				$match = true;
