@@ -38,7 +38,10 @@ class AltoRouter {
 	 * @return void
 	 * @author Koen Punt
 	 */
-	public function addRoutes(array $routes){
+	public function addRoutes($routes){
+		if(!is_array($routes) && !$routes instanceof Traversable) {
+			throw new \Exception('Routes should be an array or an instance of Traversable');
+		}
 		foreach($routes as $route) {
 			call_user_func_array(array($this, 'map'), $route);
 		}
@@ -68,7 +71,6 @@ class AltoRouter {
 	 * @param string $route The route regex, custom regex must start with an @. You can use multiple pre-set regex filters, like [i:id]
 	 * @param mixed $target The target where this route should point to. Can be anything.
 	 * @param string $name Optional name of this route. Supply if you want to reverse route this url in your application.
-	 *
 	 */
 	public function map($method, $route, $target, $name = null) {
 
