@@ -266,6 +266,36 @@ class AltoRouterTest extends PHPUnit_Framework_TestCase
 		
 	}
 
+	public function testMatchWithUnicodeRegex()
+	{
+		$pattern = '/(?<path>[^';
+		// Arabic characters
+		$pattern .= '\x{0600}-\x{06FF}';
+		$pattern .= '\x{FB50}-\x{FDFD}';
+		$pattern .= '\x{FE70}-\x{FEFF}';
+		$pattern .= '\x{0750}-\x{077F}';
+		// Alphanumeric, /, _, - and space characters
+		$pattern .= 'a-zA-Z0-9\/_-\s';
+		// 'ZERO WIDTH NON-JOINER'
+		$pattern .= '\x{200C}';
+		$pattern .= ']+)';
+		
+		$this->router->map('GET', '@' . $pattern, 'unicode_action', 'unicode_route');
+		
+		$this->assertEquals(array(
+			'target' => 'unicode_action',
+			'name' => 'unicode_route',
+			'params' => array(
+				'path' => '大家好'
+			)
+		), $this->router->match('/大家好', 'GET'));
+		
+		$this->assertFalse($this->router->match('/﷽‎', 'GET'));
+	}
+
+	/**
+	 * @covers AltoRouter::addMatchTypes
+	 */
 	public function testMatchWithCustomNamedRegex()
 	{
 		$this->router->addMatchTypes(array('cId' => '[a-zA-Z]{2}[0-9](?:_[0-9]++)?'));
@@ -289,5 +319,29 @@ class AltoRouterTest extends PHPUnit_Framework_TestCase
 		
 		$this->assertFalse($this->router->match('/some-other-thing', 'GET'));
 		
+	}
+
+	public function testMatchWithCustomNamedUnicodeRegex()
+	{
+		$pattern = '[^';
+		// Arabic characters
+		$pattern .= '\x{0600}-\x{06FF}';
+		$pattern .= '\x{FB50}-\x{FDFD}';
+		$pattern .= '\x{FE70}-\x{FEFF}';
+		$pattern .= '\x{0750}-\x{077F}';
+		$pattern .= ']+';
+		
+		$this->router->addMatchTypes(array('nonArabic' => $pattern));
+		$this->router->map('GET', '/bar/[nonArabic:string]', 'non_arabic_action', 'non_arabic_route');
+		
+		$this->assertEquals(array(
+			'target' => 'non_arabic_action',
+			'name' => 'non_arabic_route',
+			'params' => array(
+				'string' => 'some-path'
+			)
+		), $this->router->match('/bar/some-path', 'GET'));
+		
+		$this->assertFalse($this->router->match('/﷽‎', 'GET'));
 	}
 }
