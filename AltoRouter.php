@@ -186,7 +186,7 @@ class AltoRouter {
 			if ($_route === '*') {
 				$match = true;
 			} elseif (isset($_route[0]) && $_route[0] === '@') {
-				$match = preg_match('`' . substr($_route, 1) . '`', $requestUrl, $params);
+				$match = preg_match('`' . substr($_route, 1) . '`u', $requestUrl, $params);
 			} else {
 				$route = null;
 				$regex = false;
@@ -265,6 +265,6 @@ class AltoRouter {
 			}
 
 		}
-		return "`^$route$`";
+		return "`^$route$`u";
 	}
 }
