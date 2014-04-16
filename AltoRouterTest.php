@@ -46,6 +46,26 @@ class AltoRouterTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
+	 * @covers AltoRouter::addRoutes
+	 */
+	public function testAddRoutes()
+	{
+		$method = 'POST';
+		$route = '/[:controller]/[:action]';
+		$target = function(){};
+		
+		$this->router->addRoutes(array(
+			array($method, $route, $target),
+			array($method, $route, $target, 'second_route')
+		));
+		
+		$routes = $this->router->getRoutes();
+		
+		$this->assertEquals(array($method, $route, $target, null), $routes[0]);
+		$this->assertEquals(array($method, $route, $target, 'second_route'), $routes[1]);
+	}
+
+	/**
 	 * @covers AltoRouter::setBasePath
 	 */
 	public function testSetBasePath()

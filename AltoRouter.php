@@ -22,11 +22,25 @@ class AltoRouter {
 	  * @param array $matchTypes
 	  */
 	public function __construct( $routes = array(), $basePath = '', $matchTypes = array() ) {
+		$this->addRoutes($routes);
 		$this->setBasePath($basePath);
 		$this->addMatchTypes($matchTypes);
+	}
 
-		foreach( $routes as $route ) {
-			call_user_func_array(array($this,'map'),$route);
+	/**
+	 * Add multiple routes at once from array in the following format:
+	 *
+	 *   $routes = array(
+	 *      array($method, $route, $target, $name)
+	 *   );
+	 *
+	 * @param array $routes
+	 * @return void
+	 * @author Koen Punt
+	 */
+	public function addRoutes(array $routes){
+		foreach($routes as $route) {
+			call_user_func_array(array($this, 'map'), $route);
 		}
 	}
 
@@ -226,7 +240,7 @@ class AltoRouter {
 		if (preg_match_all('`(/|\.|)\[([^:\]]*+)(?::([^:\]]*+))?\](\?|)`', $route, $matches, PREG_SET_ORDER)) {
 
 			$matchTypes = $this->matchTypes;
-			foreach ($matches as $match) {
+			foreach($matches as $match) {
 				list($block, $pre, $type, $param, $optional) = $match;
 
 				if (isset($matchTypes[$type])) {
