@@ -22,11 +22,28 @@ class AltoRouter {
 	  * @param array $matchTypes
 	  */
 	public function __construct( $routes = array(), $basePath = '', $matchTypes = array() ) {
+		$this->addRoutes($routes);
 		$this->setBasePath($basePath);
 		$this->addMatchTypes($matchTypes);
+	}
 
-		foreach( $routes as $route ) {
-			call_user_func_array(array($this,'map'),$route);
+	/**
+	 * Add multiple routes at once from array in the following format:
+	 *
+	 *   $routes = array(
+	 *      array($method, $route, $target, $name)
+	 *   );
+	 *
+	 * @param array $routes
+	 * @return void
+	 * @author Koen Punt
+	 */
+	public function addRoutes($routes){
+		if(!is_array($routes) && !$routes instanceof Traversable) {
+			throw new \Exception('Routes should be an array or an instance of Traversable');
+		}
+		foreach($routes as $route) {
+			call_user_func_array(array($this, 'map'), $route);
 		}
 	}
 
@@ -54,7 +71,6 @@ class AltoRouter {
 	 * @param string $route The route regex, custom regex must start with an @. You can use multiple pre-set regex filters, like [i:id]
 	 * @param mixed $target The target where this route should point to. Can be anything.
 	 * @param string $name Optional name of this route. Supply if you want to reverse route this url in your application.
-	 *
 	 */
 	public function map($method, $route, $target, $name = null) {
 
@@ -226,7 +242,7 @@ class AltoRouter {
 		if (preg_match_all('`(/|\.|)\[([^:\]]*+)(?::([^:\]]*+))?\](\?|)`', $route, $matches, PREG_SET_ORDER)) {
 
 			$matchTypes = $this->matchTypes;
-			foreach ($matches as $match) {
+			foreach($matches as $match) {
 				list($block, $pre, $type, $param, $optional) = $match;
 
 				if (isset($matchTypes[$type])) {
