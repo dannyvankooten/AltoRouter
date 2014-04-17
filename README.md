@@ -28,6 +28,7 @@ $router->map('POST','/users/[i:id]/[delete|update:action]', 'usersController#doA
 // reversed routing
 $router->generate('users_show', array('id' => 5));
 
+
 ```
 
 **You can use the following limits on your named parameters. AltoRouter will create the correct regexes for you.**
@@ -72,6 +73,51 @@ $router->generate('users_show', array('id' => 5));
 $router->addMatchTypes(array('cId' => '[a-zA-Z]{2}[0-9](?:_[0-9]++)?'));
 ```
 
+## Matching
+
+Simply call the match() method like this :
+
+```php
+
+// perform a match against the current request url
+$match = $router->match();
+
+// perform a match against a given url
+$match = $router->match($url);
+
+```
+
+### Structure
+
+Match return an associative array containing :
+- target : the value of the third argument of the map() call
+- params : if you have params in your match pattern, an associative array with param name as key 
+- name : the name of the matched route
+
+### Example
+
+- Map :  'GET', '/user/[i:id]/', array('c' => 'UserController', 'a' => 'Profile'), 'userProfile'
+- Url : /users/group/list/123/
+
+will give :
+```
+Array
+(
+    [target] => Array
+        (
+            [c] => UserController
+            [a] => Profile
+        )
+
+    [params] => Array
+        (
+            [id] => 123
+        )
+
+    [name] => userProfile
+)
+
+```
 
 ## Contributors
 - [Danny van Kooten](https://github.com/dannyvankooten)
