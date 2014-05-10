@@ -351,7 +351,7 @@ class AltoRouterTest extends PHPUnit_Framework_TestCase
 		$pattern .= '\x{FE70}-\x{FEFF}';
 		$pattern .= '\x{0750}-\x{077F}';
 		// Alphanumeric, /, _, - and space characters
-		$pattern .= 'a-zA-Z0-9\/_-\s';
+		$pattern .= 'a-zA-Z0-9\/_\-\s';
 		// 'ZERO WIDTH NON-JOINER'
 		$pattern .= '\x{200C}';
 		$pattern .= ']+)';
