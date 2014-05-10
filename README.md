@@ -49,6 +49,15 @@ $router->map('POST','/users/[i:id]/[delete|update:action]', 'usersController#doA
 $router->generate('users_show', array('id' => 5)); # => /users/5
 ```
 
+For quickly adding multiple routes, you can use the `addRoutes` method. This method accepts an array or any kind of traversable.
+
+```php
+$router->addRoutes(array(
+  array('PATCH','/users/[i:id]', 'users#update', 'update_user'),
+  array('DELETE','/users/[i:id]', 'users#delete', 'delete_user')
+));
+```
+
 **You can use the following limits on your named parameters. AltoRouter will create the correct regexes for you.**
 
 ```php
