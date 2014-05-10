@@ -15,20 +15,38 @@ AltoRouter is a small but powerful routing class for PHP 5.3+, heavily inspired 
 4. Have a look at the basic example in the `examples` directory for a better understanding on how to use AltoRouter.
 
 ## Routing
+
+With AltoRouter you define new routes by using the `map` method.
+
+`map` accepts 4 parameters;
+
+**Request methods**  
+One of 5 HTTP Methods, or a pipe-separated list of multiple HTTP Methods (GET|POST|PATCH|PUT|DELETE)
+
+**Route pattern**  
+Route pattern to match with. You can use multiple pre-set regex filters, like `[i:id]`. A custom regex must start with an `@`.
+
+**Target**  
+The target of where this route should point to. Can be anything.
+
+**Name**  
+Optional name of this route. Supply if you want to reverse route this url in your application.
+
+### Example
+
 ```php
 $router = new AltoRouter();
-$router->setBasePath('/AltoRouter'); // (optional) the subdir AltoRouter lives in
+// (optional) set basepath to the subdirectory relative to the application root
+// or, a virtual path where you want to integrate AltoRouter.
+$router->setBasePath('/AltoRouter');
 
-// mapping routes
 $router->map('GET|POST','/', 'home#index', 'home');
 $router->map('GET','/users', array('c' => 'UserController', 'a' => 'ListAction'));
 $router->map('GET','/users/[i:id]', 'users#show', 'users_show');
 $router->map('POST','/users/[i:id]/[delete|update:action]', 'usersController#doAction', 'users_do');
 
 // reversed routing
-$router->generate('users_show', array('id' => 5));
-
-
+$router->generate('users_show', array('id' => 5)); # => /users/5
 ```
 
 **You can use the following limits on your named parameters. AltoRouter will create the correct regexes for you.**
@@ -75,48 +93,38 @@ $router->addMatchTypes(array('cId' => '[a-zA-Z]{2}[0-9](?:_[0-9]++)?'));
 
 ## Matching
 
-Simply call the match() method like this :
+Route lookup is done by calling `match`.
 
 ```php
-
 // perform a match against the current request url
-$match = $router->match();
+$result = $router->match();
 
 // perform a match against a given url
-$match = $router->match($url);
-
+$result = $router->match('/path/to/somewhere');
 ```
 
-### Structure
+### Return value
 
-Match return an associative array containing :
-- target : the value of the third argument of the map() call
-- params : if you have params in your match pattern, an associative array with param name as key 
-- name : the name of the matched route
+The return value will be an associative array if a match is found and `false` otherwise.
+
+The array consists of 3 keys; `target`, `params` and `name`.
+
+Where `target` and `name` contain the values passed to `map` and `params` is an associative array of params extracted from the url.
 
 ### Example
 
-- Map :  'GET', '/user/[i:id]/', array('c' => 'UserController', 'a' => 'Profile'), 'userProfile'
-- Url : /users/group/list/123/
+```php
+$router = new AltoRouter();
+$router->map('GET', '/user/[i:id]', 'user_controller#show_profile', 'user_profile');
+$result = $router->match('/users/group/list/123/');
 
-will give :
-```
-Array
-(
-    [target] => Array
-        (
-            [c] => UserController
-            [a] => Profile
-        )
-
-    [params] => Array
-        (
-            [id] => 123
-        )
-
-    [name] => userProfile
-)
-
+$result == array(
+  'target' => 'user_controller#show_profile',
+  'params' => array(
+    'id' => 123
+  ),
+  'name' => 'user_profile'
+);
 ```
 
 ## Contributors
