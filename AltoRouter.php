@@ -106,7 +106,7 @@ class AltoRouter {
 
 		// Replace named parameters
 		$route = $this->namedRoutes[$routeName];
-		
+
 		// prepend base path to route url again
 		$url = $this->basePath . $route;
 
@@ -173,7 +173,7 @@ class AltoRouter {
 
 			// Check if request method matches. If not, abandon early. (CHEAP)
 			foreach($methods as $method) {
-				if (strcasecmp($requestMethod, $method) === 0) {
+				if (strcasecmp($requestMethod, $method) === 0 || strcasecmp($method, '*') === 0) {
 					$method_match = true;
 					break;
 				}
