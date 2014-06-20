@@ -169,7 +169,7 @@ class AltoRouter {
 			list($method, $_route, $target, $name) = $handler;
 
 			// Allow matching of methods on a wildcard
-			if($methods === '*') {
+			if($method === '*') {
 				$method_match = true;
 			} else {
 				$methods = explode('|', $method);
@@ -182,7 +182,6 @@ class AltoRouter {
 						break;
 					}
 				}
-
 			}
 
 			// Method did not match, continue to next route.
