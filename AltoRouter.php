@@ -35,7 +35,6 @@ class AltoRouter {
 	 *   );
 	 *
 	 * @param array $routes
-	 * @return void
 	 * @author Koen Punt
      * @throws Exception
 	 */
