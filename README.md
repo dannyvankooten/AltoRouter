@@ -96,10 +96,10 @@ Match return an associative array containing :
 
 ### Example
 
-- Map :  'GET', '/user/[i:id]/', array('c' => 'UserController', 'a' => 'Profile'), 'userProfile'
-- Url : /users/group/list/123/
+- With a map like this :  $router->map('GET', '/user/[i:id]/', array('c' => 'UserController', 'a' => 'Profile'), 'userProfile');
+- and an url like that : /user/123/ 
 
-will give :
+the match result is :
 ```
 Array
 (
