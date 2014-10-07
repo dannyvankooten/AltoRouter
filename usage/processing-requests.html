@@ -1,0 +1,40 @@
+---
+title: Processing requests using AltoRouter
+layout: default
+---
+<h1>
+    <small>Using AltoRouter</small> 
+    Processing Requests
+</h1>
+
+<p>AltoRouter does not process requests for you so you are free to use the method you prefer. To help you get started, here's a simplified example using closures.</p>
+
+{% highlight php startinline %}
+$router = new AltoRouter();
+
+// map homepage
+$router->map( 'GET', '/', function() {
+	require __DIR__ . '/views/home.php';
+});
+
+// map user details page
+$router->map( 'GET', '/user/[i:id]/', function( $id ) {
+	require __DIR__ . '/views/user-details.php';
+});
+
+// match current request url
+$match = $router->match();
+
+// call closure or throw 404 status
+if( $match && is_callable( $match['target'] ) ) {
+	call_user_func_array( $match['target'], $match['params'] ); 
+} else {
+	// no route was matched
+	header( $_SERVER["SERVER_PROTOCOL"] . ' 404 Not Found');
+}
+{% endhighlight %}
+
+<p>
+    <a style="float:left;" href="/usage/matching-requests.html">&laquo; Matching requests</a> 
+    <br style="clear:both;">
+</p>

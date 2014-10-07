@@ -1,0 +1,52 @@
+---
+title: Installing AltoRouter
+layout: default
+---
+
+<h1>
+    <small>Using AltoRouter</small> 
+    Installation
+</h1>
+
+<h2>Install AltoRouter using Composer</h2>
+<p>To install using Composer, you will have to install Composer first.</p>
+
+{% highlight bash %}
+curl -s https://getcomposer.org/installer | php
+{% endhighlight %}
+
+<p>Create a <strong>composer.json</strong> file in your project root.</p>
+
+{% highlight json %}
+{
+    "require": {
+        "altorouter/altorouter": "1.1.0"
+    }
+}
+{% endhighlight %}
+
+<p>Tell Composer to install the required dependencies.</p>
+
+{% highlight bash %}
+php composer.phar install
+{% endhighlight %}
+
+<p>If you want to use the autoloading provided by Composer, add the following line to your application file.</p>
+
+{% highlight php startinline %}
+require 'vendor/autoload.php';
+{% endhighlight %}
+
+<p>You are now ready to use the <code>AltoRouter</code> class. <a href="/usage/rewrite-requests.html">Rewrite all requests to your application file</a> and start <a href="/usage/mapping-routes.html">mapping your routes</a>. </p>
+
+<h2 class="subtitle">Install AltoRouter manually</h2>
+<p>Just <a href="https://github.com/dannyvankooten/AltoRouter/zipball/master">download the AltoRouter class</a> and require it in your application file.</p>
+
+{% highlight php startinline %}
+require 'AltoRouter.php';
+{% endhighlight %}
+
+<p>
+    <a style="float:right;" href="/usage/rewrite-requests.html">Rewrite requests &raquo;</a> 
+    <br style="clear:both;">
+</p>

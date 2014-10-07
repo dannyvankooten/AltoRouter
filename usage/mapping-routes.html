@@ -1,0 +1,131 @@
+---
+title: "Mapping routes using AltoRouter"
+layout: default
+---
+<h1>
+    <small>Using AltoRouter</small> 
+    Mapping Routes
+</h1>
+
+<p>By now, you should have <a href="/usage/rewrite-requests.html">rewritten al requests to be handled by a single file in which you created an AltoRouter instance.</a></p>
+<p>To map your routes, use the <code>map()</code> method. The following example maps all <code>GET /</code> requests.</p>
+
+{% highlight php startinline %}
+    $router->map( 'GET', '/', 'render_home', 'home' );
+{% endhighlight %}
+
+<p>The <code>map()</code> method accepts the following parameters.</p>
+
+<h3><code>$method</code> (string)</h3>
+<p>
+    This is a pipe-delimited string of the accepted HTTP requests methods.<br /><br />
+    <em>Example: </em><code>GET|POST|PATCH|PUT|DELETE</code>
+</p>
+
+<h3><code>$route</code> (string)</h3>
+<p>
+    This is the route pattern to match against. This can be a plain string, one of the predefined regex filters or a custom regex. Custom regexes must start with <code>@</code>.
+    <br /><br />
+    <em>Examples: </em>
+</p>
+<table>
+    <tr>
+        <th>Route</th>
+        <th>Example Match</th>
+        <th>Variables</th>
+    </tr>
+    <tr>
+        <td><code>/contact/</code></td>
+        <td><code>/contact/</code></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><code>/users/[i:id]/</code></td>
+        <td><code>/users/12/</code></td>
+        <td><code>$id: 12</code></td>
+    </tr>
+    <tr>
+        <td><code>/[a:c]/[a:a]?/[i:id]?</code></td>
+        <td><code>/controller/action/21</code></td>
+        <td><code>$c: "controller", $a: "action", $id: 21</code></td>
+    </tr>
+</table>
+
+<h3><code>$target</code> (mixed) </h3>
+<p>As AltoRouter leaves handling routes up to you, this can be anything.</p>
+<p>
+    <em>Example using a function callback:</em> <br />
+    <code>function() { ... }</code>
+</p>
+<p>
+    <em>Example using a controller#action string:</em> <br />
+    <code>UserController#showDetails</code>
+</p>
+
+<h3><code>$name</code> (string, optional)</h3>
+<p>If you want to use reversed routing, specify a name parameter so you can later generate URL's using this route.</p>
+<p>
+    <em>Example:</em><br />
+    <code>user_details</code></coe>
+ </p>
+
+<h3>Example Mapping</h3>
+{% highlight php startinline%}
+// map homepage using callable
+$router->map( 'GET', '/', function() {
+    require __DIR__ . '/views/home.php';
+});
+
+// map users details page using controller#action string
+$router->map( 'GET', '/users/[i:id]/', 'UserController#showDetails' );
+
+// map contact form handler using function name string
+$router->map( 'POST', '/contact/', 'handleContactForm' );
+{% endhighlight %}
+
+<p>For quickly adding multiple routes, you can use the <code>addRoutes</code> method. This method accepts an array or any kind of traversable.</p>
+
+<div class="highlight highlight-php"><pre><span class="nv">$router</span><span class="o">-&gt;</span><span class="na">addRoutes</span><span class="p">(</span><span class="k">array</span><span class="p">(</span>
+  <span class="k">array</span><span class="p">(</span><span class="s1">'PATCH'</span><span class="p">,</span><span class="s1">'/users/[i:id]'</span><span class="p">,</span> <span class="s1">'users#update'</span><span class="p">,</span> <span class="s1">'update_user'</span><span class="p">),</span>
+  <span class="k">array</span><span class="p">(</span><span class="s1">'DELETE'</span><span class="p">,</span><span class="s1">'/users/[i:id]'</span><span class="p">,</span> <span class="s1">'users#delete'</span><span class="p">,</span> <span class="s1">'delete_user'</span><span class="p">)</span>
+<span class="p">));</span>
+</pre></div>
+
+<h2>Match Types</h2>
+<p>You can use the following limits on your named parameters. AltoRouter will create the correct regexes for you.</p>
+
+<div class="highlight highlight-php"><pre><span class="o">*</span>                    <span class="c1">// Match all request URIs</span>
+<span class="p">[</span><span class="nx">i</span><span class="p">]</span>                  <span class="c1">// Match an integer</span>
+<span class="p">[</span><span class="nx">i</span><span class="o">:</span><span class="nx">id</span><span class="p">]</span>               <span class="c1">// Match an integer as 'id'</span>
+<span class="p">[</span><span class="nx">a</span><span class="o">:</span><span class="nx">action</span><span class="p">]</span>           <span class="c1">// Match alphanumeric characters as 'action'</span>
+<span class="p">[</span><span class="nx">h</span><span class="o">:</span><span class="nb">key</span><span class="p">]</span>              <span class="c1">// Match hexadecimal characters as 'key'</span>
+<span class="p">[</span><span class="o">:</span><span class="nx">action</span><span class="p">]</span>            <span class="c1">// Match anything up to the next / or end of the URI as 'action'</span>
+<span class="p">[</span><span class="nx">create</span><span class="o">|</span><span class="nx">edit</span><span class="o">:</span><span class="nx">action</span><span class="p">]</span> <span class="c1">// Match either 'create' or 'edit' as 'action'</span>
+<span class="p">[</span><span class="o">*</span><span class="p">]</span>                  <span class="c1">// Catch all (lazy, stops at the next trailing slash)</span>
+<span class="p">[</span><span class="o">*:</span><span class="nx">trailing</span><span class="p">]</span>         <span class="c1">// Catch all as 'trailing' (lazy)</span>
+<span class="p">[</span><span class="o">**:</span><span class="nx">trailing</span><span class="p">]</span>        <span class="c1">// Catch all (possessive - will match the rest of the URI)</span>
+<span class="o">.</span><span class="p">[</span><span class="o">:</span><span class="nx">format</span><span class="p">]</span><span class="o">?</span>          <span class="c1">// Match an optional parameter 'format' - a / or . before the block is also optional</span>
+</pre></div>
+
+<p>The character before the colon (the 'match type') is a shortcut for one of the following regular expressions</p>
+
+<div class="highlight highlight-php"><pre><span class="s1">'i'</span>  <span class="o">=&gt;</span> <span class="s1">'[0-9]++'</span>
+<span class="s1">'a'</span>  <span class="o">=&gt;</span> <span class="s1">'[0-9A-Za-z]++'</span>
+<span class="s1">'h'</span>  <span class="o">=&gt;</span> <span class="s1">'[0-9A-Fa-f]++'</span>
+<span class="s1">'*'</span>  <span class="o">=&gt;</span> <span class="s1">'.+?'</span>
+<span class="s1">'**'</span> <span class="o">=&gt;</span> <span class="s1">'.++'</span>
+<span class="s1">''</span>   <span class="o">=&gt;</span> <span class="s1">'[^/\.]++'</span>
+</pre></div>
+
+<p>You can register your own match types using the <code>addMatchTypes()</code> method.</p>
+
+<div class="highlight highlight-php"><pre><span class="nv">$router</span><span class="o">-&gt;</span><span class="na">addMatchTypes</span><span class="p">(</span><span class="k">array</span><span class="p">(</span><span class="s1">'cId'</span> <span class="o">=&gt;</span> <span class="s1">'[a-zA-Z]{2}[0-9](?:_[0-9]++)?'</span><span class="p">));</span>
+</pre></div>
+
+<p>Once your routes are all mapped you can start matching requests and continue processing the request.</p>
+
+<p>
+    <a style="float:left;" href="/usage/rewrite-requests.html">&laquo; Rewriting requests</a> 
+    <a style="float:right;" href="/usage/matching-requests.html">Matching requests &raquo;</a> 
+    <br style="clear:both;">
+</p>

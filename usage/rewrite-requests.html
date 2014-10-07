@@ -1,0 +1,43 @@
+---
+title: "Rewrite all requests to AltoRouter"
+layout: default
+---
+<h1>
+	<small>Using AltoRouter</small> 
+	Rewrite all requests to AltoRouter
+</h1>
+
+<p>To use AltoRouter, you will need to rewrite all requests to a single file in which you create an instance of the AltoRouter class.</p>
+<p>There are various ways to go about this, but here are examples for Apache and Nginx.</p>
+
+<h4>Apache <code>.htaccess</code></h4>
+{% highlight apache %}
+RewriteEngine on
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule . index.php [L]
+{% endhighlight %}
+
+<h4>Nginx <code>nginx.conf</code></h4>
+{% highlight nginx %}
+try_files $uri /index.php;
+{% endhighlight %}
+
+<p>All requests are now handled by the same file. In that file, you create an <code>AltoRouter</code> instance.</p>
+
+{% highlight php startinline %}
+$router = new AltoRouter();
+{% endhighlight %}
+
+<p>Optionally, if your project lives in a sub-folder of your web root you use the <code>setBasePath()</code> method to set a base path.</p>
+
+{% highlight php startinline %}
+$router->setBasePath('/alto-app/');
+{% endhighlight %}
+
+<p>You are now ready to start <a href="/usage/mapping-routes.html">mapping your routes</a>.</p>
+
+<p>
+	<a style="float:left;" href="/usage/install.html">&laquo; Installing AltoRouter</a> 
+	<a style="float:right;" href="/usage/mapping-routes.html">Mapping routes &raquo;</a> 
+	<br style="clear:both;">
+</p>

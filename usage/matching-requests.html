@@ -1,0 +1,57 @@
+---
+title: Matching requests using AltoRouter
+layout: default
+---
+<h1>
+    <small>Using AltoRouter</small> 
+    Matching Requests
+</h1>
+
+<p>To match the current request, just call the `match()` method without any parameters.</p>
+
+{% highlight php startinline %}
+$match = $router->match();
+{% endhighlight %}
+
+<p>If a match was found, the <code>match()</code> method will return an associative array with the following 3 keys.</p>
+
+<p>
+	<code>target</code> (mixed)<br />
+	The target of the route, given during mapping the route.
+</p>
+
+<p>
+	<code>params</code> (array)<br />
+	Named parameters found in the request url.
+</p>
+
+<p>
+	<code>name</code> (string)<br />
+	The name of the route.
+</p>
+
+<p><em>Example</em></p>
+
+{% highlight php startinline %}
+$router = new AltoRouter();
+$router->map( 'GET', '/', function() { .. }, 'home' );
+
+// assuming current request url = '/'
+$match = $router->match();
+
+/*
+array(3) { 
+	["target"]	=> object(Closure)#2 (0) { } 
+	["params"]	=> array(0) { } 
+	["name"] 	=> 'home' 
+}
+*/
+{% endhighlight %}
+
+<p>AltoRouter does not process the request for you, you are free to use the method you prefer. Here is a simplified example <a href="/usage/processing-requests.html">how to process requests using closures</a> though.</p>
+
+<p>
+    <a style="float:left;" href="/usage/mapping-routes.html">&laquo; Mapping routes</a> 
+    <a style="float:right;" href="/usage/processing-requests.html">Processing requests &raquo;</a> 
+    <br style="clear:both;">
+</p>

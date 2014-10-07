@@ -2,150 +2,46 @@
 title: AltoRouter - PHP Router that supports REST, dynamic and reversed routing
 layout: default
 ---
-        <h1>
+<h1>
 <a name="altorouter-" class="anchor" href="#altorouter-"><span class="octicon octicon-link"></span></a>AltoRouter <a href="http://travis-ci.org/dannyvankooten/AltoRouter"><img src="https://api.travis-ci.org/dannyvankooten/AltoRouter.png" alt="Build Status"></a>
 </h1>
 
-<p>AltoRouter is a small but powerful routing class for PHP 5.3+, heavily inspired by <a href="https://github.com/chriso/klein.php/">klein.php</a>.</p>
+<p class="intro">AltoRouter is a small but powerful routing class for PHP 5.3+, heavily inspired by <a href="https://github.com/chriso/klein.php/">klein.php</a>.</p>
 
+{% highlight php startinline %}
+$router = new AltoRouter();
+
+// map homepage
+$router->map( 'GET', '/', function() {
+    require __DIR__ . '/views/home.php';
+});
+
+// map users details page
+$router->map( 'GET|POST', '/users/[i:id]/', function( $id ) {
+  $user = .....
+  require __DIR__ . '/views/user/details.php';
+});
+{% endhighlight %}
+
+<h2>Router Features</h2>
 <ul>
-<li>Dynamic routing with named parameters</li>
-<li>Reversed routing</li>
-<li>Flexible regular expression routing (inspired by <a href="http://www.sinatrarb.com/">Sinatra</a>)</li>
-<li>Custom regexes</li>
+    <li>HTTP methods</li>
+    <li>Dynamic routing with (named) route parameters</li>
+    <li>Flexible regular expression routing, inspired by <a href="http://www.sinatrarb.com/">Sinatra</a></li>
+    <li>Reversed routing</li>
+    <li>Custom regexes</li>
 </ul>
 
-<h2>
-    <a name="getting-started" class="anchor" href="#getting-started"><span class="octicon octicon-link"></span></a>
-    Getting started
-</h2>
+<h2>Using AltoRouter</h2>
+<p>To use AltoRouter in your project you need a web server running PHP 5.3 or newer.</p>
 
-<ol>
-<li>PHP 5.3.x is required</li>
-<li>Install AltoRouter using Composer or manually</li>
-<li>Setup URL rewriting so that all requests are handled by <strong>index.php</strong>
-</li>
-<li>Create an instance of AltoRouter, map your routes and match a request.</li>
-<li>Have a look at the basic example in the <code>examples</code> directory for a better understanding on how to use AltoRouter.</li>
-</ol><h2>
-
-    <a name="user-content-routing" class="anchor" href="#routing" aria-hidden="true"><span class="octicon octicon-link"></span></a>Routing</h2>
-
-<p>With AltoRouter you define new routes by using the <code>map</code> method.</p>
-
-<p><code>map</code> accepts 4 parameters;</p>
-
-<p><strong>Request methods</strong><br>
-    One of 5 HTTP Methods, or a pipe-separated list of multiple HTTP Methods (GET|POST|PATCH|PUT|DELETE)</p>
-
-<p><strong>Route pattern</strong><br>
-    Route pattern to match with. You can use multiple pre-set regex filters, like <code>[i:id]</code>. A custom regex must start with an <code>@</code>.</p>
-
-<p><strong>Target</strong><br>
-    The target of where this route should point to. Can be anything.</p>
-
-<p><strong>Name</strong><br>
-    Optional name of this route. Supply if you want to reverse route this url in your application.</p>
-
-<h3>
-    <a name="user-content-example" class="anchor" href="#example" aria-hidden="true"><span class="octicon octicon-link"></span></a>Example</h3>
-
-<div class="highlight highlight-php"><pre><span class="nv">$router</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">AltoRouter</span><span class="p">();</span>
-<span class="c1">// (optional) set basepath to the subdirectory relative to the application root</span>
-<span class="c1">// or, a virtual path where you want to integrate AltoRouter.</span>
-<span class="nv">$router</span><span class="o">-&gt;</span><span class="na">setBasePath</span><span class="p">(</span><span class="s1">'/AltoRouter'</span><span class="p">);</span>
-
-<span class="nv">$router</span><span class="o">-&gt;</span><span class="na">map</span><span class="p">(</span><span class="s1">'GET|POST'</span><span class="p">,</span><span class="s1">'/'</span><span class="p">,</span> <span class="s1">'home#index'</span><span class="p">,</span> <span class="s1">'home'</span><span class="p">);</span>
-<span class="nv">$router</span><span class="o">-&gt;</span><span class="na">map</span><span class="p">(</span><span class="s1">'GET'</span><span class="p">,</span><span class="s1">'/users'</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span><span class="s1">'c'</span> <span class="o">=&gt;</span> <span class="s1">'UserController'</span><span class="p">,</span> <span class="s1">'a'</span> <span class="o">=&gt;</span> <span class="s1">'ListAction'</span><span class="p">));</span>
-<span class="nv">$router</span><span class="o">-&gt;</span><span class="na">map</span><span class="p">(</span><span class="s1">'GET'</span><span class="p">,</span><span class="s1">'/users/[i:id]'</span><span class="p">,</span> <span class="s1">'users#show'</span><span class="p">,</span> <span class="s1">'users_show'</span><span class="p">);</span>
-<span class="nv">$router</span><span class="o">-&gt;</span><span class="na">map</span><span class="p">(</span><span class="s1">'POST'</span><span class="p">,</span><span class="s1">'/users/[i:id]/[delete|update:action]'</span><span class="p">,</span> <span class="s1">'usersController#doAction'</span><span class="p">,</span> <span class="s1">'users_do'</span><span class="p">);</span>
-
-<span class="c1">// reversed routing</span>
-<span class="nv">$router</span><span class="o">-&gt;</span><span class="na">generate</span><span class="p">(</span><span class="s1">'users_show'</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span><span class="s1">'id'</span> <span class="o">=&gt;</span> <span class="mi">5</span><span class="p">));</span> <span class="c1"># =&gt; /users/5</span>
-</pre></div>
-
-<p>For quickly adding multiple routes, you can use the <code>addRoutes</code> method. This method accepts an array or any kind of traversable.</p>
-
-<div class="highlight highlight-php"><pre><span class="nv">$router</span><span class="o">-&gt;</span><span class="na">addRoutes</span><span class="p">(</span><span class="k">array</span><span class="p">(</span>
-  <span class="k">array</span><span class="p">(</span><span class="s1">'PATCH'</span><span class="p">,</span><span class="s1">'/users/[i:id]'</span><span class="p">,</span> <span class="s1">'users#update'</span><span class="p">,</span> <span class="s1">'update_user'</span><span class="p">),</span>
-  <span class="k">array</span><span class="p">(</span><span class="s1">'DELETE'</span><span class="p">,</span><span class="s1">'/users/[i:id]'</span><span class="p">,</span> <span class="s1">'users#delete'</span><span class="p">,</span> <span class="s1">'delete_user'</span><span class="p">)</span>
-<span class="p">));</span>
-</pre></div>
-
-<p><strong>You can use the following limits on your named parameters. AltoRouter will create the correct regexes for you.</strong></p>
-
-<div class="highlight highlight-php"><pre><span class="o">*</span>                    <span class="c1">// Match all request URIs</span>
-<span class="p">[</span><span class="nx">i</span><span class="p">]</span>                  <span class="c1">// Match an integer</span>
-<span class="p">[</span><span class="nx">i</span><span class="o">:</span><span class="nx">id</span><span class="p">]</span>               <span class="c1">// Match an integer as 'id'</span>
-<span class="p">[</span><span class="nx">a</span><span class="o">:</span><span class="nx">action</span><span class="p">]</span>           <span class="c1">// Match alphanumeric characters as 'action'</span>
-<span class="p">[</span><span class="nx">h</span><span class="o">:</span><span class="nb">key</span><span class="p">]</span>              <span class="c1">// Match hexadecimal characters as 'key'</span>
-<span class="p">[</span><span class="o">:</span><span class="nx">action</span><span class="p">]</span>            <span class="c1">// Match anything up to the next / or end of the URI as 'action'</span>
-<span class="p">[</span><span class="nx">create</span><span class="o">|</span><span class="nx">edit</span><span class="o">:</span><span class="nx">action</span><span class="p">]</span> <span class="c1">// Match either 'create' or 'edit' as 'action'</span>
-<span class="p">[</span><span class="o">*</span><span class="p">]</span>                  <span class="c1">// Catch all (lazy, stops at the next trailing slash)</span>
-<span class="p">[</span><span class="o">*:</span><span class="nx">trailing</span><span class="p">]</span>         <span class="c1">// Catch all as 'trailing' (lazy)</span>
-<span class="p">[</span><span class="o">**:</span><span class="nx">trailing</span><span class="p">]</span>        <span class="c1">// Catch all (possessive - will match the rest of the URI)</span>
-<span class="o">.</span><span class="p">[</span><span class="o">:</span><span class="nx">format</span><span class="p">]</span><span class="o">?</span>          <span class="c1">// Match an optional parameter 'format' - a / or . before the block is also optional</span>
-</pre></div>
-
-<p><strong>Some more complicated examples</strong></p>
-
-<div class="highlight highlight-php"><pre><span class="o">@/</span><span class="p">(</span><span class="o">?</span><span class="p">[</span><span class="nx">A</span><span class="o">-</span><span class="nx">Za</span><span class="o">-</span><span class="nx">z</span><span class="p">]{</span><span class="mi">2</span><span class="p">}</span><span class="nx">_</span><span class="p">[</span><span class="nx">A</span><span class="o">-</span><span class="nx">Za</span><span class="o">-</span><span class="nx">z</span><span class="p">]{</span><span class="mi">2</span><span class="p">})</span><span class="err">$</span> <span class="c1">// custom regex, matches language codes like "en_us" etc.</span>
-<span class="o">/</span><span class="nx">posts</span><span class="o">/</span><span class="p">[</span><span class="o">*:</span><span class="nx">title</span><span class="p">][</span><span class="nx">i</span><span class="o">:</span><span class="nx">id</span><span class="p">]</span>        <span class="c1">// Matches "/posts/this-is-a-title-123"</span>
-<span class="o">/</span><span class="nx">output</span><span class="o">.</span><span class="p">[</span><span class="nx">xml</span><span class="o">|</span><span class="nx">json</span><span class="o">:</span><span class="nx">format</span><span class="p">]</span><span class="o">?</span>    <span class="c1">// Matches "/output", "output.xml", "output.json"</span>
-<span class="o">/</span><span class="p">[</span><span class="o">:</span><span class="nx">controller</span><span class="p">]</span><span class="o">?/</span><span class="p">[</span><span class="o">:</span><span class="nx">action</span><span class="p">]</span><span class="o">?</span>    <span class="c1">// Matches the typical /controller/action format</span>
-</pre></div>
-
-<p><strong>The character before the colon (the 'match type') is a shortcut for one of the following regular expressions</strong></p>
-
-<div class="highlight highlight-php"><pre><span class="s1">'i'</span>  <span class="o">=&gt;</span> <span class="s1">'[0-9]++'</span>
-<span class="s1">'a'</span>  <span class="o">=&gt;</span> <span class="s1">'[0-9A-Za-z]++'</span>
-<span class="s1">'h'</span>  <span class="o">=&gt;</span> <span class="s1">'[0-9A-Fa-f]++'</span>
-<span class="s1">'*'</span>  <span class="o">=&gt;</span> <span class="s1">'.+?'</span>
-<span class="s1">'**'</span> <span class="o">=&gt;</span> <span class="s1">'.++'</span>
-<span class="s1">''</span>   <span class="o">=&gt;</span> <span class="s1">'[^/\.]++'</span>
-</pre></div>
-
-<p><strong>New match types can be added using the <code>addMatchTypes()</code> method</strong></p>
-
-<div class="highlight highlight-php"><pre><span class="nv">$router</span><span class="o">-&gt;</span><span class="na">addMatchTypes</span><span class="p">(</span><span class="k">array</span><span class="p">(</span><span class="s1">'cId'</span> <span class="o">=&gt;</span> <span class="s1">'[a-zA-Z]{2}[0-9](?:_[0-9]++)?'</span><span class="p">));</span>
-</pre></div>
-
-<h2>
-    <a name="user-content-matching" class="anchor" href="#matching" aria-hidden="true"><span class="octicon octicon-link"></span></a>Matching</h2>
-
-<p>Route lookup is done by calling <code>match</code>.</p>
-
-<div class="highlight highlight-php"><pre><span class="c1">// perform a match against the current request url</span>
-<span class="nv">$result</span> <span class="o">=</span> <span class="nv">$router</span><span class="o">-&gt;</span><span class="na">match</span><span class="p">();</span>
-
-<span class="c1">// perform a match against a given url</span>
-<span class="nv">$result</span> <span class="o">=</span> <span class="nv">$router</span><span class="o">-&gt;</span><span class="na">match</span><span class="p">(</span><span class="s1">'/path/to/somewhere'</span><span class="p">);</span>
-</pre></div>
-
-<h3>
-    <a name="user-content-return-value" class="anchor" href="#return-value" aria-hidden="true"><span class="octicon octicon-link"></span></a>Return value</h3>
-
-<p>The return value will be an associative array if a match is found and <code>false</code> otherwise.</p>
-
-<p>The array consists of 3 keys; <code>target</code>, <code>params</code> and <code>name</code>.</p>
-
-<p>Where <code>target</code> and <code>name</code> contain the values passed to <code>map</code> and <code>params</code> is an associative array of params extracted from the url.</p>
-
-<h3>
-    <a name="user-content-example-1" class="anchor" href="#example-1" aria-hidden="true"><span class="octicon octicon-link"></span></a>Example</h3>
-
-<div class="highlight highlight-php"><pre><span class="nv">$router</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">AltoRouter</span><span class="p">();</span>
-<span class="nv">$router</span><span class="o">-&gt;</span><span class="na">map</span><span class="p">(</span><span class="s1">'GET'</span><span class="p">,</span> <span class="s1">'/user/[i:id]'</span><span class="p">,</span> <span class="s1">'user_controller#show_profile'</span><span class="p">,</span> <span class="s1">'user_profile'</span><span class="p">);</span>
-<span class="nv">$result</span> <span class="o">=</span> <span class="nv">$router</span><span class="o">-&gt;</span><span class="na">match</span><span class="p">(</span><span class="s1">'/user/123'</span><span class="p">);</span>
-
-<span class="nv">$result</span> <span class="o">==</span> <span class="k">array</span><span class="p">(</span>
-  <span class="s1">'target'</span> <span class="o">=&gt;</span> <span class="s1">'user_controller#show_profile'</span><span class="p">,</span>
-  <span class="s1">'params'</span> <span class="o">=&gt;</span> <span class="k">array</span><span class="p">(</span>
-    <span class="s1">'id'</span> <span class="o">=&gt;</span> <span class="mi">123</span>
-  <span class="p">),</span>
-  <span class="s1">'name'</span> <span class="o">=&gt;</span> <span class="s1">'user_profile'</span>
-<span class="p">);</span>
-</pre>
+<ul>
+    <li><a href="/usage/install.html">Install AltoRouter</a></li>
+    <li><a href="/usage/rewrite-requests.html">Rewrite all requests to AltoRouter</a></li>
+    <li><a href="/usage/mapping-routes.html">Map your routes</a></li>
+    <li><a href="/usage/matching-requests.html">Match requests</a></li>
+    <li><a href="/usage/processing-requests.html">Process the request your preferred way</a></li>
+</ul>
 
 <h2>
 <a name="contributors" class="anchor" href="#contributors"><span class="octicon octicon-link"></span></a>Contributors</h2>
@@ -155,15 +51,8 @@ layout: default
 <li><a href="https://github.com/koenpunt">Koen Punt</a></li>
 <li><a href="https://github.com/adduc">John Long</a></li>
 <li><a href="https://github.com/niahoo">Niahoo Osef</a></li>
-</ul><h2>
-<a name="license" class="anchor" href="#license"><span class="octicon octicon-link"></span></a>License</h2>
+</ul>
 
-<p>(MIT License)</p>
 
-<p>Copyright (c) 2012-2014 Danny van Kooten <a href="mailto:hi@dannyvankooten.com">hi@dannyvankooten.com</a></p>
-
-<p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:</p>
-
-<p>The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.</p>
-
-<p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
+<p>Released under the <a href="/license.html">MIT Public License</a>.</p>
+<p>&copy; 2012-2014 <a href="https://dannyvankooten.com/">Danny van Kooten</a></p>
