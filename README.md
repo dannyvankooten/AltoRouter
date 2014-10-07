@@ -125,7 +125,7 @@ Where `target` and `name` contain the values passed to `map` and `params` is an 
 ```php
 $router = new AltoRouter();
 $router->map('GET', '/user/[i:id]', 'user_controller#show_profile', 'user_profile');
-$result = $router->match('/users/group/list/123/');
+$result = $router->match('/user/123');
 
 $result == array(
   'target' => 'user_controller#show_profile',
