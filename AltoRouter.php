@@ -220,11 +220,17 @@ class AltoRouter {
 
 			if(($match == true || $match > 0)) {
 
-				if($params) {
-					foreach($params as $key => $value) {
-						if(is_numeric($key)) unset($params[$key]);
-					}
-				}
+                if($params) {
+                    foreach($params as $key => $value) {
+                        if(is_numeric($key)){
+                            unset($params[$key]);
+                        }
+                    }
+                    if($requestMethod == 'POST' && $_POST != null)
+                    {
+                        $params = array_merge($params,$_POST);
+                    }
+                }
 
 				return array(
 					'target' => $target,
