@@ -55,7 +55,7 @@ class AltoRouter {
 			call_user_func_array(array($this, 'map'), $route);
 		}
 	}
-	
+
 	/**
 	 * Set the base path.
 	 * Useful if you are running your application from a subdirectory.
