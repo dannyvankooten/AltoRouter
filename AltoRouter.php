@@ -26,7 +26,15 @@ class AltoRouter {
 		$this->setBasePath($basePath);
 		$this->addMatchTypes($matchTypes);
 	}
-
+	
+	/**
+	 * Retrieves all routes.
+	 * Useful if you want to process or display routes.
+	 */
+	public function getRoutes() {
+		return $this->routes;
+	}
+	
 	/**
 	 * Add multiple routes at once from array in the following format:
 	 *
@@ -46,7 +54,7 @@ class AltoRouter {
 			call_user_func_array(array($this, 'map'), $route);
 		}
 	}
-
+	
 	/**
 	 * Set the base path.
 	 * Useful if you are running your application from a subdirectory.
