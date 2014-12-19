@@ -30,11 +30,12 @@ class AltoRouter {
 	/**
 	 * Retrieves all routes.
 	 * Useful if you want to process or display routes.
+	 * @return array All routes.
 	 */
 	public function getRoutes() {
 		return $this->routes;
 	}
-	
+
 	/**
 	 * Add multiple routes at once from array in the following format:
 	 *
