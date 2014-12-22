@@ -139,7 +139,7 @@ class AltoRouter {
 
 		if (preg_match_all('`(/|\.|)\[([^:\]]*+)(?::([^:\]]*+))?\](\?|)`', $route, $matches, PREG_SET_ORDER)) {
 
-			foreach($matches as $match) {
+			foreach($matches as $index => $match) {
 				list($block, $pre, $type, $param, $optional) = $match;
 
 				if ($pre) {
@@ -147,12 +147,16 @@ class AltoRouter {
 				}
 
 				if(isset($params[$param])) {
+					// Part is found, replace for param value
 					$url = str_replace($block, $params[$param], $url);
-				} elseif ($optional) {
+				} elseif ($optional && $index !== 0) {
+					// Only strip preceeding slash if it's not at the base
 					$url = str_replace($pre . $block, '', $url);
+				} else {
+					// Strip match block
+					$url = str_replace($block, '', $url);
 				}
 			}
-
 
 		}
 
