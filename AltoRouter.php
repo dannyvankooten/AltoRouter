@@ -13,6 +13,7 @@ class AltoRouter {
 		'**' => '.++',
 		''   => '[^/\.]++'
 	);
+	protected $defaultParams = array();
 
 	/**
 	  * Create router in one call from config.
@@ -20,11 +21,13 @@ class AltoRouter {
 	  * @param array $routes
 	  * @param string $basePath
 	  * @param array $matchTypes
+	  * @param array $defaultParams
 	  */
-	public function __construct( $routes = array(), $basePath = '', $matchTypes = array() ) {
+	public function __construct( $routes = array(), $basePath = '', $matchTypes = array(), $defaultParams = array() ) {
 		$this->addRoutes($routes);
 		$this->setBasePath($basePath);
 		$this->addMatchTypes($matchTypes);
+		$this->addDefaultParams($defaultParams);
 	}
 	
 	/**
@@ -74,6 +77,15 @@ class AltoRouter {
 	}
 
 	/**
+	 * Add default params. It uses array_merge so keys can be overwritten.
+	 *
+	 * @param array $defaultParams
+	 */
+	public function addDefaultParams($defaultParams) {
+		$this->defaultParams = array_merge($this->defaultParams, $defaultParams);
+	}
+
+	/**
 	 * Map a route to a target
 	 *
 	 * @param string $method One of 5 HTTP Methods, or a pipe-separated list of multiple HTTP Methods (GET|POST|PATCH|PUT|DELETE)
@@ -118,6 +130,9 @@ class AltoRouter {
 		
 		// prepend base path to route url again
 		$url = $this->basePath . $route;
+
+		// merge with defaultParams
+		$params = array_merge($this->defaultParams, $params);
 
 		if (preg_match_all('`(/|\.|)\[([^:\]]*+)(?::([^:\]]*+))?\](\?|)`', $route, $matches, PREG_SET_ORDER)) {
 
