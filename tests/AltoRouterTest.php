@@ -333,13 +333,20 @@ class AltoRouterTest extends PHPUnit_Framework_TestCase
 
 	}
 	
-	public function testMatchWithServerVars()
+	public function testMatchWithRequest()
 	{
-		$this->router->map('GET', '/foo/[:controller]/[:action]', 'foo_action', 'foo_route');
-		
-		$_SERVER['REQUEST_URI'] = '/foo/test/do';
-		$_SERVER['REQUEST_METHOD'] = 'GET';
-		
+		$router = $this->getMockBuilder('AltoRouterDebug')
+			->setMethods(array('getRequestURI', 'getRequestMethod'))
+			->getMock();
+
+		$router->method('getRequestURI')
+			->willReturn('/foo/test/do');
+
+		$router->method('getRequestMethod')
+			->willReturn('POST');
+
+		$router->map('POST', '/foo/[:controller]/[:action]', 'foo_action', 'foo_route');
+
 		$this->assertEquals(array(
 			'target' => 'foo_action',
 			'params' => array(
@@ -347,7 +354,7 @@ class AltoRouterTest extends PHPUnit_Framework_TestCase
 				'action' => 'do'
 			),
 			'name' => 'foo_route'
-		), $this->router->match());
+		), $router->match());
 	}
 	
 	public function testMatchWithOptionalUrlParts()
@@ -471,4 +478,26 @@ class AltoRouterTest extends PHPUnit_Framework_TestCase
 		
 		$this->assertFalse($this->router->match('/﷽‎', 'GET'));
 	}
+
+	/**
+	 * @covers AltoRouter::getRequestMethod
+	 * @covers AltoRouter::getRequestURI
+	 */
+	public function testMatchWithRequestFromServer()
+	{
+		$_SERVER['REQUEST_METHOD'] = 'POST';
+		$_SERVER['REQUEST_URI'] = '/foo/test/do';
+
+		$this->router->map('POST', '/foo/[:controller]/[:action]', 'foo_action', 'foo_route');
+
+		$this->assertEquals(array(
+			'target' => 'foo_action',
+			'params' => array(
+				'controller' => 'test',
+				'action' => 'do'
+			),
+			'name' => 'foo_route'
+		), $this->router->match());
+	}
+
 }
