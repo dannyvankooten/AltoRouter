@@ -479,25 +479,4 @@ class AltoRouterTest extends PHPUnit_Framework_TestCase
 		$this->assertFalse($this->router->match('/﷽‎', 'GET'));
 	}
 
-	/**
-	 * @covers AltoRouter::getRequestMethod
-	 * @covers AltoRouter::getRequestURI
-	 */
-	public function testMatchWithRequestFromServer()
-	{
-		$_SERVER['REQUEST_METHOD'] = 'POST';
-		$_SERVER['REQUEST_URI'] = '/foo/test/do';
-
-		$this->router->map('POST', '/foo/[:controller]/[:action]', 'foo_action', 'foo_route');
-
-		$this->assertEquals(array(
-			'target' => 'foo_action',
-			'params' => array(
-				'controller' => 'test',
-				'action' => 'do'
-			),
-			'name' => 'foo_route'
-		), $this->router->match());
-	}
-
 }

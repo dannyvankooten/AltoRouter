@@ -237,18 +237,20 @@ class AltoRouter {
 	 * Get request URI from $_SERVER
 	 *
 	 * @return string, the request URI
+	 * @codeCoverageIgnore filter_input is not mockable
 	 */
 	protected function getRequestURI(){
-		return isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : null;
+		return filter_input(INPUT_SERVER, 'REQUEST_URI');
 	}
 
 	/**
 	 * Get request method from $_SERVER
 	 *
 	 * @return string, the request method
-	 */
+	 * @codeCoverageIgnore filter_input is not mockable
+	*/
 	protected function getRequestMethod(){
-		return isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] : null;
+		return filter_input(INPUT_SERVER, 'REQUEST_METHOD');
 	}
 
 	/**
