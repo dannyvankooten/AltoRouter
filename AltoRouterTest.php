@@ -7,11 +7,7 @@ class AltoRouterDebug extends AltoRouter{
 	public function getNamedRoutes(){
 		return $this->namedRoutes;
 	}
-	
-	public function getRoutes(){
-		return $this->routes;
-	}
-	
+
 	public function getBasePath(){
 		return $this->basePath;
 	}
@@ -70,6 +66,20 @@ class AltoRouterTest extends PHPUnit_Framework_TestCase
 	 */
 	protected function tearDown()
 	{
+	}
+
+	/**
+	 * @covers AltoRouter::getRoutes
+	 */
+	public function testGetRoutes()
+	{
+		$method = 'POST';
+		$route = '/[:controller]/[:action]';
+		$target = function(){};
+
+		$this->assertInternalType('array', $this->router->getRoutes());
+		$this->router->map($method, $route, $target);
+		$this->assertEquals(array(array($method, $route, $target, null)), $this->router->getRoutes());
 	}
 
 	/**
