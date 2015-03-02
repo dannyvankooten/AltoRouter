@@ -8,7 +8,7 @@ php:
 install:
   - composer install --dev
 script:
-  - phpunit -c phpunit.xml
+  - ./vendor/bin/phpunit
 after_script:
   - ./vendor/bin/test-reporter
 env:
