@@ -30,6 +30,6 @@
       "classmap": ["AltoRouter.php"]
    },
    "scripts": {
-     "test": "vendor/bin/phpunit AltoRouterTest.php"
+     "test": "vendor/bin/phpunit"
    }
 }
