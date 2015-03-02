@@ -5,3 +5,4 @@ Gemfile.lock
 build
 vendor
 composer.lock
+phpunit.xml
