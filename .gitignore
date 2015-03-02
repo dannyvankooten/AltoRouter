@@ -2,3 +2,6 @@
 _site
 Gemfile
 Gemfile.lock
+build
+vendor
+composer.lock
