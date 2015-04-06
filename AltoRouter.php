@@ -44,8 +44,8 @@ class AltoRouter {
 	 *   );
 	 *
 	 * @param array $routes
-	 * @return void
 	 * @author Koen Punt
+     * @throws Exception
 	 */
 	public function addRoutes($routes){
 		if(!is_array($routes) && !$routes instanceof Traversable) {
@@ -59,6 +59,8 @@ class AltoRouter {
 	/**
 	 * Set the base path.
 	 * Useful if you are running your application from a subdirectory.
+     *
+     * @param $basePath
 	 */
 	public function setBasePath($basePath) {
 		$this->basePath = $basePath;
@@ -80,6 +82,7 @@ class AltoRouter {
 	 * @param string $route The route regex, custom regex must start with an @. You can use multiple pre-set regex filters, like [i:id]
 	 * @param mixed $target The target where this route should point to. Can be anything.
 	 * @param string $name Optional name of this route. Supply if you want to reverse route this url in your application.
+     * @throws Exception
 	 */
 	public function map($method, $route, $target, $name = null) {
 
@@ -105,6 +108,7 @@ class AltoRouter {
 	 * @param string $routeName The name of the route.
 	 * @param array @params Associative array of parameters to replace placeholders with.
 	 * @return string The URL of the route with named parameters in place.
+     * @throws Exception
 	 */
 	public function generate($routeName, array $params = array()) {
 
@@ -150,7 +154,6 @@ class AltoRouter {
 	public function match($requestUrl = null, $requestMethod = null) {
 
 		$params = array();
-		$match = false;
 
 		// set Request Url if it isn't passed as parameter
 		if($requestUrl === null) {
@@ -161,7 +164,7 @@ class AltoRouter {
 		$requestUrl = substr($requestUrl, strlen($this->basePath));
 
 		// Strip query string (?a=b) from Request Url
-		if (($strpos = strpos($requestUrl, '?')) !== false) {
+		if ($strpos = strpos($requestUrl, '?')) {
 			$requestUrl = substr($requestUrl, 0, $strpos);
 		}
 
@@ -208,14 +211,14 @@ class AltoRouter {
 				while (true) {
 					if (!isset($_route[$i])) {
 						break;
-					} elseif (false === $regex) {
+					} elseif (!$regex) {
 						$c = $n;
 						$regex = $c === '[' || $c === '(' || $c === '.';
-						if (false === $regex && false !== isset($_route[$i+1])) {
+						if (!$regex && isset($_route[$i+1])) {
 							$n = $_route[$i + 1];
 							$regex = $n === '?' || $n === '+' || $n === '*' || $n === '{';
 						}
-						if (false === $regex && $c !== '/' && (!isset($requestUrl[$j]) || $c !== $requestUrl[$j])) {
+						if (!$regex && $c !== '/' && (!isset($requestUrl[$j]) || $c !== $requestUrl[$j])) {
 							continue 2;
 						}
 						$j++;
@@ -227,7 +230,7 @@ class AltoRouter {
 				$match = preg_match($regex, $requestUrl, $params);
 			}
 
-			if(($match == true || $match > 0)) {
+			if($match) {
 
 				if($params) {
 					foreach($params as $key => $value) {
@@ -247,6 +250,9 @@ class AltoRouter {
 
 	/**
 	 * Compile the regex for a given route (EXPENSIVE)
+     *
+     * @param $route
+     * @return string
 	 */
 	private function compileRoute($route) {
 		if (preg_match_all('`(/|\.|)\[([^:\]]*+)(?::([^:\]]*+))?\](\?|)`', $route, $matches, PREG_SET_ORDER)) {
