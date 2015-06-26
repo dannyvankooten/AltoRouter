@@ -1,5 +1,5 @@
 # AltoRouter [![Build Status](https://api.travis-ci.org/dannyvankooten/AltoRouter.png)](http://travis-ci.org/dannyvankooten/AltoRouter) [![Latest Stable Version](https://poser.pugx.org/altorouter/altorouter/v/stable.svg)](https://packagist.org/packages/altorouter/altorouter) [![License](https://poser.pugx.org/altorouter/altorouter/license.svg)](https://packagist.org/packages/altorouter/altorouter) [![Code Climate](https://codeclimate.com/github/dannyvankooten/AltoRouter/badges/gpa.svg)](https://codeclimate.com/github/dannyvankooten/AltoRouter) [![Test Coverage](https://codeclimate.com/github/dannyvankooten/AltoRouter/badges/coverage.svg)](https://codeclimate.com/github/dannyvankooten/AltoRouter)
-AltoRouter is a small but powerful routing class for PHP 5.3+, heavily inspired by [klein.php](https://github.com/chriso/klein.php/).
+AltoRouter is a small but powerful routing class for PHP 5.4+, heavily inspired by [klein.php](https://github.com/chriso/klein.php/).
 
 ```php
 $router = new AltoRouter();
@@ -15,6 +15,25 @@ $router->map( 'GET|POST', '/users/[i:id]/', function( $id ) {
   require __DIR__ . '/views/user/details.php';
 });
 ```
+AltoRouter used as trait in your class
+```php
+// Create you class 
+class mySuperClass {
+	// Use AltoRouter in you superclass
+	use AltoRouterTrait;
+}
+
+
+$Imyclass = new mySuperClass();
+$Imyclass->map('GET|POST','/', 'home#index', 'home');
+$Imyclass->map('GET','/users/', array('c' => 'UserController', 'a' => 'ListAction'));
+$Imyclass->map('GET','/users/[i:id]', 'users#show', 'users_show');
+$Imyclass->map('POST','/users/[i:id]/[delete|update:action]', 'usersController#doAction', 'users_do');
+
+// match current request
+$match = $Imyclass->match();
+
+```
 
 ## Features
 
@@ -23,10 +42,11 @@ $router->map( 'GET|POST', '/users/[i:id]/', function( $id ) {
 * Reversed routing
 * Flexible regular expression routing (inspired by [Sinatra](http://www.sinatrarb.com/))
 * Custom regexes
+* Can be used as trait in php 5.4
 
 ## Getting started
 
-You need PHP >= 5.3 to use AltoRouter.
+You need PHP >= 5.4 to use AltoRouter.
 
 - [Install AltoRouter](http://altorouter.com/usage/install.html)
 - [Rewrite all requests to AltoRouter](http://altorouter.com/usage/rewrite-requests.html)

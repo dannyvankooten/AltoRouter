@@ -1,6 +1,7 @@
 <?php
 
-require 'AltoRouter.php';
+require '../AltoRouterTrait.php';
+require '../AltoRouter.php';
 
 class AltoRouterDebug extends AltoRouter{
 
@@ -47,7 +48,7 @@ class SimpleTraversable implements Iterator{
 class AltoRouterTest extends PHPUnit_Framework_TestCase
 {
 	/**
-	 * @var AltoRouter
+	 * @var AltoRouterTrait
 	 */
 	protected $router;
 
@@ -69,7 +70,7 @@ class AltoRouterTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @covers AltoRouter::getRoutes
+	 * @covers AltoRouterTrait::getRoutes
 	 */
 	public function testGetRoutes()
 	{
@@ -83,7 +84,7 @@ class AltoRouterTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @covers AltoRouter::addRoutes
+	 * @covers AltoRouterTrait::addRoutes
 	 */
 	public function testAddRoutes()
 	{
@@ -103,7 +104,7 @@ class AltoRouterTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @covers AltoRouter::addRoutes
+	 * @covers AltoRouterTrait::addRoutes
 	 */
 	public function testAddRoutesAcceptsTraverable()
 	{
@@ -123,7 +124,7 @@ class AltoRouterTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @covers AltoRouter::addRoutes
+	 * @covers AltoRouterTrait::addRoutes
 	 * @expectedException Exception
 	 */
 	public function testAddRoutesThrowsExceptionOnInvalidArgument()
@@ -132,7 +133,7 @@ class AltoRouterTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @covers AltoRouter::setBasePath
+	 * @covers AltoRouterTrait::setBasePath
 	 */
 	public function testSetBasePath()
 	{
@@ -144,7 +145,7 @@ class AltoRouterTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @covers AltoRouter::map
+	 * @covers AltoRouterTrait::map
 	 */
 	public function testMap()
 	{
@@ -160,7 +161,7 @@ class AltoRouterTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @covers AltoRouter::map
+	 * @covers AltoRouterTrait::map
 	 */
 	public function testMapWithName()
 	{
@@ -187,7 +188,7 @@ class AltoRouterTest extends PHPUnit_Framework_TestCase
 
 
 	/**
-	 * @covers AltoRouter::generate
+	 * @covers AltoRouterTrait::generate
 	 */
 	public function testGenerate()
 	{
@@ -245,8 +246,8 @@ class AltoRouterTest extends PHPUnit_Framework_TestCase
 	}
 	
 	/**
-	 * @covers AltoRouter::match
-	 * @covers AltoRouter::compileRoute
+	 * @covers AltoRouterTrait::match
+	 * @covers AltoRouterTrait::compileRoute
 	 */
 	public function testMatch()
 	{
@@ -380,7 +381,7 @@ class AltoRouterTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @covers AltoRouter::addMatchTypes
+	 * @covers AltoRouterTrait::addMatchTypes
 	 */
 	public function testMatchWithCustomNamedRegex()
 	{
