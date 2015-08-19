@@ -12,6 +12,18 @@ class AltoRouterDebug extends AltoRouter{
 		return $this->basePath;
 	}
 
+	public function getMatchTypes(){
+		return $this->matchTypes;
+	}
+
+	public function getUrlConverters(){
+		return $this->urlConverters;
+	}
+
+	public function getUrlConverterTypes(){
+		return $this->urlConverterTypes;
+	}
+
 }
 
 class SimpleTraversable implements Iterator{
@@ -39,6 +51,40 @@ class SimpleTraversable implements Iterator{
 		return isset($this->_data[$this->_position]);
 	}
 
+}
+
+class NullUrlConverter implements IUrlConverter {
+
+	function getRegexp() {
+		return '.+?';
+	}
+	
+	function getUrl($data) {
+		return $data;
+	}
+
+	function getValue($url) {
+		return $url;
+	}
+}
+
+class ListUrlConverter implements IUrlConverter {
+
+	function __construct($delimiter=',') {
+		$this->delimiter = $delimiter;
+	}
+
+	function getRegexp() {
+		return '[0-9a-zA-Z]+(' . $this->delimiter . '[0-9a-zA-Z]+)*';
+	}
+	
+	function getUrl($data) {
+		return join($this->delimiter, $data);
+	}
+
+	function getValue($url) {
+		return explode($this->delimiter, $url);
+	}
 }
 
 /**
@@ -132,6 +178,46 @@ class AltoRouterTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
+	 * @covers AltoRouter::addUrlConverters
+	 */
+	public function testAddUrlConverters()
+	{	
+		$listConverter = new ListUrlConverter();
+		$nullConverter = new NullUrlConverter();
+
+		$this->router->addUrlConverters(array('list' => $listConverter, 'null' => $nullConverter));
+
+		$urlConverterTypes = $this->router->getUrlConverterTypes();
+		$this->assertEquals($urlConverterTypes['list'], $listConverter);
+		$this->assertEquals($urlConverterTypes['list'], $listConverter);
+
+		$matchTypes = $this->router->getMatchTypes();
+		$this->assertEquals($matchTypes['list'], $listConverter->getRegexp());
+		$this->assertEquals($matchTypes['null'], $nullConverter->getRegexp());
+	}
+
+	/**
+	 * @covers AltoRouter::addUrlConverters
+	 * @expectedException Exception
+	 */
+	public function testAddUrlConvertersThrowsExceptionOnInvalidArgument()
+	{
+		$this->router->addUrlConverters(array('foo' => new stdClass));
+	}
+
+	/**
+	 * @covers AltoRouter::addUrlConverters
+	 * @expectedException Exception
+	 */
+	public function testAddUrlConvertersThrowsExceptionOnConflictedMatchType()
+	{
+		$nullConverter = new NullUrlConverter();
+
+		$this->router->addUrlConverters(array('*' => $nullConverter));
+		$this->router->addUrlConverters(array('foo|bar' => $nullConverter));
+	}
+
+	/**
 	 * @covers AltoRouter::setBasePath
 	 */
 	public function testSetBasePath()
@@ -183,6 +269,53 @@ class AltoRouterTest extends PHPUnit_Framework_TestCase
 		}catch(Exception $e){
 			$this->assertEquals("Can not redeclare route '{$name}'", $e->getMessage());
 		}
+	}
+
+	/**
+	 * @covers AltoRouter::map
+	 * @expectedException Exception
+	 */
+	public function testMapWithUrlConverter()
+	{
+		$method = 'POST';
+		$this->router->addUrlConverters(array('list' => new ListUrlConverter()));
+		$route = '/[:scalar]/[list:complex]/';
+		$target = function(){};
+	
+		// this should throw an exception b.c. "route_name:param_name" pair 
+		// currently being used as key in $this->urlConverters array
+		// TODO: use route itself instead of name or generate random name
+		$this->router->map($method, $route, $target);
+	}
+
+	/**
+	 * @covers AltoRouter::map
+	 */
+	public function testMapWithNameAndUrlConverter()
+	{
+		$listConverter = new ListUrlConverter();
+		$nullConverter = new ListUrlConverter();
+
+		$method = 'POST';		
+		$this->router->addUrlConverters(array(
+			'list' => $listConverter,
+			'null' => $nullConverter,
+		));
+		$route = '/[:scalar]/[list:complex]/[null:dummy]/';
+		$target = function(){};
+		$name = 'myroute';
+	
+		$this->router->map($method, $route, $target, $name);
+		
+		$routes = $this->router->getRoutes();
+		$this->assertEquals(array($method, $route, $target, $name), $routes[0]);
+		
+		$named_routes = $this->router->getNamedRoutes();
+		$this->assertEquals($route, $named_routes[$name]);
+
+		$urlConverters = $this->router->getUrlConverters();
+		$this->assertEquals($urlConverters['myroute:complex'], $listConverter);
+		$this->assertEquals($urlConverters['myroute:dummy'], $nullConverter);
 	}
 
 
@@ -243,6 +376,55 @@ class AltoRouterTest extends PHPUnit_Framework_TestCase
 			$this->assertEquals("Route 'nonexisting_route' does not exist.", $e->getMessage());
 		}
 	}
+
+	/**
+	 * @covers AltoRouter::generate
+	 */
+	public function testGenerateWithUrlConverter()
+	{
+		$this->router->addUrlConverters(array('list' => new ListUrlConverter()));
+
+		$params = array(
+			'scalar' => 'test',
+			'complex' => array('foo', 'bar', 'baz')
+		);
+				
+		$this->router->map('GET', '/[:scalar]/[list:complex]/', function(){}, 'foo_route');
+		
+		$this->assertEquals('/test/foo,bar,baz/',
+			$this->router->generate('foo_route', $params));
+		
+		$params = array(
+			'scalar' => 'test',
+			'complex' => array('foo', 'bar', 'baz'),
+			'type' => 'json'
+		);
+		
+		$this->assertEquals('/test/foo,bar,baz/',
+			$this->router->generate('foo_route', $params));
+	}
+
+	/**
+	 * @covers AltoRouter::generate
+	 */
+	public function testGenerateWithOptionalUrlConverter()
+	{
+		$this->router->addUrlConverters(array('list' => new ListUrlConverter()));
+		$this->router->map('GET', '/[:scalar]/[list:complex]?/', function(){}, 'foo_route');
+		
+		$params = array(
+			'scalar' => 'test'
+		);
+		
+		$this->assertEquals('/test/', $this->router->generate('foo_route', $params));
+		
+		$params = array(
+			'scalar' => 'test',
+			'complex' => array('foo', 'bar', 'baz'),
+		);
+		
+		$this->assertEquals('/test/foo,bar,baz/', $this->router->generate('foo_route', $params));
+	}		
 	
 	/**
 	 * @covers AltoRouter::match
@@ -273,6 +455,24 @@ class AltoRouterTest extends PHPUnit_Framework_TestCase
 		), $this->router->match('/foo/test/do?param=value', 'GET'));
 		
 	}
+
+	/**
+	 * @covers AltoRouter::match
+	 */
+	public function testMatchUrlConverter()
+	{
+		$this->router->addUrlConverters(array('list' => new ListUrlConverter()));
+		$this->router->map('GET', '/foo/[list:complex_1]/[list:complex_2]', 'foo_action', 'foo_route');
+		
+		$this->assertEquals(array(
+			'target' => 'foo_action',
+			'params' => array(
+				'complex_1' => array('1', '2', '3'),
+				'complex_2' => array('foo', 'bar', 'baz'),
+			),
+			'name' => 'foo_route'
+		), $this->router->match('/foo/1,2,3/foo,bar,baz', 'GET'));
+	}	
 	
 	public function testMatchWithFixedParamValues()
 	{

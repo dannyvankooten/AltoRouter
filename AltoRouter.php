@@ -13,6 +13,8 @@ class AltoRouter {
 		'**' => '.++',
 		''   => '[^/\.]++'
 	);
+	protected $urlConverterTypes = array();
+	protected $urlConverters = array();
 
 	/**
 	  * Create router in one call from config.
@@ -72,9 +74,32 @@ class AltoRouter {
 	public function addMatchTypes($matchTypes) {
 		$this->matchTypes = array_merge($this->matchTypes, $matchTypes);
 	}
+	
+	/**
+	 * Add URL converters for parsing complex values and building URLs.
+	 * Converters must implement IUrlConverter interface.
+	 *
+	 * @param object $converter Instance of URL converter class
+	 */
+	public function addUrlConverters($urlConverters) {
+		$convertersMatchTypes = array();
+		foreach ($urlConverters as $name => $converter) {
+			if (!array_key_exists('IUrlConverter', class_implements($converter))) {
+				throw new \Exception(sprintf('URL converter "%s" should implement IUrlConverter interface',
+									 get_class($converter)));
+			}
+			if (in_array($name, array_keys($this->matchTypes)) || (strpos($name, '|') !== false)) {
+				throw new \Exception(sprintf('URL converter "%s" hides existing match type "%s" or contains reserved symbol "|"', 
+									 get_class($converter), $name));
+			}
+			$convertersMatchTypes[$name] = $converter->getRegexp();
+			$this->urlConverterTypes[$name] = $converter;   
+		}
+		$this->addMatchTypes($convertersMatchTypes);
+	}
 
 	/**
-	 * Map a route to a target
+	 * Map a route to a target, bind URL converters
 	 *
 	 * @param string $method One of 5 HTTP Methods, or a pipe-separated list of multiple HTTP Methods (GET|POST|PATCH|PUT|DELETE)
 	 * @param string $route The route regex, custom regex must start with an @. You can use multiple pre-set regex filters, like [i:id]
@@ -91,7 +116,19 @@ class AltoRouter {
 			} else {
 				$this->namedRoutes[$name] = $route;
 			}
+		}
 
+		// Search for match types of URL converters, bind converters to values
+		if (preg_match_all('`(/|\.|)\[([^:\]]*+)(?::([^:\]]*+))?\](\?|)`', $route, $matches, PREG_SET_ORDER)) {
+			foreach($matches as $match) {
+				list($block, $pre, $type, $param, $optional) = $match;
+				if (isset($this->urlConverterTypes[$type])) {
+					if (!$name) {
+						throw new \Exception(sprintf('Currently URL converter ("%s") cannot be added to unnamed route', $type));
+					}
+					$this->urlConverters[$name . ':' . $param] = $this->urlConverterTypes[$type];
+				}
+			}
 		}
 
 		return;
@@ -129,7 +166,13 @@ class AltoRouter {
 				}
 
 				if(isset($params[$param])) {
-					$url = str_replace($block, $params[$param], $url);
+					// check first if there's an URL converter for this value
+					if (isset($this->urlConverters[$routeName . ":" . $param])) {
+						$converted = call_user_func(array($this->urlConverters[$routeName . ":" . $param], 'getUrl'), $params[$param]);
+						$url = str_replace($block, $converted, $url);
+					} else {
+						$url = str_replace($block, $params[$param], $url);
+					}
 				} elseif ($optional) {
 					$url = str_replace($pre . $block, '', $url);
 				}
@@ -231,7 +274,12 @@ class AltoRouter {
 
 				if($params) {
 					foreach($params as $key => $value) {
-						if(is_numeric($key)) unset($params[$key]);
+						if(is_numeric($key)) {
+							unset($params[$key]);
+						} elseif (isset($this->urlConverters[$name . ":" . $key])) {
+							// there's converter for this value
+							$params[$key] = call_user_func(array($this->urlConverters[$name . ":" . $key], 'getValue'), $value);
+						}
 					}
 				}
 
@@ -277,4 +325,31 @@ class AltoRouter {
 		}
 		return "`^$route$`u";
 	}
+}
+
+
+interface IUrlConverter {
+	
+	/*
+	 * Get matching regular expression for this converter  
+	 * 
+	 * @return string Regular expression
+	 */
+	public function getRegexp();
+	
+	/*
+	 * PHP value to URL
+	 * 
+	 * @param mixed $data PHP value
+	 * @return string URL
+	 */
+	public function getUrl($data);
+
+	/*
+	 * URL to PHP value
+	 * 
+	 * @param string $url
+	 * @return mixed PHP value
+	 */
+	public function getValue($url);
 }
