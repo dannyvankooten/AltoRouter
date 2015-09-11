@@ -96,6 +96,66 @@ class AltoRouter {
 
 		return;
 	}
+	
+	/**
+	 * Map a route to a target with GET verb
+	 * Alias method for map function
+	 * 
+	 * @param string $route The route regex, custom regex must start with an @. You can use multiple pre-set regex filters, like [i:id]
+	 * @param mixed $target The target where this route should point to. Can be anything.
+	 * @param string $name Optional name of this route. Supply if you want to reverse route this url in your application.
+	 */
+	public function get($route, $target, $name = null) {
+		$this->map('GET', $route, $target, $name);
+	}
+	
+	/**
+	 * Map a route to a target with POST verb
+	 * Alias method for map function
+	 * 
+	 * @param string $route The route regex, custom regex must start with an @. You can use multiple pre-set regex filters, like [i:id]
+	 * @param mixed $target The target where this route should point to. Can be anything.
+	 * @param string $name Optional name of this route. Supply if you want to reverse route this url in your application.
+	 */
+	public function post($route, $target, $name = null) {
+		$this->map('POST', $route, $target, $name);
+	}
+	
+	/**
+	 * Map a route to a target with PATCH verb
+	 * Alias method for map function
+	 * 
+	 * @param string $route The route regex, custom regex must start with an @. You can use multiple pre-set regex filters, like [i:id]
+	 * @param mixed $target The target where this route should point to. Can be anything.
+	 * @param string $name Optional name of this route. Supply if you want to reverse route this url in your application.
+	 */
+	public function patch($route, $target, $name = null) {
+		$this->map('PATCH', $route, $target, $name);
+	}
+	
+	/**
+	 * Map a route to a target with PUT verb
+	 * Alias method for map function
+	 * 
+	 * @param string $route The route regex, custom regex must start with an @. You can use multiple pre-set regex filters, like [i:id]
+	 * @param mixed $target The target where this route should point to. Can be anything.
+	 * @param string $name Optional name of this route. Supply if you want to reverse route this url in your application.
+	 */
+	public function put($route, $target, $name = null) {
+		$this->map('PUT', $route, $target, $name);
+	}
+	
+	/**
+	 * Map a route to a target with DELETE verb
+	 * Alias method for map function
+	 * 
+	 * @param string $route The route regex, custom regex must start with an @. You can use multiple pre-set regex filters, like [i:id]
+	 * @param mixed $target The target where this route should point to. Can be anything.
+	 * @param string $name Optional name of this route. Supply if you want to reverse route this url in your application.
+	 */
+	public function delete($route, $target, $name = null) {
+		$this->map('DELETE', $route, $target, $name);
+	}
 
 	/**
 	 * Reversed routing
