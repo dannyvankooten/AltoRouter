@@ -189,52 +189,35 @@ class AltoRouter {
 		}
 
 		foreach($this->routes as $handler) {
-			list($methods, $_route, $target, $name) = $handler;
+			list($methods, $route, $target, $name) = $handler;
 
 			$method_match = (stripos($methods, $requestMethod) !== false);
 
 			// Method did not match, continue to next route.
-			if(!$method_match) continue;
+			if (!$method_match) continue;
 
-			// Check for a wildcard (matches all)
-			if ($_route === '*') {
+			if ($route === '*') {
+				// * wildcard (matches all)
 				$match = true;
-			} elseif (isset($_route[0]) && $_route[0] === '@') {
-				$pattern = '`' . substr($_route, 1) . '`u';
-				$match = preg_match($pattern, $requestUrl, $params);
+			} elseif (isset($route[0]) && $route[0] === '@') {
+				// @ regex delimiter
+				$pattern = '`' . substr($route, 1) . '`u';
+				$match = preg_match($pattern, $requestUrl, $params) === 1;
+			} elseif (($position = strpos($route, '[')) === false) {
+				// No params in url, do string comparison
+				$match = strcmp($requestUrl, $route) === 0;
 			} else {
-				$route = null;
-				$regex = false;
-				$j = 0;
-				$n = isset($_route[0]) ? $_route[0] : null;
-				$i = 0;
-
-				// Find the longest non-regex substring and match it against the URI
-				while (true) {
-					if (!isset($_route[$i])) {
-						break;
-					} elseif (false === $regex) {
-						$c = $n;
-						$regex = $c === '[' || $c === '(' || $c === '.';
-						if (false === $regex && false !== isset($_route[$i+1])) {
-							$n = $_route[$i + 1];
-							$regex = $n === '?' || $n === '+' || $n === '*' || $n === '{';
-						}
-						if (false === $regex && $c !== '/' && (!isset($requestUrl[$j]) || $c !== $requestUrl[$j])) {
-							continue 2;
-						}
-						$j++;
-					}
-					$route .= $_route[$i++];
+				// Compare longest non-param string with url
+				if (strncmp($requestUrl, $route, $position) !== 0) {
+					continue;
 				}
-
 				$regex = $this->compileRoute($route);
-				$match = preg_match($regex, $requestUrl, $params);
+				$match = preg_match($regex, $requestUrl, $params) === 1;
 			}
 
-			if(($match == true || $match > 0)) {
+			if ($match) {
 
-				if($params) {
+				if ($params) {
 					foreach($params as $key => $value) {
 						if(is_numeric($key)) unset($params[$key]);
 					}

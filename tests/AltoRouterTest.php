@@ -306,6 +306,33 @@ class AltoRouterTest extends PHPUnit_Framework_TestCase
 		$this->assertFalse($this->router->match('/users/1/create', 'GET'));
 	}
 	
+	public function testMatchWithPlainRoute()
+	{
+		$router = $this->getMockBuilder('AltoRouterDebug')
+			->setMethods(array('compileRoute'))
+			->getMock();
+		
+		// this should prove that compileRoute is not called when the route doesn't
+		// have any params in it, but this doesn't work because compileRoute is private.
+		$router->expects($this->never())
+			->method('compileRoute');
+
+		$router->map('GET', '/contact', 'website#contact', 'contact');
+
+		// exact match, so no regex compilation necessary
+		$this->assertEquals(array(
+			'target' => 'website#contact',
+			'params' => array(),
+			'name' => 'contact'
+		), $router->match('/contact', 'GET'));
+
+		$router->map('GET', '/page/[:id]', 'pages#show', 'page');
+
+		// no prefix match, so no regex compilation necessary
+		$this->assertFalse($router->match('/page1', 'GET'));
+
+	}
+	
 	public function testMatchWithServerVars()
 	{
 		$this->router->map('GET', '/foo/[:controller]/[:action]', 'foo_action', 'foo_route');
