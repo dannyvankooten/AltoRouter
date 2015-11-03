@@ -80,6 +80,10 @@ class AltoRouterTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testAddRoutesAcceptsTraverable()
 	{
+		if(defined('HHVM_VERSION')){
+			$this->markTestSkipped('HHVM does not support array functions on ArrayObject');
+		}
+		
 		$traversable = new ArrayObject(array(
 			array('GET', '/foo', 'foo_action', null),
 			array('POST', '/bar', 'bar_action', 'second_route')
