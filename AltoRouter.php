@@ -2,9 +2,24 @@
 
 class AltoRouter {
 
+	/**
+	 * @var array Array of all routes (incl. named routes).
+	 */
 	protected $routes = array();
+
+	/**
+	 * @var array Array of all named routes.
+	 */
 	protected $namedRoutes = array();
+
+	/**
+	 * @var string Can be used to ignore leading part of the Request URL (if main file lives in subdirectory of host)
+	 */
 	protected $basePath = '';
+
+	/**
+	 * @var array Array of default match types (regex helpers)
+	 */
 	protected $matchTypes = array(
 		'i'  => '[0-9]++',
 		'a'  => '[0-9A-Za-z]++',
