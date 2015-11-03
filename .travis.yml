@@ -9,6 +9,9 @@ php:
   - hhvm
 install:
   - composer update --prefer-source
+cache:
+  directories:
+    - ./vendor/
 script:
   - ./vendor/bin/phpunit
 after_script:
