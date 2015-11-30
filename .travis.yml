@@ -4,9 +4,10 @@ php:
   - 5.4
   - 5.5
   - 5.6
+  - 7.0
   - hhvm
 install:
-  - composer install --dev
+  - composer update --prefer-source
 script:
   - ./vendor/bin/phpunit
 after_script:
@@ -14,3 +15,8 @@ after_script:
 env:
   global:
     secure: XnXSc7nxJMIrm/EJ1KuwlN4f+sj2R/sR0IFHdOdbOfMKyZ/u6WEgZ3vNrdeAsisiC/QUJJ00DGku1pAl3t3Hzvam0N/SiHtXjB1ZLVbX00S1PEZ6Z+h9zoaUBXWoN6+0OdKN0Xjmj2lwvTpvUxUZXNabilOw0F9WS/+JasofqBQ=
+sudo: false
+cache:
+  directories:
+    - vendor
+    - $HOME/.composer/cache
