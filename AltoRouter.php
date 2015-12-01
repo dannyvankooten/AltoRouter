@@ -189,7 +189,7 @@ class AltoRouter {
 		}
 
 		foreach($this->routes as $handler) {
-			list($method, $_route, $target, $name) = $handler;
+			list($method, $route, $target, $name) = $handler;
 
 			$methods = explode('|', $method);
 			$method_match = false;
@@ -206,37 +206,12 @@ class AltoRouter {
 			if(!$method_match) continue;
 
 			// Check for a wildcard (matches all)
-			if ($_route === '*') {
+			if ($route === '*') {
 				$match = true;
-			} elseif (isset($_route[0]) && $_route[0] === '@') {
-				$pattern = '`' . substr($_route, 1) . '`u';
+			} elseif (isset($route[0]) && $route[0] === '@') {
+				$pattern = '`' . substr($route, 1) . '`u';
 				$match = preg_match($pattern, $requestUrl, $params);
 			} else {
-				$route = null;
-				$regex = false;
-				$j = 0;
-				$n = isset($_route[0]) ? $_route[0] : null;
-				$i = 0;
-
-				// Find the longest non-regex substring and match it against the URI
-				while (true) {
-					if (!isset($_route[$i])) {
-						break;
-					} elseif (false === $regex) {
-						$c = $n;
-						$regex = $c === '[' || $c === '(' || $c === '.';
-						if (false === $regex && false !== isset($_route[$i+1])) {
-							$n = $_route[$i + 1];
-							$regex = $n === '?' || $n === '+' || $n === '*' || $n === '{';
-						}
-						if (false === $regex && $c !== '/' && (!isset($requestUrl[$j]) || $c !== $requestUrl[$j])) {
-							continue 2;
-						}
-						$j++;
-					}
-					$route .= $_route[$i++];
-				}
-
 				$regex = $this->compileRoute($route);
 				$match = preg_match($regex, $requestUrl, $params);
 			}
