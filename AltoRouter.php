@@ -189,18 +189,9 @@ class AltoRouter {
 		}
 
 		foreach($this->routes as $handler) {
-			list($method, $_route, $target, $name) = $handler;
+			list($methods, $_route, $target, $name) = $handler;
 
-			$methods = explode('|', $method);
-			$method_match = false;
-
-			// Check if request method matches. If not, abandon early. (CHEAP)
-			foreach($methods as $method) {
-				if (strcasecmp($requestMethod, $method) === 0) {
-					$method_match = true;
-					break;
-				}
-			}
+			$method_match = (stripos($methods, $requestMethod) !== false);
 
 			// Method did not match, continue to next route.
 			if(!$method_match) continue;
