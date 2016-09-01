@@ -1,5 +1,7 @@
 <?php
 
+namespace AltoRouter;
+
 class AltoRouter {
 
 	/**
