@@ -271,7 +271,6 @@ class AltoRouterTest extends PHPUnit_Framework_TestCase
 			),
 			'name' => 'foo_route'
 		), $this->router->match('/foo/test/do?param=value', 'GET'));
-		
 	}
 
 	public function testMatchWithNonRegex() {
@@ -470,5 +469,22 @@ class AltoRouterTest extends PHPUnit_Framework_TestCase
 		), $this->router->match('/bar/some-path', 'GET'));
 		
 		$this->assertFalse($this->router->match('/﷽‎', 'GET'));
+	}
+	public function testMatchWithOneDynamicParam()
+	{
+		$this->router->map('GET', '/foo/[i:id]?', 'foo_action', 'foo_route');
+		$this->assertEquals(array(
+			'target' => 'foo_action',
+			'params' => array(
+				'id' => '666'
+			),
+			'name' => 'foo_route'
+		), $this->router->match('/foo/666', 'GET'));
+		
+		$this->assertEquals(array(
+			'target' => 'foo_action',
+			'params' => array(),
+			'name' => 'foo_route'
+		), $this->router->match('/foo', 'GET'));
 	}
 }
