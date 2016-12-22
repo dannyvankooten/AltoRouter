@@ -1,6 +1,7 @@
 <?php
 
 require 'AltoRouter.php';
+require 'AltoTransformer.php';
 
 class AltoRouterDebug extends AltoRouter{
 
@@ -39,6 +40,16 @@ class SimpleTraversable implements Iterator{
 		return isset($this->_data[$this->_position]);
 	}
 
+}
+
+class AltoDateTransformer implements AltoTransformer {
+	public function fromUrl($parameter) {
+		return new DateTime($parameter);
+	}
+
+	public function toUrl($parameter) {
+		return $parameter->format('Y-m-d');
+	}
 }
 
 /**
@@ -90,14 +101,14 @@ class AltoRouterTest extends PHPUnit_Framework_TestCase
 		$method = 'POST';
 		$route = '/[:controller]/[:action]';
 		$target = function(){};
-		
+
 		$this->router->addRoutes(array(
 			array($method, $route, $target),
 			array($method, $route, $target, 'second_route')
 		));
-		
+
 		$routes = $this->router->getRoutes();
-		
+
 		$this->assertEquals(array($method, $route, $target, null), $routes[0]);
 		$this->assertEquals(array($method, $route, $target, 'second_route'), $routes[1]);
 	}
@@ -109,15 +120,15 @@ class AltoRouterTest extends PHPUnit_Framework_TestCase
 	{
 		$traversable = new SimpleTraversable();
 		$this->router->addRoutes($traversable);
-		
+
 		$traversable->rewind();
-		
+
 		$first = $traversable->current();
 		$traversable->next();
 		$second = $traversable->current();
-		
+
 		$routes = $this->router->getRoutes();
-		
+
 		$this->assertEquals($first, $routes[0]);
 		$this->assertEquals($second, $routes[1]);
 	}
@@ -138,7 +149,7 @@ class AltoRouterTest extends PHPUnit_Framework_TestCase
 	{
 		$basePath = $this->router->setBasePath('/some/path');
 		$this->assertEquals('/some/path', $this->router->getBasePath());
-		
+
 		$basePath = $this->router->setBasePath('/some/path');
 		$this->assertEquals('/some/path', $this->router->getBasePath());
 	}
@@ -151,11 +162,11 @@ class AltoRouterTest extends PHPUnit_Framework_TestCase
 		$method = 'POST';
 		$route = '/[:controller]/[:action]';
 		$target = function(){};
-		
+
 		$this->router->map($method, $route, $target);
-		
+
 		$routes = $this->router->getRoutes();
-		
+
 		$this->assertEquals(array($method, $route, $target, null), $routes[0]);
 	}
 
@@ -168,15 +179,15 @@ class AltoRouterTest extends PHPUnit_Framework_TestCase
 		$route = '/[:controller]/[:action]';
 		$target = function(){};
 		$name = 'myroute';
-		
+
 		$this->router->map($method, $route, $target, $name);
-		
+
 		$routes = $this->router->getRoutes();
 		$this->assertEquals(array($method, $route, $target, $name), $routes[0]);
-		
+
 		$named_routes = $this->router->getNamedRoutes();
 		$this->assertEquals($route, $named_routes[$name]);
-		
+
 		try{
 			$this->router->map($method, $route, $target, $name);
 			$this->fail('Should not be able to add existing named route');
@@ -195,45 +206,45 @@ class AltoRouterTest extends PHPUnit_Framework_TestCase
 			'controller' => 'test',
 			'action' => 'someaction'
 		);
-		
+
 		$this->router->map('GET', '/[:controller]/[:action]', function(){}, 'foo_route');
-		
+
 		$this->assertEquals('/test/someaction',
 			$this->router->generate('foo_route', $params));
-		
+
 		$params = array(
 			'controller' => 'test',
 			'action' => 'someaction',
 			'type' => 'json'
 		);
-		
+
 		$this->assertEquals('/test/someaction',
 			$this->router->generate('foo_route', $params));
-		
+
 	}
 
 	public function testGenerateWithOptionalUrlParts()
 	{
 		$this->router->map('GET', '/[:controller]/[:action].[:type]?', function(){}, 'bar_route');
-		
+
 		$params = array(
 			'controller' => 'test',
 			'action' => 'someaction'
 		);
-		
+
 		$this->assertEquals('/test/someaction',
 			$this->router->generate('bar_route', $params));
-		
+
 		$params = array(
 			'controller' => 'test',
 			'action' => 'someaction',
 			'type' => 'json'
 		);
-		
+
 		$this->assertEquals('/test/someaction.json',
 			$this->router->generate('bar_route', $params));
 	}
-	
+
 	public function testGenerateWithNonexistingRoute()
 	{
 		try{
@@ -243,7 +254,7 @@ class AltoRouterTest extends PHPUnit_Framework_TestCase
 			$this->assertEquals("Route 'nonexisting_route' does not exist.", $e->getMessage());
 		}
 	}
-	
+
 	/**
 	 * @covers AltoRouter::match
 	 * @covers AltoRouter::compileRoute
@@ -251,7 +262,7 @@ class AltoRouterTest extends PHPUnit_Framework_TestCase
 	public function testMatch()
 	{
 		$this->router->map('GET', '/foo/[:controller]/[:action]', 'foo_action', 'foo_route');
-		
+
 		$this->assertEquals(array(
 			'target' => 'foo_action',
 			'params' => array(
@@ -260,9 +271,9 @@ class AltoRouterTest extends PHPUnit_Framework_TestCase
 			),
 			'name' => 'foo_route'
 		), $this->router->match('/foo/test/do', 'GET'));
-		
+
 		$this->assertFalse($this->router->match('/foo/test/do', 'POST'));
-		
+
 		$this->assertEquals(array(
 			'target' => 'foo_action',
 			'params' => array(
@@ -271,7 +282,7 @@ class AltoRouterTest extends PHPUnit_Framework_TestCase
 			),
 			'name' => 'foo_route'
 		), $this->router->match('/foo/test/do?param=value', 'GET'));
-		
+
 	}
 
 	public function testMatchWithNonRegex() {
@@ -287,11 +298,11 @@ class AltoRouterTest extends PHPUnit_Framework_TestCase
 		$this->assertFalse($this->router->match('/about', 'GET'));
 		$this->assertFalse($this->router->match('/about-us-again', 'GET'));
 	}
-	
+
 	public function testMatchWithFixedParamValues()
 	{
 		$this->router->map('POST','/users/[i:id]/[delete|update:action]', 'usersController#doAction', 'users_do');
-		
+
 		$this->assertEquals(array(
 			'target' => 'usersController#doAction',
 			'params' => array(
@@ -300,18 +311,18 @@ class AltoRouterTest extends PHPUnit_Framework_TestCase
 			),
 			'name' => 'users_do'
 		), $this->router->match('/users/1/delete', 'POST'));
-		
+
 		$this->assertFalse($this->router->match('/users/1/delete', 'GET'));
 		$this->assertFalse($this->router->match('/users/abc/delete', 'POST'));
 		$this->assertFalse($this->router->match('/users/1/create', 'GET'));
 	}
-	
+
 	public function testMatchWithPlainRoute()
 	{
 		$router = $this->getMockBuilder('AltoRouterDebug')
 			->setMethods(array('compileRoute'))
 			->getMock();
-		
+
 		// this should prove that compileRoute is not called when the route doesn't
 		// have any params in it, but this doesn't work because compileRoute is private.
 		$router->expects($this->never())
@@ -332,14 +343,14 @@ class AltoRouterTest extends PHPUnit_Framework_TestCase
 		$this->assertFalse($router->match('/page1', 'GET'));
 
 	}
-	
+
 	public function testMatchWithServerVars()
 	{
 		$this->router->map('GET', '/foo/[:controller]/[:action]', 'foo_action', 'foo_route');
-		
+
 		$_SERVER['REQUEST_URI'] = '/foo/test/do';
 		$_SERVER['REQUEST_METHOD'] = 'GET';
-		
+
 		$this->assertEquals(array(
 			'target' => 'foo_action',
 			'params' => array(
@@ -349,11 +360,11 @@ class AltoRouterTest extends PHPUnit_Framework_TestCase
 			'name' => 'foo_route'
 		), $this->router->match());
 	}
-	
+
 	public function testMatchWithOptionalUrlParts()
 	{
 		$this->router->map('GET', '/bar/[:controller]/[:action].[:type]?', 'bar_action', 'bar_route');
-		
+
 		$this->assertEquals(array(
 			'target' => 'bar_action',
 			'params' => array(
@@ -363,34 +374,34 @@ class AltoRouterTest extends PHPUnit_Framework_TestCase
 			),
 			'name' => 'bar_route'
 		), $this->router->match('/bar/test/do.json', 'GET'));
-		
+
 	}
-	
+
 	public function testMatchWithWildcard()
 	{
 		$this->router->map('GET', '/a', 'foo_action', 'foo_route');
 		$this->router->map('GET', '*', 'bar_action', 'bar_route');
-		
+
 		$this->assertEquals(array(
 			'target' => 'bar_action',
 			'params' => array(),
 			'name' => 'bar_route'
 		), $this->router->match('/everything', 'GET'));
-		
+
 	}
-	
+
 	public function testMatchWithCustomRegexp()
 	{
 		$this->router->map('GET', '@^/[a-z]*$', 'bar_action', 'bar_route');
-		
+
 		$this->assertEquals(array(
 			'target' => 'bar_action',
 			'params' => array(),
 			'name' => 'bar_route'
 		), $this->router->match('/everything', 'GET'));
-		
+
 		$this->assertFalse($this->router->match('/some-other-thing', 'GET'));
-		
+
 	}
 
 	public function testMatchWithUnicodeRegex()
@@ -406,9 +417,9 @@ class AltoRouterTest extends PHPUnit_Framework_TestCase
 		// 'ZERO WIDTH NON-JOINER'
 		$pattern .= '\x{200C}';
 		$pattern .= ']+)';
-		
+
 		$this->router->map('GET', '@' . $pattern, 'unicode_action', 'unicode_route');
-		
+
 		$this->assertEquals(array(
 			'target' => 'unicode_action',
 			'name' => 'unicode_route',
@@ -416,7 +427,7 @@ class AltoRouterTest extends PHPUnit_Framework_TestCase
 				'path' => '大家好'
 			)
 		), $this->router->match('/大家好', 'GET'));
-		
+
 		$this->assertFalse($this->router->match('/﷽‎', 'GET'));
 	}
 
@@ -427,7 +438,7 @@ class AltoRouterTest extends PHPUnit_Framework_TestCase
 	{
 		$this->router->addMatchTypes(array('cId' => '[a-zA-Z]{2}[0-9](?:_[0-9]++)?'));
 		$this->router->map('GET', '/bar/[cId:customId]', 'bar_action', 'bar_route');
-		
+
 		$this->assertEquals(array(
 			'target' => 'bar_action',
 			'params' => array(
@@ -443,9 +454,9 @@ class AltoRouterTest extends PHPUnit_Framework_TestCase
 			),
 			'name' => 'bar_route'
 		), $this->router->match('/bar/AB1_0123456789', 'GET'));
-		
+
 		$this->assertFalse($this->router->match('/some-other-thing', 'GET'));
-		
+
 	}
 
 	public function testMatchWithCustomNamedUnicodeRegex()
@@ -457,10 +468,10 @@ class AltoRouterTest extends PHPUnit_Framework_TestCase
 		$pattern .= '\x{FE70}-\x{FEFF}';
 		$pattern .= '\x{0750}-\x{077F}';
 		$pattern .= ']+';
-		
+
 		$this->router->addMatchTypes(array('nonArabic' => $pattern));
 		$this->router->map('GET', '/bar/[nonArabic:string]', 'non_arabic_action', 'non_arabic_route');
-		
+
 		$this->assertEquals(array(
 			'target' => 'non_arabic_action',
 			'name' => 'non_arabic_route',
@@ -468,7 +479,36 @@ class AltoRouterTest extends PHPUnit_Framework_TestCase
 				'string' => 'some-path'
 			)
 		), $this->router->match('/bar/some-path', 'GET'));
-		
+
 		$this->assertFalse($this->router->match('/﷽‎', 'GET'));
+	}
+
+
+	public function testMatchWithTransformer()
+	{
+		$this->router->addTransformer('d', new AltoDateTransformer());
+		$this->router->addMatchTypes(array('d' => '[0-9]{4}-[0-9]{2}-[0-9]{2}'));
+		$this->router->map('GET', '/articles/[d:date]', 'date_transformer_action', 'date_transformer_route');
+
+		$this->assertEquals(array(
+			'target' => 'date_transformer_action',
+			'name' => 'date_transformer_route',
+			'params' => array(
+				'date' => new DateTime('2016-12-22')
+			)
+		), $this->router->match('/articles/2016-12-22', 'GET'));
+	}
+
+
+	public function testGeneratorWithTransformer()
+	{
+		$this->router->addTransformer('d', new AltoDateTransformer());
+		$this->router->addMatchTypes(array('d' => '[0-9]{4}-[0-9]{2}-[0-9]{2}'));
+		$this->router->map('GET', '/articles/[d:date]', 'date_transformer_action', 'date_transformer_route');
+
+		$this->assertEquals(
+			'/articles/2016-12-22',
+			$this->router->generate('date_transformer_route', array('date' => new DateTime('2016-12-22')))
+		);
 	}
 }
