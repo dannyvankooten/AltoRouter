@@ -241,7 +241,7 @@ class AltoRouter {
 						if(is_numeric($key)) unset($params[$key]);
 					}
 
-					if (isset($route['types'])) {
+					if (is_array($route)) {
 						foreach($params as $key => $value) {
 							$type = $route['types'][$key];
 
