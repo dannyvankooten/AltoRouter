@@ -29,6 +29,12 @@ class AltoRouter {
 		''   => '[^/\.]++'
 	);
 
+
+	/**
+	 * @var array Array of transformers for URL parameter transformations
+	 */
+	protected $transformers = array();
+
 	/**
 	  * Create router in one call from config.
 	  *
@@ -41,7 +47,7 @@ class AltoRouter {
 		$this->setBasePath($basePath);
 		$this->addMatchTypes($matchTypes);
 	}
-	
+
 	/**
 	 * Retrieves all routes.
 	 * Useful if you want to process or display routes.
@@ -90,6 +96,16 @@ class AltoRouter {
 	}
 
 	/**
+	 * Add transformer.
+	 *
+	 * @param string $matchType The name/key for an added match type (see: addMatchTypes())
+	 * @param AltoTransformer $transformer A transformer instance
+	 */
+	public function addTransformer($matchType, AltoTransformer $transformer) {
+		$this->transformers[$matchType] = $transformer;
+	}
+
+	/**
 	 * Map a route to a target
 	 *
 	 * @param string $method One of 5 HTTP Methods, or a pipe-separated list of multiple HTTP Methods (GET|POST|PATCH|PUT|DELETE)
@@ -133,7 +149,7 @@ class AltoRouter {
 
 		// Replace named parameters
 		$route = $this->namedRoutes[$routeName];
-		
+
 		// prepend base path to route url again
 		$url = $this->basePath . $route;
 
@@ -144,6 +160,10 @@ class AltoRouter {
 
 				if ($pre) {
 					$block = substr($block, 1);
+				}
+
+				if (isset($this->transformers[$type])) {
+					$params[$param] = $this->transformers[$type]->toUrl($params[$param]);
 				}
 
 				if(isset($params[$param])) {
@@ -211,15 +231,24 @@ class AltoRouter {
 				if (strncmp($requestUrl, $route, $position) !== 0) {
 					continue;
 				}
-				$regex = $this->compileRoute($route);
-				$match = preg_match($regex, $requestUrl, $params) === 1;
+				$route = $this->compileRoute($route);
+				$match = preg_match($route['regex'], $requestUrl, $params) === 1;
 			}
 
 			if ($match) {
-
 				if ($params) {
 					foreach($params as $key => $value) {
 						if(is_numeric($key)) unset($params[$key]);
+					}
+
+					if (is_array($route)) {
+						foreach($params as $key => $value) {
+							$type = $route['types'][$key];
+
+							if (isset($this->transformers[$type])) {
+								$params[$key] = $this->transformers[$type]->fromUrl($value);
+							}
+						}
 					}
 				}
 
@@ -237,15 +266,23 @@ class AltoRouter {
 	 * Compile the regex for a given route (EXPENSIVE)
 	 */
 	private function compileRoute($route) {
-		if (preg_match_all('`(/|\.|)\[([^:\]]*+)(?::([^:\]]*+))?\](\?|)`', $route, $matches, PREG_SET_ORDER)) {
+		$route = array(
+			'regex' => '`^' . $route . '$`u',
+			'types' => array()
+		);
 
+		if (preg_match_all('`(/|\.|)\[([^:\]]*+)(?::([^:\]]*+))?\](\?|)`', $route['regex'], $matches, PREG_SET_ORDER)) {
 			$matchTypes = $this->matchTypes;
+
 			foreach($matches as $match) {
 				list($block, $pre, $type, $param, $optional) = $match;
+
+				$route['types'][$param] = $type;
 
 				if (isset($matchTypes[$type])) {
 					$type = $matchTypes[$type];
 				}
+
 				if ($pre === '.') {
 					$pre = '\.';
 				}
@@ -259,10 +296,10 @@ class AltoRouter {
 						. '))'
 						. ($optional !== '' ? '?' : null);
 
-				$route = str_replace($block, $pattern, $route);
+				$route['regex'] = str_replace($block, $pattern, $route['regex']);
 			}
-
 		}
-		return "`^$route$`u";
+
+		return $route;
 	}
 }
