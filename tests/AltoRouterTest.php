@@ -246,7 +246,7 @@ class AltoRouterTest extends PHPUnit_Framework_TestCase
 	
 	/**
 	 * @covers AltoRouter::match
-	 * @covers AltoRouter::compileRoute
+	 * @covers AltoRouter::_compileRoute
 	 */
 	public function testMatch()
 	{
@@ -309,13 +309,13 @@ class AltoRouterTest extends PHPUnit_Framework_TestCase
 	public function testMatchWithPlainRoute()
 	{
 		$router = $this->getMockBuilder('AltoRouterDebug')
-			->setMethods(array('compileRoute'))
+			->setMethods(array('_compileRoute'))
 			->getMock();
 		
-		// this should prove that compileRoute is not called when the route doesn't
-		// have any params in it, but this doesn't work because compileRoute is private.
+		// this should prove that _compileRoute is not called when the route doesn't
+		// have any params in it, but this doesn't work because _compileRoute is private.
 		$router->expects($this->never())
-			->method('compileRoute');
+			->method('_compileRoute');
 
 		$router->map('GET', '/contact', 'website#contact', 'contact');
 
