@@ -254,14 +254,18 @@ class AltoRouter {
 					$pre = '\.';
 				}
 
+				$optional = $optional !== '' ? '?' : null;
+				
 				//Older versions of PCRE require the 'P' in (?P<named>)
 				$pattern = '(?:'
 						. ($pre !== '' ? $pre : null)
 						. '('
 						. ($param !== '' ? "?P<$param>" : null)
 						. $type
-						. '))'
-						. ($optional !== '' ? '?' : null);
+						. ')'
+						. $optional
+						. ')'
+						. $optional;
 
 				$route = str_replace($block, $pattern, $route);
 			}
