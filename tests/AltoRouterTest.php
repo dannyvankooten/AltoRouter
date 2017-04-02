@@ -246,7 +246,7 @@ class AltoRouterTest extends PHPUnit_Framework_TestCase
 	
 	/**
 	 * @covers AltoRouter::match
-	 * @covers AltoRouter::compileRoute
+	 * @covers AltoRouter::_compileRoute
 	 */
 	public function testMatch()
 	{
@@ -256,7 +256,8 @@ class AltoRouterTest extends PHPUnit_Framework_TestCase
 			'target' => 'foo_action',
 			'params' => array(
 				'controller' => 'test',
-				'action' => 'do'
+                'action' => 'do',
+                'method' => 'GET'
 			),
 			'name' => 'foo_route'
 		), $this->router->match('/foo/test/do', 'GET'));
@@ -267,7 +268,8 @@ class AltoRouterTest extends PHPUnit_Framework_TestCase
 			'target' => 'foo_action',
 			'params' => array(
 				'controller' => 'test',
-				'action' => 'do'
+                'action' => 'do',
+                'method' => 'GET'
 			),
 			'name' => 'foo_route'
 		), $this->router->match('/foo/test/do?param=value', 'GET'));
@@ -279,7 +281,8 @@ class AltoRouterTest extends PHPUnit_Framework_TestCase
 
 		$this->assertEquals(array(
 			'target' => 'PagesController#about',
-			'params' => array(),
+            'params' => array(
+            ),
 			'name' => 'about_us'
 		), $this->router->match('/about-us', 'GET'));
 
@@ -296,7 +299,8 @@ class AltoRouterTest extends PHPUnit_Framework_TestCase
 			'target' => 'usersController#doAction',
 			'params' => array(
 				'id' => 1,
-				'action' => 'delete'
+                'action' => 'delete',
+                'method' => 'POST'
 			),
 			'name' => 'users_do'
 		), $this->router->match('/users/1/delete', 'POST'));
@@ -309,20 +313,21 @@ class AltoRouterTest extends PHPUnit_Framework_TestCase
 	public function testMatchWithPlainRoute()
 	{
 		$router = $this->getMockBuilder('AltoRouterDebug')
-			->setMethods(array('compileRoute'))
+			->setMethods(array('_compileRoute'))
 			->getMock();
 		
-		// this should prove that compileRoute is not called when the route doesn't
-		// have any params in it, but this doesn't work because compileRoute is private.
+		// this should prove that _compileRoute is not called when the route doesn't
+		// have any params in it, but this doesn't work because _compileRoute is private.
 		$router->expects($this->never())
-			->method('compileRoute');
+			->method('_compileRoute');
 
 		$router->map('GET', '/contact', 'website#contact', 'contact');
 
 		// exact match, so no regex compilation necessary
 		$this->assertEquals(array(
 			'target' => 'website#contact',
-			'params' => array(),
+            'params' => array(
+            ),
 			'name' => 'contact'
 		), $router->match('/contact', 'GET'));
 
@@ -344,7 +349,8 @@ class AltoRouterTest extends PHPUnit_Framework_TestCase
 			'target' => 'foo_action',
 			'params' => array(
 				'controller' => 'test',
-				'action' => 'do'
+                'action' => 'do',
+                'method' => 'GET'
 			),
 			'name' => 'foo_route'
 		), $this->router->match());
@@ -359,7 +365,8 @@ class AltoRouterTest extends PHPUnit_Framework_TestCase
 			'params' => array(
 				'controller' => 'test',
 				'action' => 'do',
-				'type' => 'json'
+				'type' => 'json',
+                'method' => 'GET'
 			),
 			'name' => 'bar_route'
 		), $this->router->match('/bar/test/do.json', 'GET'));
@@ -373,7 +380,8 @@ class AltoRouterTest extends PHPUnit_Framework_TestCase
 		
 		$this->assertEquals(array(
 			'target' => 'bar_action',
-			'params' => array(),
+            'params' => array(
+            ),
 			'name' => 'bar_route'
 		), $this->router->match('/everything', 'GET'));
 		
@@ -385,7 +393,9 @@ class AltoRouterTest extends PHPUnit_Framework_TestCase
 		
 		$this->assertEquals(array(
 			'target' => 'bar_action',
-			'params' => array(),
+            'params' => array(
+                'method' => 'GET'
+            ),
 			'name' => 'bar_route'
 		), $this->router->match('/everything', 'GET'));
 		
@@ -413,7 +423,8 @@ class AltoRouterTest extends PHPUnit_Framework_TestCase
 			'target' => 'unicode_action',
 			'name' => 'unicode_route',
 			'params' => array(
-				'path' => '大家好'
+				'path' => '大家好',
+                'method' => 'GET'
 			)
 		), $this->router->match('/大家好', 'GET'));
 		
@@ -432,6 +443,7 @@ class AltoRouterTest extends PHPUnit_Framework_TestCase
 			'target' => 'bar_action',
 			'params' => array(
 				'customId' => 'AB1',
+                'method' => 'GET'
 			),
 			'name' => 'bar_route'
 		), $this->router->match('/bar/AB1', 'GET'));
@@ -439,7 +451,8 @@ class AltoRouterTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals(array(
 			'target' => 'bar_action',
 			'params' => array(
-				'customId' => 'AB1_0123456789',
+                'customId' => 'AB1_0123456789',
+                'method' => 'GET'
 			),
 			'name' => 'bar_route'
 		), $this->router->match('/bar/AB1_0123456789', 'GET'));
@@ -465,7 +478,8 @@ class AltoRouterTest extends PHPUnit_Framework_TestCase
 			'target' => 'non_arabic_action',
 			'name' => 'non_arabic_route',
 			'params' => array(
-				'string' => 'some-path'
+                'string' => 'some-path',
+                'method' => 'GET'
 			)
 		), $this->router->match('/bar/some-path', 'GET'));
 		
