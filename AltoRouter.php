@@ -205,7 +205,7 @@ class AltoRouter
         $this->routes[] = array($method, $route, $target, $name);
         if ($name) {
             if (isset($this->namedRoutes[$name])) {
-                //throw new \Exception("Can not redeclare route '{$name}'");
+                throw new \Exception("Can not redeclare route '{$name}'");
                 /**
                  * If the route already exists in the named list, skip.
                  * Allow appending multiple routes to the same named route.
@@ -239,7 +239,6 @@ class AltoRouter
         $routeName,
         array $params = array()
     ) {
-
         // Check if named route exists
         if (!isset($this->namedRoutes[$routeName])) {
             throw new \Exception(
@@ -399,44 +398,36 @@ class AltoRouter
     private function _compileRoute($route)
     {
         $pattern = '`(/|\.|)\[([^:\]]*+)(?::([^:\]]*+))?\](\?|)`';
-        /**
-         * Sets our new routes and breaks current route into an array.
-         */
-        $newroutes = array();
-        $routes = explode('|', $route);
-        foreach ($routes as $newroute) {
-            if (preg_match_all($pattern, $route, $matches, PREG_SET_ORDER)) {
-                $matchTypes = $this->matchTypes;
-                foreach ($matches as $match) {
-                    list(
-                        $block,
-                        $pre,
-                        $type,
-                        $param,
-                        $optional
-                    ) = $match;
-                    if (isset($matchTypes[$type])) {
-                        $type = $matchTypes[$type];
-                    }
-                    if ('.' === $pre) {
-                        $pre = '\.';
-                    }
-                    //Older versions of PCRE require the 'P' in (?P<named>)
-                    $pattern = '(?:'
-                        . ($pre !== '' ? $pre : null)
-                        . '('
-                        . ($param !== '' ? "?P<$param>" : null)
-                        . $type
-                        . '))'
-                        . ($optional !== '' ? '?' : null);
-                    $newroute = str_replace($block, $pattern, $route);
+        if (preg_match_all($pattern, $route, $matches, PREG_SET_ORDER)) {
+            $matchTypes = $this->matchTypes;
+            foreach ($matches as $match) {
+                list(
+                    $block,
+                    $pre,
+                    $type,
+                    $param,
+                    $optional
+                ) = $match;
+                if (isset($matchTypes[$type])) {
+                    $type = $matchTypes[$type];
                 }
-                $newroutes[] = $newroute;
+                if ('.' === $pre) {
+                    $pre = '\.';
+                }
+                // Older versions of PCRE require the 'P' in (?P<named>)
+                $pattern = '(?:'
+                    . ('' !== $pre ? $pre : null)
+                    . '('
+                    . ('' !== $param ? "?P<$param>" : null)
+                    . $type
+                    . '))'
+                    . ('' !== $optional ? '?' : null);
+                $route = str_replace($block, $pattern, $route);
             }
         }
         return sprintf(
             '`^%s$`u',
-            implode('|', $newroutes)
+            $route
         );
     }
     /**
@@ -446,7 +437,11 @@ class AltoRouter
      */
     protected function getRequestURI()
     {
-        return filter_input(INPUT_SERVER, 'REQUEST_URI');
+        return (
+            isset($_SERVER['REQUEST_URI']) ?
+            $_SERVER['REQUEST_URI'] :
+            ''
+        );
     }
     /**
      * Get request method from $_SERVER
@@ -455,7 +450,11 @@ class AltoRouter
      */
     protected function getRequestMethod()
     {
-        return filter_input(INPUT_SERVER, 'REQUEST_METHOD');
+        return (
+            isset($_SERVER['REQUEST_METHOD']) ?
+            $_SERVER['REQUEST_METHOD'] :
+            ''
+        );
     }
     /**
      * Get the matched result to return.
