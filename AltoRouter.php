@@ -145,7 +145,7 @@ class AltoRouter
             && !$routes instanceof Traversable
         ) {
             throw new \Exception(
-                'Routes should be an array or an instance of Traversable'
+                _('Routes should be an array or an instance of Traversable')
             );
         }
         foreach ($routes as $route) {
@@ -205,20 +205,13 @@ class AltoRouter
         $this->routes[] = array($method, $route, $target, $name);
         if ($name) {
             if (isset($this->namedRoutes[$name])) {
-                throw new \Exception("Can not redeclare route '{$name}'");
-                /**
-                 * If the route already exists in the named list, skip.
-                 * Allow appending multiple routes to the same named route.
-                 */
-                if (false !== strpos($route, $this->namedRoutes[$name])) {
-                    return;
-                }
-                $this->namedRoutes[$name] = sprintf(
-                    '%s|%s',
-                    $this->namedRoutes[$name],
-                    $route
+                throw new \Exception(
+                    sprintf(
+                        "%s '%s'",
+                        _('Can not redeclare route'),
+                        $name
+                    )
                 );
-                return;
             }
             $this->namedRoutes[$name] = $route;
         }
@@ -388,8 +381,6 @@ class AltoRouter
     }
     /**
      * Compile the regex for a given route (EXPENSIVE)
-     * NOTE: Modified so we can do multiple routes through
-     * the same method.
      *
      * @param string $route The route to compile.
      *
@@ -437,6 +428,8 @@ class AltoRouter
      */
     protected function getRequestURI()
     {
+        // ** Preferred method when tests are fixed.
+        //return filter_input(INPUT_SERVER, 'REQUEST_URI');
         return (
             isset($_SERVER['REQUEST_URI']) ?
             $_SERVER['REQUEST_URI'] :
@@ -450,6 +443,8 @@ class AltoRouter
      */
     protected function getRequestMethod()
     {
+        // ** Preferred method when tests are fixed.
+        //return filter_input(INPUT_SERVER, 'REQUEST_METHOD');
         return (
             isset($_SERVER['REQUEST_METHOD']) ?
             $_SERVER['REQUEST_METHOD'] :
