@@ -74,7 +74,7 @@ class AltoRouter
         $this->addMatchTypes($matchTypes);
     }
     /**
-     * Magic method to route get, put, patch, delete, and post
+     * Magic method to route get, put, post, patch, and delete
      * to the map method. So you can call router->get(...) or
      * router->post(...) without constant rewriting.
      *
@@ -96,18 +96,21 @@ class AltoRouter
         $name = strtolower($name);
         $validTypes = array(
             'get' => 'GET',
-            'patch' => 'PATCH',
-            'post' => 'POST',
             'put' => 'PUT',
+            'post' => 'POST',
+            'patch' => 'PATCH',
             'delete' => 'DELETE'
         );
+        // If method type is invalid don't do anything.
         if (!isset($validTypes[$name])) {
             return;
         }
+        // Prepend the type to our arguments to pass to the map.
         array_unshift(
             $arguments,
             $validTypes[$name]
         );
+        // Pass to the map method.
         call_user_func_array(
             array($this, 'map'),
             $arguments
