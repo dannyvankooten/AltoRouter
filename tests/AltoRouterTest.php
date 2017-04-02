@@ -29,7 +29,7 @@ require 'AltoRouter.php';
  * @license  http://opensource.org/licenses/MIT MIT
  * @link     https://github.com/dannyvankooten/AltoRouter
  */
-class AltoRouterDebug extends AltoRouter
+class AltoRouterDebug extends AltoRouter\AltoRouter
 {
     /**
      * Gets the named routes.

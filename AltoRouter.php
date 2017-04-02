@@ -12,6 +12,7 @@
  * @license  http://opensource.org/licenses/MIT MIT
  * @link     https://github.com/dannyvankooten/AltoRouter
  */
+namespace AltoRouter;
 /**
  * An api map/routing mechanism. Simplified and small.
  * Based on klein.php and uses elements of Sinatra for regex
@@ -145,7 +146,7 @@ class AltoRouter
     public function addRoutes($routes)
     {
         if (!is_array($routes)
-            && !$routes instanceof Traversable
+            && !$routes instanceof \Traversable
         ) {
             throw new \Exception(
                 _('Routes should be an array or an instance of Traversable')
