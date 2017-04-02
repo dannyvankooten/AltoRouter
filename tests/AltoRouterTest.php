@@ -339,6 +339,34 @@ class AltoRouterTest extends PHPUnit_Framework_TestCase
         );
     }
     /**
+     * Github #98
+     * Test on bare url.
+     *
+     * @return void
+     */
+    public function testGenerateWithOptionalOnBareUrl()
+    {
+        $this->router->map(
+            'GET',
+            '/[i:page]?',
+            function () {
+            },
+            'bare_route'
+        );
+        $params = array(
+            'page' => 1
+        );
+        $this->assertEquals(
+            '/1',
+            $this->router->generate('bare_route', $params)
+        );
+        $params = array();
+        $this->assertEquals(
+            '/',
+            $this->router->generate('bare_route', $params)
+        );
+    }
+    /**
      * Tests generate witout route.
      *
      * @return void
@@ -545,6 +573,54 @@ class AltoRouterTest extends PHPUnit_Framework_TestCase
                 'name' => 'bar_route'
             ),
             $this->router->match('/bar/test/do.json', 'GET')
+        );
+        $this->assertEquals(
+            array(
+                'target' => 'bar_action',
+                'params' => array(
+                    'controller' => 'test',
+                    'action' => 'do',
+                    'method' => 'GET'
+                ),
+                'name' => 'bar_route'
+            ),
+            $this->router->match('/bar/test/do', 'GET')
+        );
+    }
+    /**
+     * Github #98
+     * Test match on bare url.
+     *
+     * @return void
+     */
+    public function testMatchWithOptionalPartOnBareUrl()
+    {
+        $this->router->map(
+            'GET',
+            '/[i:page]?',
+            'bare_action',
+            'bare_route'
+        );
+        $this->assertEquals(
+            array(
+                'target' => 'bare_action',
+                'params' => array(
+                    'page' => 1,
+                    'method' => 'GET'
+                ),
+                'name' => 'bare_route'
+            ),
+            $this->router->match('/1', 'GET')
+        );
+        $this->assertEquals(
+            array(
+                'target' => 'bare_action',
+                'params' => array(
+                    'method' => 'GET'
+                ),
+                'name' => 'bare_route'
+            ),
+            $this->router->match('/', 'GET')
         );
     }
     /**

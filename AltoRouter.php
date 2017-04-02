@@ -244,7 +244,7 @@ class AltoRouter
         $url = $this->basePath . $route;
         $pattern = '`(/|\.|)\[([^:\]]*+)(?::([^:\]]*+))?\](\?|)`';
         if (preg_match_all($pattern, $route, $matches, PREG_SET_ORDER)) {
-            foreach ($matches as $match) {
+            foreach ($matches as $index => $match) {
                 list(
                     $block,
                     $pre,
@@ -256,14 +256,21 @@ class AltoRouter
                     $block = substr($block, 1);
                 }
                 if (isset($params[$param])) {
+                    // Part is found, replace for param value.
                     $url = str_replace(
                         $block,
                         $params[$param],
                         $url
                     );
-                } elseif ($optional) {
+                } elseif ($optional && $index !== 0) {
                     $url = str_replace(
                         $pre . $block,
+                        '',
+                        $url
+                    );
+                } else {
+                    $url = str_replace(
+                        $block,
                         '',
                         $url
                     );
@@ -411,7 +418,9 @@ class AltoRouter
                     . '('
                     . ('' !== $param ? "?P<$param>" : null)
                     . $type
-                    . '))'
+                    . ')'
+                    . ('' !== $optional ? '?' : null)
+                    . ')'
                     . ('' !== $optional ? '?' : null);
                 $route = str_replace($block, $pattern, $route);
             }
@@ -460,5 +469,23 @@ class AltoRouter
             'params' => $params,
             'name' => $name
         );
+    }
+    /**
+     * Returns the named routes.
+     *
+     * @return array
+     */
+    protected function getNamedRoutes()
+    {
+        return $this->namedRoutes;
+    }
+    /**
+     * Returns the base path.
+     *
+     * @return array
+     */
+    protected function getBasePath()
+    {
+        return $this->basePath;
     }
 }
