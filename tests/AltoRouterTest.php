@@ -210,6 +210,37 @@ class AltoRouterTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('/some/path', $this->router->getBasePath());
     }
     /**
+     * Tests adding default parameters.
+     *
+     * @covers AltoRouter::addDefaultParams
+     *
+     * @return void
+     */
+    public function testAddDefaultParams()
+    {
+        $method = 'POST';
+        $route = '/[:language]/[:controller]/[:action]';
+        $target = function () {
+        };
+        $name = 'language_route';
+        $this->router->addDefaultParams(
+            array(
+                'language' => 'nl'
+            )
+        );
+        $this->router->map($method, $route, $target, $name);
+        $this->assertEquals(
+            '/nl/test/foo',
+            $this->router->generate(
+                'language_route',
+                array(
+                    'controller' => 'test',
+                    'action' => 'foo'
+                )
+            )
+        );
+    }
+    /**
      * Tests the map method.
      *
      * @covers AltoRouter::map

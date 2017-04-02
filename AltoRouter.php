@@ -59,20 +59,31 @@ class AltoRouter
         ''   => '[^/\.]++'
     );
     /**
+     * Array of default parameters.
+     *
+     * @var array
+     */
+    protected $defaultParams = array();
+    /**
      * Create router in one call from config.
      *
-     * @param array  $routes     The default routes to add.
-     * @param string $basePath   The basePath at instantiation time.
-     * @param array  $matchTypes Any additions matching types you'd like.
+     * @param array  $routes        The default routes to add.
+     * @param string $basePath      The basePath at instantiation time.
+     * @param array  $matchTypes    Any additions matching types you'd like.
+     * @param array  $defaultParams Any default parameters.
+     *
+     * @return void
      */
     public function __construct(
         $routes = array(),
         $basePath = '',
-        $matchTypes = array()
+        $matchTypes = array(),
+        $defaultParams = array()
     ) {
         $this->addRoutes($routes);
         $this->setBasePath($basePath);
         $this->addMatchTypes($matchTypes);
+        $this->addDefaultParams($defaultParams);
     }
     /**
      * Magic method to route get, put, post, patch, and delete
@@ -129,6 +140,33 @@ class AltoRouter
         return $this->routes;
     }
     /**
+     * Returns the named routes.
+     *
+     * @return array
+     */
+    public function getNamedRoutes()
+    {
+        return $this->namedRoutes;
+    }
+    /**
+     * Returns the base path.
+     *
+     * @return array
+     */
+    public function getBasePath()
+    {
+        return $this->basePath;
+    }
+    /**
+     * Returns the default parameters.
+     *
+     * @return array
+     */
+    public function getDefaultParams()
+    {
+        return $this->getDefaultParams();
+    }
+    /**
      * Add multiple routes at once from array in the following format:
      *
      *   $routes = array(
@@ -180,6 +218,20 @@ class AltoRouter
         $this->matchTypes = array_merge(
             $this->matchTypes,
             $matchTypes
+        );
+    }
+    /**
+     * Adds default parameters.
+     *
+     * @param array $defaultParams The items to add.
+     *
+     * @return array
+     */
+    public function addDefaultParams($defaultParams)
+    {
+        $this->defaultParams = array_merge(
+            $this->defaultParams,
+            $defaultParams
         );
     }
     /**
@@ -246,6 +298,11 @@ class AltoRouter
         $route = $this->namedRoutes[$routeName];
         // prepend base path to route url again
         $url = $this->basePath . $route;
+        // merge with default params.
+        $params = array_merge(
+            $this->defaultParams,
+            $params
+        );
         $pattern = '`(/|\.|)\[([^:\]]*+)(?::([^:\]]*+))?\](\?|)`';
         if (preg_match_all($pattern, $route, $matches, PREG_SET_ORDER)) {
             foreach ($matches as $index => $match) {
@@ -473,23 +530,5 @@ class AltoRouter
             'params' => $params,
             'name' => $name
         );
-    }
-    /**
-     * Returns the named routes.
-     *
-     * @return array
-     */
-    protected function getNamedRoutes()
-    {
-        return $this->namedRoutes;
-    }
-    /**
-     * Returns the base path.
-     *
-     * @return array
-     */
-    protected function getBasePath()
-    {
-        return $this->basePath;
     }
 }
