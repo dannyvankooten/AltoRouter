@@ -100,7 +100,14 @@ class AltoRouter {
 	 */
 	public function map($method, $route, $target, $name = null) {
 
-		$this->routes[] = array($method, $route, $target, $name);
+        if(!isset($this->routes[$method])) {
+            $this->routes[$method] = array();
+        }
+
+        $methods = explode('|', $method);
+        foreach($methods as $method) {
+            $this->routes[$method][] = array($route, $target, $name);
+        }
 
 		if($name) {
 			if(isset($this->namedRoutes[$name])) {
@@ -190,15 +197,14 @@ class AltoRouter {
 		// set Request Method if it isn't passed as a parameter
 		if($requestMethod === null) {
 			$requestMethod = isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] : 'GET';
-		}
+        }
 
-		foreach($this->routes as $handler) {
-			list($methods, $route, $target, $name) = $handler;
+        if(empty($this->routes[$requestMethod])) {
+            return false;
+        }
 
-			$method_match = (stripos($methods, $requestMethod) !== false);
-
-			// Method did not match, continue to next route.
-			if (!$method_match) continue;
+		foreach($this->routes[$requestMethod] as $handler) {
+			list($route, $target, $name) = $handler;
 
 			if ($route === '*') {
 				// * wildcard (matches all)
