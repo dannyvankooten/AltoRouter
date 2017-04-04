@@ -233,7 +233,27 @@ class AltoRouterTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals('/test/someaction.json',
 			$this->router->generate('bar_route', $params));
 	}
-	
+
+	/**
+	 * GitHub #98
+	 */
+	public function testGenerateWithOptionalPartOnBareUrl()
+	{
+		$this->router->map('GET', '/[i:page]?', function(){}, 'bare_route');
+		
+		$params = array(
+			'page' => 1
+		);
+		
+		$this->assertEquals('/1',
+			$this->router->generate('bare_route', $params));
+		
+		$params = array();
+		
+		$this->assertEquals('/',
+			$this->router->generate('bare_route', $params));
+	}
+
 	public function testGenerateWithNonexistingRoute()
 	{
 		try{
@@ -364,6 +384,35 @@ class AltoRouterTest extends PHPUnit_Framework_TestCase
 			'name' => 'bar_route'
 		), $this->router->match('/bar/test/do.json', 'GET'));
 		
+		$this->assertEquals(array(
+			'target' => 'bar_action',
+			'params' => array(
+				'controller' => 'test',
+				'action' => 'do'
+			),
+			'name' => 'bar_route'
+		), $this->router->match('/bar/test/do', 'GET'));
+	}
+	
+	/**
+	 * GitHub #98
+	 */
+	public function testMatchWithOptionalPartOnBareUrl(){
+		$this->router->map('GET', '/[i:page]?', 'bare_action', 'bare_route');
+		
+		$this->assertEquals(array(
+			'target' => 'bare_action',
+			'params' => array(
+				'page' => 1
+			),
+			'name' => 'bare_route'
+		), $this->router->match('/1', 'GET'));
+		
+		$this->assertEquals(array(
+			'target' => 'bare_action',
+			'params' => array(),
+			'name' => 'bare_route'
+		), $this->router->match('/', 'GET'));
 	}
 	
 	public function testMatchWithWildcard()
