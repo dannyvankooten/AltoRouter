@@ -51,4 +51,5 @@ $end = microtime( true );
 
 // print execution time
 echo "Time: " . number_format(( $end - $start ), 4 ). ' seconds' . PHP_EOL;
-echo "Peak memory usage: " . ( memory_get_peak_usage( true ) / 1024 / 1024 ) . 'MB';
+echo "Memory usage: " . round( memory_get_usage() / 1024 ) . 'KB' . PHP_EOL;
+echo "Peak memory usage: " . round( memory_get_peak_usage( true ) / 1024 ) . 'KB' . PHP_EOL;
