@@ -535,7 +535,11 @@ class AltoRouter
     {
         $pattern = '`(/|\.|)\[([^:\]]*+)(?::([^:\]]*+))?\](\?|)`';
         $route = array(
-            'regex' => $route,
+            'regex' => sprintf(
+                '`^%s$`u%s',
+                $route,
+                ($this->ignoreCase ? 'i' : '')
+            ),
             'types' => array()
         );
         if (preg_match_all($pattern, $route['regex'], $matches, PREG_SET_ORDER)) {
@@ -567,11 +571,6 @@ class AltoRouter
                     . ')'
                     . $optional;
                 $route['regex'] = str_replace($block, $pattern, $route['regex']);
-                $route['regex'] = sprintf(
-                    '^%s$`u%s',
-                    $route['regex'],
-                    ($this->ignoreCase ? 'i' : null)
-                );
             }
         }
         return $route;
