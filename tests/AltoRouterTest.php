@@ -29,7 +29,7 @@ require 'AltoRouter.php';
  * @license  http://opensource.org/licenses/MIT MIT
  * @link     https://github.com/dannyvankooten/AltoRouter
  */
-class AltoRouterDebug extends AltoRouter\AltoRouter
+class AltoRouterDebug extends AltoRouter
 {
     /**
      * Gets the named routes.
@@ -75,7 +75,7 @@ class AltoRouterTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->router = new AltoRouterDebug;
+        $this->router = new \AltoRouterDebug;
     }
     /**
      * Tears down the fixture, for example, closes a network connection.
@@ -103,11 +103,12 @@ class AltoRouterTest extends PHPUnit_Framework_TestCase
         $this->router->map($method, $route, $target);
         $this->assertEquals(
             array(
-                array(
-                    $method,
-                    $route,
-                    $target,
-                    null
+                $method => array(
+                    array(
+                        $route,
+                        $target,
+                        null
+                    )
                 )
             ),
             $this->router->getRoutes()
@@ -133,24 +134,17 @@ class AltoRouterTest extends PHPUnit_Framework_TestCase
             )
         );
         $routes = $this->router->getRoutes();
-        $this->assertEquals(
-            array(
-                $method,
-                $route,
-                $target,
-                null
-            ),
-            $routes[0]
-        );
-        $this->assertEquals(
-            array(
-                $method,
-                $route,
-                $target,
-                'second_route'
-            ),
-            $routes[1]
-        );
+        reset($routes);
+        foreach (current($routes) as $ind => $r) {
+            $this->assertEquals(
+                array(
+                    $route,
+                    $target,
+                    $ind ? 'second_route' : null
+                ),
+                $r
+            );
+        }
     }
     /**
      * Tests that addRoutes accepts Traversable.
@@ -173,13 +167,25 @@ class AltoRouterTest extends PHPUnit_Framework_TestCase
                 array('POST', '/bar', 'bar_action', 'second_route')
             )
         );
+        $first = array(
+            array(
+                '/foo',
+                'foo_action',
+                null
+            )
+        );
+        $second = array(
+            array(
+                '/bar',
+                'bar_action',
+                'second_route'
+            )
+        );
         $this->router->addRoutes($traversable);
-        reset($traversable);
-        $first = current($traversable);
-        $second = next($traversable);
         $routes = $this->router->getRoutes();
-        $this->assertEquals($first, $routes[0]);
-        $this->assertEquals($second, $routes[1]);
+        reset($routes);
+        $this->assertEquals($first, current($routes));
+        $this->assertEquals($second, next($routes));
     }
     /**
      * Tests it throws exception.
@@ -255,14 +261,16 @@ class AltoRouterTest extends PHPUnit_Framework_TestCase
         };
         $this->router->map($method, $route, $target);
         $routes = $this->router->getRoutes();
+        reset($routes);
         $this->assertEquals(
             array(
-                $method,
-                $route,
-                $target,
-                null
+                array(
+                    $route,
+                    $target,
+                    null
+                )
             ),
-            $routes[0]
+            current($routes)
         );
     }
     /**
@@ -281,14 +289,16 @@ class AltoRouterTest extends PHPUnit_Framework_TestCase
         $name = 'myroute';
         $this->router->map($method, $route, $target, $name);
         $routes = $this->router->getRoutes();
+        reset($routes);
         $this->assertEquals(
             array(
-                $method,
-                $route,
-                $target,
-                $name
+                array(
+                    $route,
+                    $target,
+                    $name
+                )
             ),
-            $routes[0]
+            current($routes)
         );
         $named_routes = $this->router->getNamedRoutes();
         $this->assertEquals($route, $named_routes[$name]);

@@ -12,7 +12,6 @@
  * @license  http://opensource.org/licenses/MIT MIT
  * @link     https://github.com/dannyvankooten/AltoRouter
  */
-namespace AltoRouter;
 /**
  * An api map/routing mechanism. Simplified and small.
  * Based on klein.php and uses elements of Sinatra for regex
