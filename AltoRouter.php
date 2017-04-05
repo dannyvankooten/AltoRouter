@@ -310,12 +310,12 @@ class AltoRouter
         $target,
         $name = null
     ) {
-        $methods = explode('|', $method);
-        foreach ($methods as $method) {
+        foreach (explode('|', $method) as &$method) {
             if (!isset($this->routes[$method])) {
                 $this->routes[$method] = array();
             }
             $this->routes[$method][] = array($route, $target, $name);
+            unset($method);
         }
         if ($name) {
             if (isset($this->namedRoutes[$name])) {
@@ -444,12 +444,13 @@ class AltoRouter
         if (empty($this->routes[$requestMethod])) {
             return false;
         }
-        foreach ($this->routes[$requestMethod] as $handler) {
+        foreach ($this->routes[$requestMethod] as &$handler) {
             list(
                 $route,
                 $target,
                 $name
             ) = $handler;
+            unset($handler);
             if ('*' === $route) {
                 // * wildcard (matches all)
                 $match = true;
@@ -465,17 +466,6 @@ class AltoRouter
             } elseif (false === ($position = strpos($route, '['))) {
                 // No params in url, do string comparison
                 $match = 0 === strcmp($requestUrl, $route);
-                /**
-                 * We should still check if the mapping matches, otherwise
-                 * only routes that contain [matchType:param] will work.
-                 * This means we can ONLY do mapped routes using this method.
-                 *
-                 * Yes, the pattern needs some work first.
-                 */
-                if (!$match) {
-                    $regex = $this->_compileRoute($route);
-                    $match = (1 === preg_match($regex['regex'], $requestUrl));
-                }
             } else {
                 // Compare longest non-param string with url
                 if (0 !== strncmp($requestUrl, $route, $position)) {
@@ -486,19 +476,21 @@ class AltoRouter
             }
             if ($match) {
                 if ($params) {
-                    foreach ($params as $key => $value) {
+                    $routeisarr = is_array($route);
+                    foreach ($params as $key => &$value) {
                         if (is_numeric($key)) {
                             unset($params[$key]);
+                            continue;
                         }
-                    }
-                    if (is_array($route)) {
-                        foreach ($params as $key => $value) {
-                            $type = $route['types'][$key];
-                            if (isset($this->transformers[$type])) {
-                                $params[$key]
-                                    = $this->transformers[$type]->fromUrl($value);
-                            }
+                        if (!$routeisarr) {
+                            continue;
                         }
+                        $type = $route['types'][$key];
+                        if (isset($this->transformers[$type])) {
+                            $params[$key]
+                                = $this->transformers[$type]->fromUrl($value);
+                        }
+                        unset($values);
                     }
                     /**
                      * Send the request method so we can test.
@@ -544,7 +536,7 @@ class AltoRouter
         );
         if (preg_match_all($pattern, $route['regex'], $matches, PREG_SET_ORDER)) {
             $matchTypes = $this->matchTypes;
-            foreach ($matches as $match) {
+            foreach ($matches as &$match) {
                 list(
                     $block,
                     $pre,
@@ -552,6 +544,7 @@ class AltoRouter
                     $param,
                     $optional
                 ) = $match;
+                unset($match);
                 $optional = ('' !== $optional ? '?' : null);
                 $route['types'][$param] = $type;
                 if (isset($matchTypes[$type])) {
