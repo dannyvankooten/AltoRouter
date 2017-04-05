@@ -100,12 +100,13 @@ class AltoRouter {
 	 */
 	public function map($method, $route, $target, $name = null) {
 
-        if(!isset($this->routes[$method])) {
-            $this->routes[$method] = array();
-        }
-
         $methods = explode('|', $method);
         foreach($methods as $method) {
+            // ensure array key exists
+            if(!isset($this->routes[$method])) {
+                $this->routes[$method] = array();
+            }
+
             $this->routes[$method][] = array($route, $target, $name);
         }
 
