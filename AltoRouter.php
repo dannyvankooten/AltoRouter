@@ -276,13 +276,13 @@ class AltoRouter
     /**
      * Add transformer.
      *
-     * @param string          $matchType   The name/key for an added match type
+     * @param string           $matchType   The name/key for an added match type
      * (see: addMatchTypes())
-     * @param AltoTransformer $transformer A transformer instance.
+     * @param \AltoTransformer $transformer A transformer instance.
      *
      * @return void
      */
-    public function addTransformer($matchType, AltoTransformer $transformer)
+    public function addTransformer($matchType, \AltoTransformer $transformer)
     {
         $this->transformers[$matchType] = $transformer;
     }
