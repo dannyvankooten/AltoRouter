@@ -492,6 +492,23 @@ class AltoRouterTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->router->match('/about-us-again', 'GET'));
     }
     /**
+     * Tests match with multiple methods.
+     *
+     * @return void
+     */
+    public function testMatchWithMultipleMethods()
+    {
+        $this->router->map('GET|POST', '/methods', 'multiple_methods');
+        $expected = array(
+            'target' => 'multiple_methods',
+            'params' => array(),
+            'name' => null,
+        );
+        $this->assertEquals($expected, $this->router->match('/methods', 'GET'));
+        $this->assertEquals($expected, $this->router->match('/methods', 'POST'));
+        $this->assertFalse($this->router->match('/methods', 'PUT'));
+    }
+    /**
      * Tests match with fixed params.
      *
      * @return void
