@@ -210,10 +210,10 @@ class AltoRouter
         if (!is_array($routes)
             && !$routes instanceof \Traversable
         ) {
-            $msg = _('Routes should be an array or an instance of Traversable');
-            if (defined('HHVM_VERSION')) {
-                $msg 
-                    = 'Routes should be an array or an instance of Traversable';
+            $msg 
+                = 'Routes should be an array or an instance of Traversable';
+            if (!defined('HHVM_VERSION')) {
+                $msg = _('Routes should be an array or an instance of Traversable');
             }
             throw new \Exception($msg);
         }
@@ -321,13 +321,13 @@ class AltoRouter
             if (isset($this->namedRoutes[$name])) {
                 $msg = sprintf(
                     "%s '%s'",
-                    _('Can not redeclare route'),
+                    'Can not redeclare route',
                     $name
                 );
-                if (defined('HHVM_VERSION')) {
+                if (!defined('HHVM_VERSION')) {
                     $msg = sprintf(
                         "%s '%s'",
-                        'Can not redeclare route',
+                        _('Can not redeclare route'),
                         $name
                     );
                 }
