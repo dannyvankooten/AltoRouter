@@ -292,7 +292,19 @@ class AltoRouterTest extends PHPUnit_Framework_TestCase
 			'name' => 'foo_route'
 		), $this->router->match('/foo/test/do?param=value', 'GET'));
 		
-	}
+    }
+
+    public function testMatchWithMultipleMethods() {
+        $this->router->map('GET|POST', '/methods', 'multiple_methods');
+        $expected = array(
+            'target' => 'multiple_methods',
+            'params' => array(),
+            'name' => null,
+        );
+        $this->assertEquals($expected, $this->router->match('/methods', 'GET'));
+        $this->assertEquals($expected, $this->router->match('/methods', 'POST'));
+        $this->assertFalse($this->router->match('/methods', 'PUT'));
+    }
 
 	public function testMatchWithNonRegex() {
 		$this->router->map('GET','/about-us', 'PagesController#about', 'about_us');
