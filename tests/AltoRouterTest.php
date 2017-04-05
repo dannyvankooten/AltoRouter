@@ -20,6 +20,7 @@
  * @link     https://github.com/dannyvankooten/AltoRouter
  */
 require 'AltoRouter.php';
+require 'AltoTransformer.php';
 /**
  * AltoRouterDebug for our tests.
  *
@@ -48,6 +49,40 @@ class AltoRouterDebug extends \AltoRouter\AltoRouter
     public function getBasePath()
     {
         return $this->basePath;
+    }
+}
+/**
+ * AltoDateTransformer
+ *
+ * @category AltoTransformer
+ * @package  AltoRouter
+ * @author   Mattsah <no@email.given>
+ * @license  http://opensource.org/licenses/MIT MIT
+ * @link     https://github.com/dannyvankooten/AltoRouter
+ */
+class AltoDateTransformer implements \AltoTransformer
+{
+    /**
+     * From url.
+     *
+     * @param mixed $parameter The parameter.
+     *
+     * @return DateTime
+     */
+    public function fromUrl($parameter)
+    {
+        return new \DateTime($parameter);
+    }
+    /**
+     * To url.
+     *
+     * @param mixed $parameter The parameter.
+     *
+     * @return string
+     */
+    public function toUrl($parameter)
+    {
+        return $parameter->format('Y-m-d');
     }
 }
 /**
@@ -834,5 +869,59 @@ class AltoRouterTest extends \PHPUnit_Framework_TestCase
             $this->router->match('/bar/some-path', 'GET')
         );
         $this->assertFalse($this->router->match('/﷽‎', 'GET'));
+    }
+    /**
+     * Test match with transformer
+     *
+     * @return void
+     */
+    public function testMatchWithTransformer()
+    {
+        $this->router->addTransformer('d', new \AltoDateTransformer());
+        $this->router->addMatchTypes(array('d' => '[0-9]{4}-[0-9]{2}-[0-9]{2}'));
+        $this->router->map(
+            'GET',
+            '/articles/[d:date]',
+            'date_transformer_action',
+            'date_transformer_route'
+        );
+        $date = new \DateTime('2016-12-22');
+        $this->assertEquals(
+            array(
+                'target' => 'date_transformer_action',
+                'name' => 'date_transformer_route',
+                'params' => array(
+                    'date' => $date->format('Y-m-d'),
+                    'method' => 'GET'
+                )
+            ),
+            $this->router->match('/articles/2016-12-22', 'GET')
+        );
+    }
+    /**
+     * Test generator with transformer
+     *
+     * @return void
+     */
+    public function testGeneratorWithTransformer()
+    {
+        $this->router->addTransformer('d', new AltoDateTransformer());
+        $this->router->addMatchTypes(array('d' => '[0-9]{4}-[0-9]{2}-[0-9]{2}'));
+        $this->router->map(
+            'GET',
+            '/articles/[d:date]',
+            'date_transformer_action',
+            'date_transformer_route'
+        );
+        $date = new \DateTime('2016-12-22');
+        $this->assertEquals(
+            '/articles/2016-12-22',
+            $this->router->generate(
+                'date_transformer_route',
+                array(
+                    'date' => $date
+                )
+            )
+        );
     }
 }
