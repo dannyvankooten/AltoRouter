@@ -72,7 +72,7 @@ function randomRequestMethod()
     $random_key = array_rand($methods);
     return $methods[ $random_key ];
 }
-$router = new AltoRouter();
+$router = new AltoRouter\AltoRouter();
 // map 1000 random routes
 for ($i=0; $i < $n; $i++) {
     $router->map(

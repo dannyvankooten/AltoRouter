@@ -29,7 +29,7 @@ require 'AltoRouter.php';
  * @license  http://opensource.org/licenses/MIT MIT
  * @link     https://github.com/dannyvankooten/AltoRouter
  */
-class AltoRouterDebug extends AltoRouter
+class AltoRouterDebug extends \AltoRouter\AltoRouter
 {
     /**
      * Gets the named routes.
@@ -59,7 +59,7 @@ class AltoRouterDebug extends AltoRouter
  * @license  http://opensource.org/licenses/MIT MIT
  * @link     https://github.com/dannyvankooten/AltoRouter
  */
-class AltoRouterTest extends PHPUnit_Framework_TestCase
+class AltoRouterTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * Stores AltoRouter Object.
@@ -89,7 +89,7 @@ class AltoRouterTest extends PHPUnit_Framework_TestCase
     /**
      * Tests the getRoutes function.
      *
-     * @covers AltoRouter::getRoutes
+     * @covers AltoRouter\AltoRouter::getRoutes
      *
      * @return void
      */
@@ -117,7 +117,7 @@ class AltoRouterTest extends PHPUnit_Framework_TestCase
     /**
      * Tests the addRoutes function.
      *
-     * @covers AltoRouter::addRoutes
+     * @covers AltoRouter\AltoRouter::addRoutes
      *
      * @return void
      */
@@ -149,7 +149,7 @@ class AltoRouterTest extends PHPUnit_Framework_TestCase
     /**
      * Tests that addRoutes accepts Traversable.
      *
-     * @covers AltoRouter::addRoutes
+     * @covers AltoRouter\AltoRouter::addRoutes
      *
      * @return void
      */
@@ -161,7 +161,7 @@ class AltoRouterTest extends PHPUnit_Framework_TestCase
             );
         }
 
-        $traversable = new ArrayObject(
+        $traversable = new \ArrayObject(
             array(
                 array('GET', '/foo', 'foo_action', null),
                 array('POST', '/bar', 'bar_action', 'second_route')
@@ -190,7 +190,7 @@ class AltoRouterTest extends PHPUnit_Framework_TestCase
     /**
      * Tests it throws exception.
      *
-     * @covers AltoRouter::addRoutes
+     * @covers AltoRouter\AltoRouter::addRoutes
      *
      * @expectedException Exception
      *
@@ -198,12 +198,12 @@ class AltoRouterTest extends PHPUnit_Framework_TestCase
      */
     public function testAddRoutesThrowsExceptionOnInvalidArgument()
     {
-        $this->router->addRoutes(new stdClass);
+        $this->router->addRoutes(new \stdClass);
     }
     /**
      * Tests setting base path.
      *
-     * @covers AltoRouter::setBasePath
+     * @covers AltoRouter\AltoRouter::setBasePath
      *
      * @return void
      */
@@ -218,7 +218,7 @@ class AltoRouterTest extends PHPUnit_Framework_TestCase
     /**
      * Tests adding default parameters.
      *
-     * @covers AltoRouter::addDefaultParams
+     * @covers AltoRouter\AltoRouter::addDefaultParams
      *
      * @return void
      */
@@ -249,7 +249,7 @@ class AltoRouterTest extends PHPUnit_Framework_TestCase
     /**
      * Tests the map method.
      *
-     * @covers AltoRouter::map
+     * @covers AltoRouter\AltoRouter::map
      *
      * @return void
      */
@@ -276,7 +276,7 @@ class AltoRouterTest extends PHPUnit_Framework_TestCase
     /**
      * Tests the map method with name.
      *
-     * @covers AltoRouter::map
+     * @covers AltoRouter\AltoRouter::map
      *
      * @return void
      */
@@ -314,7 +314,7 @@ class AltoRouterTest extends PHPUnit_Framework_TestCase
     /**
      * Tests the generate method.
      *
-     * @covers AltoRouter::generate
+     * @covers AltoRouter\AltoRouter::generate
      *
      * @return void
      */
@@ -426,9 +426,9 @@ class AltoRouterTest extends PHPUnit_Framework_TestCase
     /**
      * Tests match method and _compileRoute method.
      *
-     * @covers AltoRouter::match
+     * @covers AltoRouter\AltoRouter::match
      *
-     * @covers AltoRouter::_compileRoute
+     * @covers AltoRouter\AltoRouter::_compileRoute
      *
      * @return void
      */
@@ -527,7 +527,7 @@ class AltoRouterTest extends PHPUnit_Framework_TestCase
      */
     public function testMatchWithPlainRoute()
     {
-        $router = $this->getMockBuilder('AltoRouterDebug')
+        $router = $this->getMockBuilder('\AltoRouterDebug')
             ->setMethods(array('_compileRoute'))
             ->getMock();
         /**
@@ -563,7 +563,7 @@ class AltoRouterTest extends PHPUnit_Framework_TestCase
     public function testMatchWithRequest()
     {
 
-        $router = $this->getMockBuilder('AltoRouterDebug')
+        $router = $this->getMockBuilder('\AltoRouterDebug')
             ->setMethods(array('getRequestURI', 'getRequestMethod'))
             ->getMock();
         $router->method('getRequestURI')
@@ -743,7 +743,7 @@ class AltoRouterTest extends PHPUnit_Framework_TestCase
     /**
      * Tests add match types.
      *
-     * @covers AltoRouter::addMatchTypes
+     * @covers AltoRouter\AltoRouter::addMatchTypes
      *
      * @return void
      */
