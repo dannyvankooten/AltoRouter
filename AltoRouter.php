@@ -310,7 +310,7 @@ class AltoRouter
         $target,
         $name = null
     ) {
-        foreach (explode('|', $method) as &$method) {
+        foreach (explode('|', $method) as $method) {
             if (!isset($this->routes[$method])) {
                 $this->routes[$method] = array();
             }
@@ -444,7 +444,7 @@ class AltoRouter
         if (empty($this->routes[$requestMethod])) {
             return false;
         }
-        foreach ($this->routes[$requestMethod] as &$handler) {
+        foreach ($this->routes[$requestMethod] as $handler) {
             list(
                 $route,
                 $target,
@@ -477,7 +477,7 @@ class AltoRouter
             if ($match) {
                 if ($params) {
                     $routeisarr = is_array($route);
-                    foreach ($params as $key => &$value) {
+                    foreach ($params as $key => $value) {
                         if (is_numeric($key)) {
                             unset($params[$key]);
                             continue;
@@ -536,7 +536,7 @@ class AltoRouter
         );
         if (preg_match_all($pattern, $route['regex'], $matches, PREG_SET_ORDER)) {
             $matchTypes = $this->matchTypes;
-            foreach ($matches as &$match) {
+            foreach ($matches as $match) {
                 list(
                     $block,
                     $pre,
