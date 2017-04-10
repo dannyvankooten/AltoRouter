@@ -211,8 +211,19 @@ class AltoRouter {
 				// No params in url, do string comparison
 				$match = strcmp($requestUrl, $route) === 0;
 			} else {
-				// Compare longest non-param string with url
-				if (strncmp($requestUrl, $route, $position) !== 0) {
+				//test for optional param
+				$optional = (substr($route, strpos ( $route, ']', $position )+1, 1) === '?');
+				if ($optional) {
+                    			$signBefore = substr($route, $position - 1, 1);
+					// update optional if leading / or .
+					$optional = ($signBefore === '/' || $signBefore ==='.');
+				}
+				if ($optional) {
+		                	$strncmp = strncmp($requestUrl, $route, $position);
+					if ($strncmp !== -1 && $strncmp !== 0) {
+						continue;
+					}
+				} else if (strncmp($requestUrl, $route, $position) !== 0) {
 					continue;
 				}
 				$regex = $this->compileRoute($route);
