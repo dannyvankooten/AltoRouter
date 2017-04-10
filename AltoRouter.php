@@ -7,6 +7,11 @@ class AltoRouter {
 	 */
 	protected $routes = array();
 
+    /**
+     * @var array An optimised tree with all routes
+     */ 
+    protected $tree = array();
+
 	/**
 	 * @var array Array of all named routes.
 	 */
@@ -47,7 +52,7 @@ class AltoRouter {
 	 * Useful if you want to process or display routes.
 	 * @return array All routes.
 	 */
-	public function getRoutes() {
+    public function getRoutes() {
 		return $this->routes;
 	}
 
@@ -98,16 +103,20 @@ class AltoRouter {
 	 * @param string $name Optional name of this route. Supply if you want to reverse route this url in your application.
 	 * @throws Exception
 	 */
-	public function map($method, $route, $target, $name = null) {
+    public function map($method, $route, $target, $name = null) {
 
+        // store raw route config
+        $this->routes[] = array($method, $route, $target, $name);
+
+        // add to tree
         $methods = explode('|', $method);
         foreach($methods as $method) {
             // ensure array key exists
-            if(!isset($this->routes[$method])) {
-                $this->routes[$method] = array();
+            if(!isset($this->tree[$method])) {
+                $this->tree[$method] = array();
             }
 
-            $this->routes[$method][] = array($route, $target, $name);
+            $this->tree[$method][] = array($route, $target, $name);
         }
 
 		if($name) {
@@ -200,11 +209,11 @@ class AltoRouter {
 			$requestMethod = isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] : 'GET';
         }
 
-        if(empty($this->routes[$requestMethod])) {
+        if(empty($this->tree[$requestMethod])) {
             return false;
         }
 
-		foreach($this->routes[$requestMethod] as $handler) {
+		foreach($this->tree[$requestMethod] as $handler) {
 			list($route, $target, $name) = $handler;
 
 			if ($route === '*') {
