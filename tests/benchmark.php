@@ -64,21 +64,29 @@ foreach($requests as $r) {
 }
 $end = microtime(true);
 $map_time = $end - $start;
-echo "Map time: " . number_format($map_time, 4). ' seconds' . PHP_EOL;
+echo "Map time: " . number_format($map_time, 6). ' seconds' . PHP_EOL;
 
-// shuffle requests
-shuffle($requests);
 
-// match 1000 random routes
+// pick random route to match
+$r = $requests[array_rand($requests)];
+
+// match random known route
 $start = microtime(true);
-foreach($requests as $r) {
-    $router->match($r['url'], $r['method']);
-}
-$end = microtime( true );
-$match_time = $end - $start;
-echo "Match time: " . number_format($match_time, 4). ' seconds' . PHP_EOL;
+$router->match($r['url'], $r['method']);
+$end = microtime(true);
+$match_time_known_route = $end - $start;
+echo "Match time (known route): " . number_format($match_time_known_route, 6). ' seconds' . PHP_EOL;
+
+// match unexisting route
+$start = microtime(true);
+$router->match('/55-foo-bar', 'GET');
+$end = microtime(true);
+$match_time_unknown_route = $end - $start;
+echo "Match time (unknown route): " . number_format($match_time_unknown_route, 6). ' seconds' . PHP_EOL;
 
 // print totals
-echo "Total time: " . number_format(($map_time + $match_time), 4). ' seconds' . PHP_EOL;
+echo "Total time: " . number_format(($map_time + $match_time_known_route + $match_time_unknown_route), 6). ' seconds' . PHP_EOL;
 echo "Memory usage: " . round( memory_get_usage() / 1024 ) . 'KB' . PHP_EOL;
 echo "Peak memory usage: " . round( memory_get_peak_usage( true ) / 1024 ) . 'KB' . PHP_EOL;
+
+
