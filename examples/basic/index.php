@@ -3,7 +3,7 @@
 require '../../AltoRouter.php';
 
 $router = new AltoRouter();
-$router->setBasePath('/AltoRouter/examples/basic');
+//$router->setBasePath('/AltoRouter/examples/basic');
 $router->map('GET|POST','/', 'home#index', 'home');
 $router->map('GET','/users/', array('c' => 'UserController', 'a' => 'ListAction'));
 $router->map('GET','/users/[i:id]', 'users#show', 'users_show');
