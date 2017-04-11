@@ -23,6 +23,7 @@ class AltoRouter {
 	protected $matchTypes = array(
 		'i'  => '[0-9]++',
 		'a'  => '[0-9A-Za-z]++',
+		't'  => '[a-zA-Z0-9]+(-[a-zA-Z0-9]+)*',
 		'h'  => '[0-9A-Fa-f]++',
 		'*'  => '.+?',
 		'**' => '.++',
