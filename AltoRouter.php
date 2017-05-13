@@ -110,7 +110,6 @@ class AltoRouter {
 			}
 
 		}
-
 		return;
 	}
 
@@ -273,4 +272,14 @@ class AltoRouter {
 		}
 		return "`^$route$`u";
 	}
+
+    public function reRoute($route){
+        foreach($this->routes as $currentRoute){
+            if($currentRoute[3] == $route){
+                $route = $currentRoute;
+                break;
+            }
+        }
+        return $this->match($this->generate($route[3]),$route[0]);
+    }
 }
