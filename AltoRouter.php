@@ -94,11 +94,11 @@ class AltoRouter {
 	 *
 	 * @param string $method One of 5 HTTP Methods, or a pipe-separated list of multiple HTTP Methods (GET|POST|PATCH|PUT|DELETE)
 	 * @param string $route The route regex, custom regex must start with an @. You can use multiple pre-set regex filters, like [i:id]
-	 * @param mixed $target The target where this route should point to. Can be anything.
+	 * @param mixed $target Optional target where this route should point to. Can be anything.
 	 * @param string $name Optional name of this route. Supply if you want to reverse route this url in your application.
 	 * @throws Exception
 	 */
-	public function map($method, $route, $target, $name = null) {
+	public function map($method, $route, $target = null, $name = null) {
 
 		$this->routes[] = array($method, $route, $target, $name);
 
