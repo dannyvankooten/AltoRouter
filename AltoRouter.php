@@ -45,10 +45,16 @@ class AltoRouter {
 	/**
 	 * Retrieves all routes.
 	 * Useful if you want to process or display routes.
+	 *
+	 * @param bool $named
 	 * @return array All routes.
 	 */
-	public function getRoutes() {
-		return $this->routes;
+	public function getRoutes($named = FALSE) {
+		if($named === TRUE){
+			return $this->namedRoutes;
+		} else {
+			return $this->routes;
+		}
 	}
 
 	/**
