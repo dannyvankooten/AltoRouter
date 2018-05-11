@@ -2,3 +2,4 @@ _site
 Gemfile
 Gemfile.lock
 .idea
+*.swp
