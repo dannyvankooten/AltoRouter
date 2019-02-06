@@ -7,9 +7,9 @@
 		</testsuite>
 	</testsuites>
 	<filter>
-		<blacklist>
-			<directory>./vendor/</directory>
-		</blacklist>
+        <whitelist>
+            <file>./AltoRouter.php</file>
+        </whitelist>
 	</filter>
 	<logging>
 		<log type="coverage-clover" target="build/logs/clover.xml"/>
