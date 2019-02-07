@@ -1,6 +1,14 @@
 <?php
 
-require '../../AltoRouter.php';
+require __DIR__ . '/../../AltoRouter.php';
+
+/**
+ * This can be useful if you're using PHP's built-in web server, to serve files like images or css
+ * @link https://secure.php.net/manual/en/features.commandline.webserver.php
+ */
+if (file_exists($_SERVER['SCRIPT_FILENAME']) && pathinfo($_SERVER['SCRIPT_FILENAME'], PATHINFO_EXTENSION) !== 'php') {
+    return;
+}
 
 $router = new AltoRouter();
 $router->setBasePath('/AltoRouter/examples/basic');
