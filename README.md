@@ -29,7 +29,7 @@ echo $router->generate( 'user-details', array( 'id' => 5 ) ); // Output: "/users
 
 ## Getting started
 
-You need PHP >= 5.3 to use AltoRouter.
+You need PHP >= 5.3 to use AltoRouter, although we highly recommend you [use an officially supported PHP version](https://secure.php.net/supported-versions.php).
 
 - [Install AltoRouter](http://altorouter.com/usage/install.html)
 - [Rewrite all requests to AltoRouter](http://altorouter.com/usage/rewrite-requests.html)

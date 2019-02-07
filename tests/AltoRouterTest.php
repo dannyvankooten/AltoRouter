@@ -73,7 +73,8 @@ class AltoRouterTest extends PHPUnit\Framework\TestCase
 		$route = '/[:controller]/[:action]';
 		$target = function(){};
 
-		$this->assertIsArray($this->router->getRoutes());
+		$this->assertInternalType('array', $this->router->getRoutes());
+		// $this->assertIsArray($this->router->getRoutes()); // for phpunit 7.x
 		$this->router->map($method, $route, $target);
 		$this->assertEquals(array(array($method, $route, $target, null)), $this->router->getRoutes());
 	}
