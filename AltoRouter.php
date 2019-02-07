@@ -251,7 +251,7 @@ class AltoRouter {
 	/**
 	 * Compile the regex for a given route (EXPENSIVE)
 	 */
-	private function compileRoute($route) {
+	protected function compileRoute($route) {
 		if (preg_match_all('`(/|\.|)\[([^:\]]*+)(?::([^:\]]*+))?\](\?|)`', $route, $matches, PREG_SET_ORDER)) {
 
 			$matchTypes = $this->matchTypes;

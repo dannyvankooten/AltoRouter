@@ -10,6 +10,7 @@ class AltoRouterDebug extends AltoRouter{
 	public function getBasePath(){
 		return $this->basePath;
 	}
+
 }
 
 class SimpleTraversable implements Iterator{
@@ -72,7 +73,7 @@ class AltoRouterTest extends PHPUnit\Framework\TestCase
 		$route = '/[:controller]/[:action]';
 		$target = function(){};
 
-		$this->assertInternalType('array', $this->router->getRoutes());
+		$this->assertIsArray($this->router->getRoutes());
 		$this->router->map($method, $route, $target);
 		$this->assertEquals(array(array($method, $route, $target, null)), $this->router->getRoutes());
 	}
