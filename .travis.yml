@@ -8,7 +8,7 @@ php:
 install:
   - composer update --prefer-source
 script:
-  - ./vendor/bin/phpunit
+  - phpunit
 after_script:
   - ./vendor/bin/test-reporter
 env:
