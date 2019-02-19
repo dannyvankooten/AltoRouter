@@ -26,7 +26,7 @@ $router->map( 'GET', '/user/[i:id]/', function( $id ) {
 $match = $router->match();
 
 // call closure or throw 404 status
-if( $match && is_callable( $match['target'] ) ) {
+if( is_array($match) && is_callable( $match['target'] ) ) {
 	call_user_func_array( $match['target'], $match['params'] ); 
 } else {
 	// no route was matched
