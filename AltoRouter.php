@@ -249,6 +249,22 @@ class AltoRouter {
 	}
 
 	/**
+	 * Start the router
+	 * @param mixed $noMatchTarget Optional The target callable that will be executed when no matching route found. Defaults to 404 HTTP status code.
+	 * @author coder966
+	 */
+	public function run($noMatchTarget = null){
+		$match = $this->match();
+		if($match && is_callable($match['target'])){
+			call_user_func_array($match['target'], $match['params']);
+		}else if(is_callable($noMatchTarget)){
+			call_user_func_array($noMatchTarget, array());
+		}else{
+			header($_SERVER['SERVER_PROTOCOL'] . ' 404 Not Found');
+		}
+	}
+
+	/**
 	 * Compile the regex for a given route (EXPENSIVE)
 	 */
 	protected function compileRoute($route) {
