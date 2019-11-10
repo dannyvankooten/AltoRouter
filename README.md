@@ -5,18 +5,18 @@ AltoRouter is a small but powerful routing class, heavily inspired by [klein.php
 $router = new AltoRouter();
 
 // map homepage
-$router->map( 'GET', '/', function() {
+$router->map('GET', '/', function() {
     require __DIR__ . '/views/home.php';
 });
 
 // dynamic named route
-$router->map( 'GET|POST', '/users/[i:id]/', function( $id ) {
+$router->map('GET|POST', '/users/[i:id]/', function($id) {
   $user = .....
   require __DIR__ . '/views/user/details.php';
-}, 'user-details' );
+}, 'user-details');
 
 // echo URL to user-details page for ID 5
-echo $router->generate( 'user-details', array( 'id' => 5 ) ); // Output: "/users/5"
+echo $router->generate('user-details', ['id' => 5]); // Output: "/users/5"
 ```
 
 ## Features
