@@ -1,5 +1,5 @@
 # AltoRouter [![Build Status](https://api.travis-ci.org/dannyvankooten/AltoRouter.png)](http://travis-ci.org/dannyvankooten/AltoRouter) [![Latest Stable Version](https://poser.pugx.org/altorouter/altorouter/v/stable.svg)](https://packagist.org/packages/altorouter/altorouter) [![License](https://poser.pugx.org/altorouter/altorouter/license.svg)](https://packagist.org/packages/altorouter/altorouter) [![Code Climate](https://codeclimate.com/github/dannyvankooten/AltoRouter/badges/gpa.svg)](https://codeclimate.com/github/dannyvankooten/AltoRouter) [![Test Coverage](https://codeclimate.com/github/dannyvankooten/AltoRouter/badges/coverage.svg)](https://codeclimate.com/github/dannyvankooten/AltoRouter)
-AltoRouter is a small but powerful routing class for PHP 5.3+, heavily inspired by [klein.php](https://github.com/chriso/klein.php/).
+AltoRouter is a small but powerful routing class, heavily inspired by [klein.php](https://github.com/chriso/klein.php/).
 
 ```php
 $router = new AltoRouter();
@@ -29,7 +29,7 @@ echo $router->generate( 'user-details', array( 'id' => 5 ) ); // Output: "/users
 
 ## Getting started
 
-You need PHP >= 5.3 to use AltoRouter, although we highly recommend you [use an officially supported PHP version](https://secure.php.net/supported-versions.php).
+You need PHP >= 5.6 to use AltoRouter, although we highly recommend you [use an officially supported PHP version](https://secure.php.net/supported-versions.php) that is not EOL.
 
 - [Install AltoRouter](http://altorouter.com/usage/install.html)
 - [Rewrite all requests to AltoRouter](http://altorouter.com/usage/rewrite-requests.html)
