@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<ruleset name="rules">
+    <description>rules</description>
+    <rule ref="PSR2"/>
+    <rule ref="Generic.Arrays.DisallowLongArraySyntax"/>
+    <file>tests</file>
+    <file>AltoRouter.php</file>
+    <file>examples/</file>
+    <arg name="colors"/>
+</ruleset>
