@@ -204,6 +204,8 @@ class AltoRouter
             $requestUrl = substr($requestUrl, 0, $strpos);
         }
 
+        $lastRequestUrlChar = $requestUrl[strlen($requestUrl)-1];
+
         // set Request Method if it isn't passed as a parameter
         if ($requestMethod === null) {
             $requestMethod = isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] : 'GET';
@@ -230,10 +232,12 @@ class AltoRouter
                 // No params in url, do string comparison
                 $match = strcmp($requestUrl, $route) === 0;
             } else {
-                // Compare longest non-param string with url
-                if (strncmp($requestUrl, $route, $position) !== 0) {
+                // Compare longest non-param string with url before moving on to regex
+				// Check if last character before param is a slash, because it could be optional if param is optional too (see https://github.com/dannyvankooten/AltoRouter/issues/241)
+                if (strncmp($requestUrl, $route, $position) !== 0 && ($lastRequestUrlChar === '/' || $route[$position-1] !== '/')) {
                     continue;
                 }
+
                 $regex = $this->compileRoute($route);
                 $match = preg_match($regex, $requestUrl, $params) === 1;
             }
@@ -254,6 +258,7 @@ class AltoRouter
                 ];
             }
         }
+
         return false;
     }
 

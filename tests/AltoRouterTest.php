@@ -371,7 +371,7 @@ class AltoRouterTest extends PHPUnit\Framework\TestCase
             ->getMock();
 
         // this should prove that compileRoute is not called when the route doesn't
-        // have any params in it, but this doesn't work because compileRoute is private.
+        // have any params in it
         $router->expects($this->never())
             ->method('compileRoute');
 
@@ -383,8 +383,6 @@ class AltoRouterTest extends PHPUnit\Framework\TestCase
             'params' => [],
             'name' => 'contact'
         ], $router->match('/contact', 'GET'));
-
-        $router->map('GET', '/page/[:id]', 'pages#show', 'page');
 
         // no prefix match, so no regex compilation necessary
         $this->assertFalse($router->match('/page1', 'GET'));
