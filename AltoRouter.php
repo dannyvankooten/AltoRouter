@@ -184,9 +184,10 @@ class AltoRouter
      * Match a given Request Url against stored routes
      * @param string $requestUrl
      * @param string $requestMethod
-     * @return array|boolean Array with route information on success, false on failure (no match).
+     * @param boolean $once Return first match
+     * @return array|boolean Array with route information/array with routes on success, false/empty array on failure (no match).
      */
-    public function match($requestUrl = null, $requestMethod = null)
+    public function match($requestUrl = null, $requestMethod = null, $once = true)
     {
 
         $params = [];
@@ -211,6 +212,7 @@ class AltoRouter
             $requestMethod = isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] : 'GET';
         }
 
+        $matches = [];
         foreach ($this->routes as $handler) {
             list($methods, $route, $target, $name) = $handler;
 
@@ -251,15 +253,25 @@ class AltoRouter
                     }
                 }
 
-                return [
-                    'target' => $target,
-                    'params' => $params,
-                    'name' => $name
-                ];
+                //if once return route, else add route to array of matched routes
+                if ($once) {
+                    return [
+                        'target' => $target,
+                        'params' => $params,
+                        'name' => $name
+                    ];
+                } else {
+                    $matches[] = [
+                        'target' => $target,
+                        'params' => $params,
+                        'name' => $name
+                    ];
+                }
             }
         }
 
-        return false;
+        //if once return false, else return array of matched routes
+        return $once ? false : $matches;
     }
 
     /**
