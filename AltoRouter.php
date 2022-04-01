@@ -186,7 +186,7 @@ class AltoRouter
      * @param string $requestMethod
      * @return array|boolean Array with route information on success, false on failure (no match).
      */
-    public function match($requestUrl = null, $requestMethod = null)
+    public function matcher($requestUrl = null, $requestMethod = null)
     {
 
         $params = [];
@@ -214,10 +214,10 @@ class AltoRouter
         foreach ($this->routes as $handler) {
             list($methods, $route, $target, $name) = $handler;
 
-            $method_match = (stripos($methods, $requestMethod) !== false);
+            $method_matcher = (stripos($methods, $requestMethod) !== false);
 
             // Method did not match, continue to next route.
-            if (!$method_match) {
+            if (!$method_matcher) {
                 continue;
             }
 
