@@ -69,7 +69,7 @@ echo sprintf('Map time: %.3f ms', $time * 1000) . PHP_EOL;
 
 // match a static route
 $start = microtime(true);
-$router->match('/1/login', 'GET');
+$router->matcher('/1/login', 'GET');
 $end = microtime(true);
 $time = $end - $start;
 $total_time += $time;
@@ -77,7 +77,7 @@ echo sprintf('Match time (existing route, no params): %.3f ms', $time * 1000) . 
 
 // match a route with 1 parameter
 $start = microtime(true);
-$res = $router->match('/1/classes/foo', 'GET');
+$res = $router->matcher('/1/classes/foo', 'GET');
 $end = microtime(true);
 $time = $end - $start;
 $total_time += $time;
@@ -85,7 +85,7 @@ echo sprintf('Match time (existing route, 1 param): %.3f ms', $time * 1000) . PH
 
 // match a route with 2 parameters
 $start = microtime(true);
-$res = $router->match('/1/classes/foo/500', 'GET');
+$res = $router->matcher('/1/classes/foo/500', 'GET');
 $end = microtime(true);
 $time = $end - $start;
 $total_time += $time;
@@ -94,7 +94,7 @@ echo sprintf('Match time (existing route, 2 params): %.3f ms', $time * 1000) . P
 
 // match unexisting route
 $start = microtime(true);
-$router->match('/55-foo-bar', 'GET');
+$router->matcher('/55-foo-bar', 'GET');
 $end = microtime(true);
 $time = $end - $start;
 $total_time += $time;

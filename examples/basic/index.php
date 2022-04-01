@@ -18,7 +18,7 @@ $router->map('GET', '/users/[i:id]', 'users#show', 'users_show');
 $router->map('POST', '/users/[i:id]/[delete|update:action]', 'usersController#doAction', 'users_do');
 
 // match current request
-$match = $router->match();
+$match = $router->matcher();
 ?>
 <h1>AltoRouter</h1>
 
