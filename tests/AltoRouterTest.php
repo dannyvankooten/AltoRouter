@@ -25,23 +25,26 @@ class SimpleTraversable implements Iterator
         ['POST', '/bar', 'bar_action', 'second_route']
     ];
 
+    #[\ReturnTypeWillChange]
     public function current()
     {
         return $this->_data[$this->_position];
     }
+
+    #[\ReturnTypeWillChange]
     public function key()
     {
         return $this->_position;
     }
-    public function next()
+    public function next() : void 
     {
         ++$this->_position;
     }
-    public function rewind()
+    public function rewind() : void
     {
         $this->_position = 0;
     }
-    public function valid()
+    public function valid() : bool
     {
         return isset($this->_data[$this->_position]);
     }
