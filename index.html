@@ -3,7 +3,7 @@ title: AltoRouter - PHP Router that supports REST, dynamic and reversed routing
 layout: default
 ---
 <h1>
-<a name="altorouter-" class="anchor" href="#altorouter-"><span class="octicon octicon-link"></span></a>AltoRouter <a href="http://travis-ci.org/dannyvankooten/AltoRouter"><img src="https://api.travis-ci.org/dannyvankooten/AltoRouter.png" alt="Build Status"></a>
+<a name="altorouter-" class="anchor" href="#altorouter-"><span class="octicon octicon-link"></span></a>AltoRouter <a href="https://travis-ci.org/dannyvankooten/AltoRouter"><img src="https://api.travis-ci.org/dannyvankooten/AltoRouter.png" alt="Build Status"></a>
 </h1>
 
 <p class="intro">AltoRouter is a small but powerful routing class for PHP 5.3+, heavily inspired by <a href="https://github.com/chriso/klein.php/">klein.php</a>.</p>
@@ -36,11 +36,11 @@ $router->map( 'GET|POST', '/users/[i:id]/', function( $id ) {
 <p>To use AltoRouter in your project you need a web server running PHP 5.3 or newer.</p>
 
 <ul>
-    <li><a href="/usage/install.html">Install AltoRouter</a></li>
-    <li><a href="/usage/rewrite-requests.html">Rewrite all requests to AltoRouter</a></li>
-    <li><a href="/usage/mapping-routes.html">Map your routes</a></li>
-    <li><a href="/usage/matching-requests.html">Match requests</a></li>
-    <li><a href="/usage/processing-requests.html">Process the request your preferred way</a></li>
+    <li><a href="{{ '/usage/install.html' | relative_url }}">Install AltoRouter</a></li>
+    <li><a href="{{ '/usage/rewrite-requests.html' | relative_url }}">Rewrite all requests to AltoRouter</a></li>
+    <li><a href="{{ '/usage/mapping-routes.html' | relative_url }}">Map your routes</a></li>
+    <li><a href="{{ '/usage/matching-requests.html' | relative_url }}">Match requests</a></li>
+    <li><a href="{{ '/usage/processing-requests.html' | relative_url }}">Process the request your preferred way</a></li>
 </ul>
 
 <h2>
@@ -54,5 +54,5 @@ $router->map( 'GET|POST', '/users/[i:id]/', function( $id ) {
 </ul>
 
 
-<p>Released under the <a href="/license.html">MIT Public License</a>.</p>
-<p>&copy; 2012-2018 <a href="https://dannyvankooten.com/">Danny van Kooten</a></p>
+<p>Released under the <a href="{{ '/license.html' | relative_url }}">MIT Public License</a>.</p>
+<p>&copy; 2012-2023 <a href="https://dannyvankooten.com/">Danny van Kooten</a></p>
