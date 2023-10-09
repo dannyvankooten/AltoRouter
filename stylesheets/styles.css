@@ -8,7 +8,7 @@ body {
 
 h1, h2, h3, h4, h5, h6 {
   color:#222;
-  margin:0 0 24px;
+  margin:48px 0 24px;
 }
 
 p, ul, ol, table, pre, dl, figure {
@@ -21,6 +21,7 @@ h1, h2, h3, h4 {
 
 h1 {
   font-size:28px;
+  margin-top: 0;
 }
 
 .site-title a{
