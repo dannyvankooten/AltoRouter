@@ -1,21 +1,21 @@
 
 body {
   padding:50px;
-  font:14px/1.5 Verdana, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font:16px/1.5 Verdana, "Helvetica Neue", Helvetica, Arial, sans-serif;
   color:#777;
   font-weight:300;
 }
 
 h1, h2, h3, h4, h5, h6 {
   color:#222;
-  margin:0 0 20px;
+  margin:0 0 24px;
 }
 
-p, ul, ol, table, pre, dl {
-  margin:0 0 20px;
+p, ul, ol, table, pre, dl, figure {
+  margin:0 0 24px;
 }
 
-h1, h2, h3 {
+h1, h2, h3, h4 {
   line-height:1.1;
 }
 
@@ -68,12 +68,12 @@ blockquote {
 code, pre {
   font-family: monospace;
   color:#333;
-  font-size:12px;
+  font-size:14px;
 }
 
 pre {
   padding:8px 15px;
-  background: #f8f8f8;  
+  background: #f8f8f8;
   border-radius:5px;
   border:1px solid #e5e5e5;
   overflow-x: auto;
@@ -162,33 +162,33 @@ h1 small {
 }
 
 @media print, screen and (max-width: 960px) {
-  
+
   div.wrapper {
     width:auto;
     margin:0;
   }
-  
+
   header, section, footer {
     float:none;
     position:static;
     width:auto;
   }
-  
+
   header {
     padding-right:320px;
   }
-  
+
   section {
     border:1px solid #e5e5e5;
     border-width:1px 0;
     padding:20px 0;
     margin:0 0 20px;
   }
-  
+
   header a small {
     display:inline;
   }
-  
+
   header ul {
     position:absolute;
     right:50px;
@@ -200,15 +200,15 @@ h1 small {
   body {
     word-wrap:break-word;
   }
-  
+
   header {
     padding:0;
   }
-  
+
   header ul, header p.view {
     position:static;
   }
-  
+
   pre, code {
     word-wrap:normal;
   }
@@ -218,7 +218,7 @@ h1 small {
   body {
     padding:15px;
   }
-  
+
   header ul {
     display:none;
   }
