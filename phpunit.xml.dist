@@ -1,17 +1,17 @@
-<phpunit
-	colors="true"
-	verbose="true">
-	<testsuites>
-		<testsuite name="altorouter">
-			<directory>./tests/</directory>
-		</testsuite>
-	</testsuites>
-	<filter>
-        <whitelist>
-            <file>./AltoRouter.php</file>
-        </whitelist>
-	</filter>
-	<logging>
-		<log type="coverage-clover" target="build/logs/clover.xml"/>
-	</logging>
+<?xml version="1.0"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" colors="true" verbose="true" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd">
+  <coverage>
+    <include>
+      <file>./AltoRouter.php</file>
+    </include>
+    <report>
+      <clover outputFile="build/logs/clover.xml"/>
+    </report>
+  </coverage>
+  <testsuites>
+    <testsuite name="altorouter">
+      <directory>./tests/</directory>
+    </testsuite>
+  </testsuites>
+  <logging/>
 </phpunit>
