@@ -3,7 +3,7 @@ title: Matching requests using AltoRouter
 layout: default
 ---
 <h1>
-    <small>Using AltoRouter</small> 
+    <small>Using AltoRouter</small>
     Matching Requests
 </h1>
 
@@ -40,10 +40,10 @@ $router->map( 'GET', '/', function() { .. }, 'home' );
 $match = $router->match();
 
 /*
-array(3) { 
-	["target"]	=> object(Closure)#2 (0) { } 
-	["params"]	=> array(0) { } 
-	["name"] 	=> 'home' 
+array(3) {
+	["target"]	=> object(Closure)#2 (0) { }
+	["params"]	=> array(0) { }
+	["name"] 	=> 'home'
 }
 */
 {% endhighlight %}
@@ -51,7 +51,7 @@ array(3) {
 <p>AltoRouter does not process the request for you, you are free to use the method you prefer. Here is a simplified example <a href="/usage/processing-requests.html">how to process requests using closures</a> though.</p>
 
 <p>
-    <a style="float:left;" href="/usage/mapping-routes.html">&laquo; Mapping routes</a> 
-    <a style="float:right;" href="/usage/processing-requests.html">Processing requests &raquo;</a> 
+    <a style="float:left;" href="{{ '/usage/mapping-routes.html' | relative_url }}">&laquo; Mapping routes</a>
+    <a style="float:right;" href="{{ '/usage/processing-requests.html' | relative_url }}">Processing requests &raquo;</a>
     <br style="clear:both;">
 </p>

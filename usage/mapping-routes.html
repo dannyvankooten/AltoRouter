@@ -3,11 +3,11 @@ title: "Mapping routes using AltoRouter"
 layout: default
 ---
 <h1>
-    <small>Using AltoRouter</small> 
+    <small>Using AltoRouter</small>
     Mapping Routes
 </h1>
 
-<p>By now, you should have <a href="/usage/rewrite-requests.html">rewritten al requests to be handled by a single file in which you created an AltoRouter instance.</a></p>
+<p>By now, you should have <a href="{{ '/usage/rewrite-requests.html' | relative_url }}">rewritten al requests to be handled by a single file in which you created an AltoRouter instance.</a></p>
 <p>To map your routes, use the <code>map()</code> method. The following example maps all <code>GET /</code> requests.</p>
 
 {% highlight php startinline %}
@@ -129,7 +129,7 @@ $router->addMatchTypes(array('cId' => '[a-zA-Z]{2}[0-9](?:_[0-9]++)?'));
 <p>Once your routes are all mapped you can start matching requests and continue processing the request.</p>
 
 <p>
-    <a style="float:left;" href="/usage/rewrite-requests.html">&laquo; Rewriting requests</a> 
-    <a style="float:right;" href="/usage/matching-requests.html">Matching requests &raquo;</a> 
+    <a style="float:left;" href="{{ '/usage/rewrite-requests.html' | relative_url }}">&laquo; Rewriting requests</a>
+    <a style="float:right;" href="{{ '/usage/matching-requests.html' | relative_url }}">Matching requests &raquo;</a>
     <br style="clear:both;">
 </p>

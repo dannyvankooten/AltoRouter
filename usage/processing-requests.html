@@ -3,7 +3,7 @@ title: Processing requests using AltoRouter
 layout: default
 ---
 <h1>
-    <small>Using AltoRouter</small> 
+    <small>Using AltoRouter</small>
     Processing Requests
 </h1>
 
@@ -27,7 +27,7 @@ $match = $router->match();
 
 // call closure or throw 404 status
 if( is_array($match) && is_callable( $match['target'] ) ) {
-	call_user_func_array( $match['target'], $match['params'] ); 
+	call_user_func_array( $match['target'], $match['params'] );
 } else {
 	// no route was matched
 	header( $_SERVER["SERVER_PROTOCOL"] . ' 404 Not Found');
@@ -35,6 +35,6 @@ if( is_array($match) && is_callable( $match['target'] ) ) {
 {% endhighlight %}
 
 <p>
-    <a style="float:left;" href="/usage/matching-requests.html">&laquo; Matching requests</a> 
+    <a style="float:left;" href="{{ '/usage/matching-requests.html' | relative_url }}">&laquo; Matching requests</a>
     <br style="clear:both;">
 </p>
