@@ -1,9 +1,8 @@
 
 body {
-  padding:50px;
+  padding: 50px;
   font:16px/1.5 Verdana, "Helvetica Neue", Helvetica, Arial, sans-serif;
-  color:#777;
-  font-weight:300;
+  color: #444;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -140,8 +139,8 @@ footer {
 }
 
 h1 small {
-  color: lightGray;
-  font-size: 60%;
+  color: #888;
+  font-size: 16px;
   display: block;
   margin-bottom: 10px;
 }
