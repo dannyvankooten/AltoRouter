@@ -36,7 +36,7 @@ class SimpleTraversable implements Iterator
     {
         return $this->_position;
     }
-    public function next() : void 
+    public function next() : void
     {
         ++$this->_position;
     }
@@ -138,7 +138,7 @@ class AltoRouterTest extends PHPUnit\Framework\TestCase
      */
     public function testSetBasePath()
     {
-    	$this->router->setBasePath('/some/path');
+        $this->router->setBasePath('/some/path');
         $this->assertEquals('/some/path', $this->router->getBasePath());
 
         $this->router->setBasePath('/some/path');
@@ -514,18 +514,17 @@ class AltoRouterTest extends PHPUnit\Framework\TestCase
     }
 
     public function testMatchWithSlashBeforeOptionalPart()
-	{
-		$this->router->map('GET', '/archives/[lmin:category]?', 'Article#archives');
-		$expected =  [
-			'target' => 'Article#archives',
-			'params' => [],
-			'name' => null
-		];
+    {
+        $this->router->map('GET', '/archives/[lmin:category]?', 'Article#archives');
+        $expected =  [
+            'target' => 'Article#archives',
+            'params' => [],
+            'name' => null
+        ];
 
-		$this->assertEquals($expected, $this->router->match('/archives/', 'GET'));
-		$this->assertEquals($expected, $this->router->match('/archives', 'GET'));
-
-	}
+        $this->assertEquals($expected, $this->router->match('/archives/', 'GET'));
+        $this->assertEquals($expected, $this->router->match('/archives', 'GET'));
+    }
 
     /**
      * @covers AltoRouter::addMatchTypes

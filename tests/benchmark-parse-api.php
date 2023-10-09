@@ -13,46 +13,46 @@
 
 require __DIR__ . '/../vendor/autoload.php';
 $routes = [
-	["POST", "/1/classes/[a:className]"],
-	["GET", "/1/classes/[a:className]/[i:objectId]"],
-	["PUT", "/1/classes/[a:className]/[i:objectId]"],
-	["GET", "/1/classes/[a:className]"],
-	["DELETE", "/1/classes/[a:className]/[i:objectId]"],
+    ["POST", "/1/classes/[a:className]"],
+    ["GET", "/1/classes/[a:className]/[i:objectId]"],
+    ["PUT", "/1/classes/[a:className]/[i:objectId]"],
+    ["GET", "/1/classes/[a:className]"],
+    ["DELETE", "/1/classes/[a:className]/[i:objectId]"],
 
-	// Users
-	["POST", "/1/users"],
-	["GET", "/1/login"],
-	["GET", "/1/users/[i:objectId]"],
-	["PUT", "/1/users/[i:objectId]"],
-	["GET", "/1/users"],
-	["DELETE", "/1/users/[i:objectId]"],
-	["POST", "/1/requestPasswordReset"],
+    // Users
+    ["POST", "/1/users"],
+    ["GET", "/1/login"],
+    ["GET", "/1/users/[i:objectId]"],
+    ["PUT", "/1/users/[i:objectId]"],
+    ["GET", "/1/users"],
+    ["DELETE", "/1/users/[i:objectId]"],
+    ["POST", "/1/requestPasswordReset"],
 
-	// Roles
-	["POST", "/1/roles"],
-	["GET", "/1/roles/[i:objectId]"],
-	["PUT", "/1/roles/[i:objectId]"],
-	["GET", "/1/roles"],
-	["DELETE", "/1/roles/[i:objectId]"],
+    // Roles
+    ["POST", "/1/roles"],
+    ["GET", "/1/roles/[i:objectId]"],
+    ["PUT", "/1/roles/[i:objectId]"],
+    ["GET", "/1/roles"],
+    ["DELETE", "/1/roles/[i:objectId]"],
 
-	// Files
-	["POST", "/1/files/:fileName"],
+    // Files
+    ["POST", "/1/files/:fileName"],
 
-	// Analytics
-	["POST", "/1/events/[a:eventName]"],
+    // Analytics
+    ["POST", "/1/events/[a:eventName]"],
 
-	// Push Notifications
-	["POST", "/1/push"],
+    // Push Notifications
+    ["POST", "/1/push"],
 
-	// Installations
-	["POST", "/1/installations"],
-	["GET", "/1/installations/[i:objectId]"],
-	["PUT", "/1/installations/[i:objectId]"],
-	["GET", "/1/installations"],
-	["DELETE", "/1/installations/[i:objectId]"],
+    // Installations
+    ["POST", "/1/installations"],
+    ["GET", "/1/installations/[i:objectId]"],
+    ["PUT", "/1/installations/[i:objectId]"],
+    ["GET", "/1/installations"],
+    ["DELETE", "/1/installations/[i:objectId]"],
 
-	// Cloud Functions
-	["POST", "/1/functions"],
+    // Cloud Functions
+    ["POST", "/1/functions"],
 ];
 $total_time = 0;
 $router = new AltoRouter();
