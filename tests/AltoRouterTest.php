@@ -1,8 +1,8 @@
 <?php
 
-require 'AltoRouter.php';
+require 'EdgeAltoRouter.php';
 
-class AltoRouterDebug extends AltoRouter
+class EdgeAltoRouterDebug extends EdgeAltoRouter
 {
     public function getNamedRoutes()
     {
@@ -50,10 +50,10 @@ class SimpleTraversable implements Iterator
     }
 }
 
-class AltoRouterTest extends PHPUnit\Framework\TestCase
+class EdgeAltoRouterTest extends PHPUnit\Framework\TestCase
 {
     /**
-     * @var AltoRouter
+     * @var EdgeAltoRouter
      */
     protected $router;
 
@@ -63,11 +63,11 @@ class AltoRouterTest extends PHPUnit\Framework\TestCase
      */
     protected function setUp() : void
     {
-        $this->router = new AltoRouterDebug;
+        $this->router = new EdgeAltoRouterDebug;
     }
 
     /**
-     * @covers AltoRouter::getRoutes
+     * @covers EdgeAltoRouter::getRoutes
      */
     public function testGetRoutes()
     {
@@ -83,7 +83,7 @@ class AltoRouterTest extends PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers AltoRouter::addRoutes
+     * @covers EdgeAltoRouter::addRoutes
      */
     public function testAddRoutes()
     {
@@ -104,7 +104,7 @@ class AltoRouterTest extends PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers AltoRouter::addRoutes
+     * @covers EdgeAltoRouter::addRoutes
      */
     public function testAddRoutesAcceptsTraverable()
     {
@@ -124,7 +124,7 @@ class AltoRouterTest extends PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers AltoRouter::addRoutes
+     * @covers EdgeAltoRouter::addRoutes
      * @expectedException Exception
      */
     public function testAddRoutesThrowsExceptionOnInvalidArgument()
@@ -134,7 +134,7 @@ class AltoRouterTest extends PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers AltoRouter::setBasePath
+     * @covers EdgeAltoRouter::setBasePath
      */
     public function testSetBasePath()
     {
@@ -146,7 +146,7 @@ class AltoRouterTest extends PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers AltoRouter::map
+     * @covers EdgeAltoRouter::map
      */
     public function testMap()
     {
@@ -163,7 +163,7 @@ class AltoRouterTest extends PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers AltoRouter::map
+     * @covers EdgeAltoRouter::map
      */
     public function testMapWithName()
     {
@@ -191,7 +191,7 @@ class AltoRouterTest extends PHPUnit\Framework\TestCase
 
 
     /**
-     * @covers AltoRouter::generate
+     * @covers EdgeAltoRouter::generate
      */
     public function testGenerate()
     {
@@ -221,7 +221,7 @@ class AltoRouterTest extends PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers AltoRouter::generate
+     * @covers EdgeAltoRouter::generate
      */
     public function testGenerateWithOptionalUrlParts()
     {
@@ -252,7 +252,7 @@ class AltoRouterTest extends PHPUnit\Framework\TestCase
 
     /**
      * GitHub #98
-     * @covers AltoRouter::generate
+     * @covers EdgeAltoRouter::generate
      */
     public function testGenerateWithOptionalPartOnBareUrl()
     {
@@ -277,7 +277,7 @@ class AltoRouterTest extends PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers AltoRouter::generate
+     * @covers EdgeAltoRouter::generate
      */
     public function testGenerateWithNonexistingRoute()
     {
@@ -290,8 +290,8 @@ class AltoRouterTest extends PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers AltoRouter::match
-     * @covers AltoRouter::compileRoute
+     * @covers EdgeAltoRouter::match
+     * @covers EdgeAltoRouter::compileRoute
      */
     public function testMatch()
     {
@@ -319,7 +319,7 @@ class AltoRouterTest extends PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers AltoRouter::match
+     * @covers EdgeAltoRouter::match
      */
     public function testMatchWithNonRegex()
     {
@@ -337,7 +337,7 @@ class AltoRouterTest extends PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers AltoRouter::match
+     * @covers EdgeAltoRouter::match
      */
     public function testMatchWithFixedParamValues()
     {
@@ -358,7 +358,7 @@ class AltoRouterTest extends PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers AltoRouter::match
+     * @covers EdgeAltoRouter::match
      */
     public function testMatchWithPlainRoute()
     {
@@ -385,7 +385,7 @@ class AltoRouterTest extends PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers AltoRouter::match
+     * @covers EdgeAltoRouter::match
      */
     public function testMatchWithServerVars()
     {
@@ -405,7 +405,7 @@ class AltoRouterTest extends PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers AltoRouter::match
+     * @covers EdgeAltoRouter::match
      */
     public function testMatchWithOptionalUrlParts()
     {
@@ -433,7 +433,7 @@ class AltoRouterTest extends PHPUnit\Framework\TestCase
 
     /**
      * GitHub #98
-     * @covers AltoRouter::match
+     * @covers EdgeAltoRouter::match
      */
     public function testMatchWithOptionalPartOnBareUrl()
     {
@@ -455,7 +455,7 @@ class AltoRouterTest extends PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers AltoRouter::match
+     * @covers EdgeAltoRouter::match
      */
     public function testMatchWithWildcard()
     {
@@ -469,7 +469,7 @@ class AltoRouterTest extends PHPUnit\Framework\TestCase
         ], $this->router->match('/everything', 'GET'));
     }
     /**
-     * @covers AltoRouter::match
+     * @covers EdgeAltoRouter::match
      */
     public function testMatchWithCustomRegexp()
     {
@@ -484,7 +484,7 @@ class AltoRouterTest extends PHPUnit\Framework\TestCase
         $this->assertFalse($this->router->match('/some-other-thing', 'GET'));
     }
     /**
-     * @covers AltoRouter::match
+     * @covers EdgeAltoRouter::match
      */
     public function testMatchWithUnicodeRegex()
     {
@@ -527,7 +527,7 @@ class AltoRouterTest extends PHPUnit\Framework\TestCase
     }
 
     /**
-     * @covers AltoRouter::addMatchTypes
+     * @covers EdgeAltoRouter::addMatchTypes
      */
     public function testMatchWithCustomNamedRegex()
     {
@@ -553,7 +553,7 @@ class AltoRouterTest extends PHPUnit\Framework\TestCase
         $this->assertFalse($this->router->match('/some-other-thing', 'GET'));
     }
     /**
-     * @covers AltoRouter::addMatchTypes
+     * @covers EdgeAltoRouter::addMatchTypes
      */
     public function testMatchWithCustomNamedUnicodeRegex()
     {
