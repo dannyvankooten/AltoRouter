@@ -1,6 +1,6 @@
 <?php
 
-require __DIR__ . '/../../AltoRouter.php';
+require __DIR__ . '/../../EdgeAltoRouter.php';
 
 /**
  * This can be useful if you're using PHP's built-in web server, to serve files like images or css
@@ -10,8 +10,8 @@ if (file_exists($_SERVER['SCRIPT_FILENAME']) && pathinfo($_SERVER['SCRIPT_FILENA
     return;
 }
 
-$router = new AltoRouter();
-$router->setBasePath('/AltoRouter/examples/basic');
+$router = new EdgeAltoRouter();
+$router->setBasePath('/EdgeAltoRouter/examples/basic');
 $router->map('GET|POST', '/', 'home#index', 'home');
 $router->map('GET', '/users/', ['c' => 'UserController', 'a' => 'ListAction']);
 $router->map('GET', '/users/[i:id]', 'users#show', 'users_show');
