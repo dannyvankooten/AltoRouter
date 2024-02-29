@@ -76,7 +76,6 @@ class EdgeAltoRouter
                 if (preg_match("#{.*}#", $matches[2])) {
                     if (preg_match_all("#(?<capture>[0-9a-zA-Z:\/\\ÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ_+\- '\[\]\|]*)#", $matches[2], $arrayMatches)) {
                         $array = array();
-                        $array[] = 'GET';
                         foreach ($arrayMatches['capture'] as $capturedValue) {
                             if ($capturedValue != '') {
                                 $array[] = trim($capturedValue);
