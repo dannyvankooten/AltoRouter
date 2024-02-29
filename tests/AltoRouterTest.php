@@ -578,4 +578,51 @@ class EdgeAltoRouterTest extends PHPUnit\Framework\TestCase
 
         $this->assertFalse($this->router->match('/﷽‎', 'GET'));
     }
+    /**
+     * @covers EdgeAltoRouter::setRouteFromConfig
+     */
+    public function testSetRouteFromConfig()
+    {
+        $configModelUrl = __DIR__.DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'route.config';
+
+        $this->router->setRouteFromConfig($configModelUrl);
+
+        $routes = $this->router->getRoutes();
+
+        $method = 'POST';
+        $route = '/[:controller]/[:action]';
+        $target = static function () {
+        };
+        $this->assertEquals([$method, $route, $target, null], $routes[1]);
+
+        $this->assertEquals([
+            'target' => 'home#index',
+            'params' => [],
+            'name' => 'home'
+        ], $this->router->match('/home#index', 'GET'));
+
+        $this->assertEquals([
+            'target' => 'home#index',
+            'params' => [],
+            'name' => 'home'
+        ], $this->router->match('/home#index', 'POST'));
+
+        $this->assertEquals([
+            'target' => 'users#show',
+            'params' => [
+                id => 1
+            ],
+            'name' => 'users_show'
+        ], $this->router->match('/users/1', 'GET'));
+
+        $this->assertEquals([
+            'target' => 'usersController#doAction',
+            'params' => [
+                id => 1,
+                action => 'delete'
+            ],
+            'name' => 'users_do'
+        ], $this->router->match('/users/1/delete', 'POST'));
+
+    }
 }
