@@ -25,7 +25,7 @@ if( is_array($this->match) && is_callable( $this->match['target'] ) ) {
 }
 
 
-// echo URL to user-details page for ID 5
+// echo URL to home at index
 echo $router->generate('home'); // Output: "home#index"
 ```
 
