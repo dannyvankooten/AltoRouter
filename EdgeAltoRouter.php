@@ -48,9 +48,10 @@ class EdgeAltoRouter
      * @param array $routes
      * @param string $basePath
      * @param array $matchTypes
+     * @param string $configModelUrl
      * @throws Exception
      */
-    public function __construct(array $routes = [], string $basePath = '', array $matchTypes = [], string $configModelUrl = dirname(__FILE__).DIRECTORY_SEPARATOR.'routes.config')
+    public function __construct(array $routes = [], string $basePath = '', array $matchTypes = [], string $configModelUrl = __DIR__.DIRECTORY_SEPARATOR.'routes.config')
     {
         $this->addRoutes($routes);
         $this->setBasePath($basePath);
