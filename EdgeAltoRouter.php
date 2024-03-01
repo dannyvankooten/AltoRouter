@@ -85,7 +85,7 @@ class EdgeAltoRouter
                                     if (preg_match_all("#(?<capture>[0-9a-zA-Z:ÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ_+\-]*)#", trim($capturedValue), $capturedArrayMatches)) {
                                         foreach ($capturedArrayMatches['capture'] as $capturedArrayValue) {
                                             if (trim($capturedArrayValue) !== ''){
-                                                $capturedArrayIndex[] = trim($capturedArrayValue);
+                                                $capturedArrayIndex[] = mb_convert_encoding( trim($capturedArrayValue), 'UTF-8', mb_detect_encoding( $capturedArrayValue, 'auto') );
                                             }
                                         } 
                                         if(count($capturedArrayIndex)%2 !== 0){
@@ -93,9 +93,8 @@ class EdgeAltoRouter
                                            throw new RuntimeException('error : some key of the array in configfile has no values');
                                         }else{
                                             for($i = 0; $i < count($capturedArrayIndex) ; $i = $i+2){
-                                                $capturedArray[$capturedArrayIndex[$i]] = $capturedArrayIndex[$i+1];
+                                                $capturedArray[mb_convert_encoding( trim($capturedArrayIndex[$i], 'UTF-8', mb_detect_encoding( $capturedArrayIndex[$i], 'auto') )] = mb_convert_encoding( trim($capturedArrayIndex[$i+1], 'UTF-8', mb_detect_encoding( $capturedArrayIndex[$i+1], 'auto') );
                                             }
-                                            
                                         }
                                     }
                                     $array[] =  $capturedArray;
@@ -104,13 +103,13 @@ class EdgeAltoRouter
                                     if (preg_match_all("#(?<capture>[0-9a-zA-Z:ÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ_+\-]*)#", trim($capturedValue), $capturedArrayMatches)) {
                                         foreach ($capturedArrayMatches['capture'] as $capturedArrayValue) {
                                             if (trim($capturedArrayValue) != ''){
-                                                $capturedArray[] = trim($capturedArrayValue);
+                                                $capturedArray[] = mb_convert_encoding( trim($capturedArrayValue), 'UTF-8', mb_detect_encoding( $capturedArrayValue, 'auto') );
                                             }
                                         } 
                                     }          
                                     $array[] =  $capturedArray;              
                                 }else if ($capturedValue != '') {
-                                    $array[] = trim($capturedValue);
+                                    $array[] = mb_convert_encoding( trim($capturedValue), 'UTF-8', mb_detect_encoding( $capturedValue, 'auto') );
                                 }
                             }
                             $array[] = trim($matches[1]);
