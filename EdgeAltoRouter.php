@@ -81,28 +81,37 @@ class EdgeAltoRouter
                         foreach ($arrayMatches['capture'] as $capturedValue) {
                             print_r($capturedValue);
                             if(preg_match("#^\[((.*=>.*),?)*\]$#", $capturedValue)){
-                               $capturedArray = array();
-                               if (preg_match_all("#(?<capture>[0-9a-zA-Z:ÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ_+\-]*)#", trim($capturedValue), $capturedArrayMatches)) {
-                                print_r($capturedArrayMatches['capture']);
-                                   if(count($capturedArrayMatches['capture'])%2 == 0){
-                                       for($i=0;$i<count($capturedArrayMatches['capture']);$i=$i+2){
-                                           $capturedArray[$capturedArrayMatches['capture'][$i]] = $capturedArrayMatches['capture'][($i+1)];
-                                       }
-                                   }else{
+                                $capturedArrayIndex = array();
+                                $capturedArray = array();
+                                if (preg_match_all("#(?<capture>[0-9a-zA-Z:ÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ_+\-]*)#", trim($capturedValue), $capturedArrayMatches)) {
+                                    print_r($capturedArrayMatches['capture']);
+                                    foreach ($capturedArrayMatches['capture'] as $capturedArrayValue) {
+                                        if (trim($capturedArrayValue) !== ''){
+                                            $capturedArrayIndex[] = trim($capturedArrayValue);
+                                        }
+                                    } 
+                                    if(count($capturedArrayIndex)%2 !== 0){
                                        $capturedArray = 'error : some key of the array has no values';
                                        throw new Exception('error : some key of the array in configfile has no values');
-                                   }
-                               }
-                               $array[] =  $capturedArray;
+                                    }else{
+                                        for($i = 0; $i < count($capturedArrayIndex) ; $i = $i+2){
+                                            $capturedArray[$capturedArrayIndex[$i]] = $capturedArrayIndex[$i+1];
+                                        }
+                                        
+                                    }
+                                }
+                                $array[] =  $capturedArray;
                             }else if(preg_match("#^\[((.*),?)*\]$#", $capturedValue)){
-                               $capturedArray = array();
-                               if (preg_match_all("#(?<capture>[0-9a-zA-Z:ÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ_+\-]*)#", trim($capturedValue), $capturedArrayMatches)) {
-                                   print_r($capturedArrayMatches['capture']);
-                                   foreach ($capturedArrayMatches['capture'] as $capturedArrayValue) {
-                                       $capturedArrayValue[] = $capturedArrayValue;
-                                   } 
-                               }          
-                               $array[] =  $capturedArray;              
+                                $capturedArray = array();
+                                if (preg_match_all("#(?<capture>[0-9a-zA-Z:ÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ_+\-]*)#", trim($capturedValue), $capturedArrayMatches)) {
+                                    print_r($capturedArrayMatches['capture']);
+                                    foreach ($capturedArrayMatches['capture'] as $capturedArrayValue) {
+                                        if (trim($capturedArrayValue) != ''){
+                                            $capturedArray[] = trim($capturedArrayValue);
+                                        }
+                                    } 
+                                }          
+                                $array[] =  $capturedArray;              
                             }else if ($capturedValue != '') {
                                 $array[] = trim($capturedValue);
                             }
