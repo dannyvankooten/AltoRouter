@@ -69,7 +69,7 @@ class EdgeAltoRouter
      * @throws Exception
      */
     public function setRouteFromConfig($configUrl){
-        if(file_exists($configModelUrl)){
+        if(file_exists($configUrl)){
             $file = file($configUrl);
             foreach ($file as $line_num => $line) {
                 //searching pattern parameters
