@@ -113,7 +113,7 @@ class EdgeAltoRouter
                                 $array[] = trim($capturedValue);
                             }
                         }
-                        $array[] = $matches[1];
+                        $array[] = trim($matches[1]);
                         $this->map(...$array);
                         continue;
                     }
