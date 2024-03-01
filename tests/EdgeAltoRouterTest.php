@@ -601,17 +601,24 @@ class EdgeAltoRouterTest extends PHPUnit\Framework\TestCase
         ;
         $this->assertEquals([$method, $route, $target, ''], $routes[1]);
 
-        /*$this->assertEquals([
+        $this->assertEquals([
             'target' => 'home#index',
             'params' => [],
             'name' => 'home'
-        ], $this->router->match('/home#index', 'GET'));*/
+        ], $this->router->match('/', 'GET'));
 
-        /*$this->assertEquals([
+        $this->assertEquals([
             'target' => 'home#index',
             'params' => [],
             'name' => 'home'
-        ], $this->router->match('/home#index', 'POST'));*/
+        ], $this->router->match('/', 'POST'));
+
+        $this->assertEquals([
+            'target' => ['c' => 'UserController','a' => 'ListAction'],
+            'params' => [],
+            'name' => ''
+        ], $this->router->match('/users/', 'GET'));
+
 
         $this->assertEquals([
             'target' => 'users#show',
