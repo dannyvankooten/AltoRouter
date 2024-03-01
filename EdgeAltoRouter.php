@@ -69,8 +69,9 @@ class EdgeAltoRouter
      * @throws Exception
      */
     public function setRouteFromConfig($configUrl){
-        $fichier = file($configUrl);
-        foreach ($fichier as $line_num => $line) {
+        $file = file($configUrl);
+        print_r($file);
+        foreach ($file as $line_num => $line) {
             //searching pattern parameters
             if (preg_match("#[ ]*([a-zA-Z_+]*)[ ]*[:][ ]*([a-zA-Z0-9:\/\\ÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ_+\-'\{\,\ \}\(\)\[\]\|]*[ ]*)#", $line, $matches)) {
                 //searching array pattern
