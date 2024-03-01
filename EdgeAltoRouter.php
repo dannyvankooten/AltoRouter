@@ -82,7 +82,7 @@ class EdgeAltoRouter
                                $capturedArray = array();
                                if (preg_match_all("#(?<capture>[0-9a-zA-Z:ÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ_+\- '\"]*)#", trim($capturedValue), $capturedArrayMatches)) {
                                    if(count($capturedArrayMatches['capture'])%2 == 0){
-                                       for($i=0,$i<count($capturedArrayMatches['capture']),$i=$i+2){
+                                       for($i=0;$i<count($capturedArrayMatches['capture']);$i=$i+2){
                                            $capturedArray[$capturedArrayMatches['capture'][$i]] = $capturedArrayMatches['capture'][($i+1)];
                                        }
                                    }
