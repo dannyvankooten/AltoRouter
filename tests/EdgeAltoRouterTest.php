@@ -592,11 +592,11 @@ class EdgeAltoRouterTest extends PHPUnit\Framework\TestCase
         
         print_r($routes);
 
-        $method = 'POST';
-        $route = '/[:controller]/[:action]';
-        $target = static function () {
-        };
-        $this->assertEquals([$method, $route, $target, null], $routes[1]);
+        $method = 'GET';
+        $route = '/user/';
+        $target = array('c' => 'UserController','a' => 'ListAction')
+        ;
+        $this->assertEquals([$method, $route, $target, ''], $routes[1]);
 
         $this->assertEquals([
             'target' => 'home#index',
