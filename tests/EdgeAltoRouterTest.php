@@ -591,6 +591,7 @@ class EdgeAltoRouterTest extends PHPUnit\Framework\TestCase
 
         print_r($routes);
         print_r($this->router->match('/home#index', 'GET'));
+        print_r($this->router->match('/users/1', 'GET'))
 
         $method = 'GET';
         $route = '/users/';
@@ -613,7 +614,7 @@ class EdgeAltoRouterTest extends PHPUnit\Framework\TestCase
         $this->assertEquals([
             'target' => 'users#show',
             'params' => [
-                id => 1
+                'id' => 1
             ],
             'name' => 'users_show'
         ], $this->router->match('/users/1', 'GET'));
@@ -621,8 +622,8 @@ class EdgeAltoRouterTest extends PHPUnit\Framework\TestCase
         $this->assertEquals([
             'target' => 'usersController#doAction',
             'params' => [
-                id => 1,
-                action => 'delete'
+                'id' => 1,
+                'action' => 'delete'
             ],
             'name' => 'users_do'
         ], $this->router->match('/users/1/delete', 'POST'));
