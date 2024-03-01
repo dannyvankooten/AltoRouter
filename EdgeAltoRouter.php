@@ -69,56 +69,59 @@ class EdgeAltoRouter
      * @throws Exception
      */
     public function setRouteFromConfig($configUrl){
-        $file = file($configUrl);
-        foreach ($file as $line_num => $line) {
-            //searching pattern parameters
-            if (preg_match("#[ ]*([a-zA-Z_+ ]*)[:][ ]*([a-zA-Z0-9:\/\\ÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ_+\-'\"\{\,\ \}\(\)\[\]\|=>\#]*[ ]*)#", $line, $matches)) {
-                //searching array pattern
-                if (preg_match("#{.*}#", $matches[2])) {
-                    if (preg_match_all("#(?<capture>((\[([0-9a-zA-ZÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ_\-=>'\" ]*,?)*\])|([0-9a-zA-Z\/\\ÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ_+\-\[\]:\|\#]*)))#", $matches[2], $arrayMatches)) {
-                        $array = array();
-                        foreach ($arrayMatches['capture'] as $capturedValue) {
-                            if(preg_match("#^\[((.*=>.*),?)*\]$#", $capturedValue)){
-                                $capturedArrayIndex = array();
-                                $capturedArray = array();
-                                if (preg_match_all("#(?<capture>[0-9a-zA-Z:ÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ_+\-]*)#", trim($capturedValue), $capturedArrayMatches)) {
-                                    foreach ($capturedArrayMatches['capture'] as $capturedArrayValue) {
-                                        if (trim($capturedArrayValue) !== ''){
-                                            $capturedArrayIndex[] = trim($capturedArrayValue);
+        if(file_exists($configModelUrl)){
+            $file = file($configUrl);
+            foreach ($file as $line_num => $line) {
+                //searching pattern parameters
+                if (preg_match("#[ ]*([a-zA-Z_+ ]*)[:][ ]*([a-zA-Z0-9:\/\\ÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ_+\-'\"\{\,\ \}\(\)\[\]\|=>\#]*[ ]*)#", $line, $matches)) {
+                    //searching array pattern
+                    if (preg_match("#{.*}#", $matches[2])) {
+                        if (preg_match_all("#(?<capture>((\[([0-9a-zA-ZÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ_\-=>'\" ]*,?)*\])|([0-9a-zA-Z\/\\ÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ_+\-\[\]:\|\#]*)))#", $matches[2], $arrayMatches)) {
+                            $array = array();
+                            foreach ($arrayMatches['capture'] as $capturedValue) {
+                                if(preg_match("#^\[((.*=>.*),?)*\]$#", $capturedValue)){
+                                    $capturedArrayIndex = array();
+                                    $capturedArray = array();
+                                    if (preg_match_all("#(?<capture>[0-9a-zA-Z:ÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ_+\-]*)#", trim($capturedValue), $capturedArrayMatches)) {
+                                        foreach ($capturedArrayMatches['capture'] as $capturedArrayValue) {
+                                            if (trim($capturedArrayValue) !== ''){
+                                                $capturedArrayIndex[] = trim($capturedArrayValue);
+                                            }
+                                        } 
+                                        if(count($capturedArrayIndex)%2 !== 0){
+                                           $capturedArray = 'error : some key of the array has no values';
+                                           throw new RuntimeException('error : some key of the array in configfile has no values');
+                                        }else{
+                                            for($i = 0; $i < count($capturedArrayIndex) ; $i = $i+2){
+                                                $capturedArray[$capturedArrayIndex[$i]] = $capturedArrayIndex[$i+1];
+                                            }
+                                            
                                         }
-                                    } 
-                                    if(count($capturedArrayIndex)%2 !== 0){
-                                       $capturedArray = 'error : some key of the array has no values';
-                                       throw new Exception('error : some key of the array in configfile has no values');
-                                    }else{
-                                        for($i = 0; $i < count($capturedArrayIndex) ; $i = $i+2){
-                                            $capturedArray[$capturedArrayIndex[$i]] = $capturedArrayIndex[$i+1];
-                                        }
-                                        
                                     }
+                                    $array[] =  $capturedArray;
+                                }else if(preg_match("#^\[((.*),?)*\]$#", $capturedValue)){
+                                    $capturedArray = array();
+                                    if (preg_match_all("#(?<capture>[0-9a-zA-Z:ÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ_+\-]*)#", trim($capturedValue), $capturedArrayMatches)) {
+                                        foreach ($capturedArrayMatches['capture'] as $capturedArrayValue) {
+                                            if (trim($capturedArrayValue) != ''){
+                                                $capturedArray[] = trim($capturedArrayValue);
+                                            }
+                                        } 
+                                    }          
+                                    $array[] =  $capturedArray;              
+                                }else if ($capturedValue != '') {
+                                    $array[] = trim($capturedValue);
                                 }
-                                $array[] =  $capturedArray;
-                            }else if(preg_match("#^\[((.*),?)*\]$#", $capturedValue)){
-                                $capturedArray = array();
-                                if (preg_match_all("#(?<capture>[0-9a-zA-Z:ÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ_+\-]*)#", trim($capturedValue), $capturedArrayMatches)) {
-                                    print_r($capturedArrayMatches['capture']);
-                                    foreach ($capturedArrayMatches['capture'] as $capturedArrayValue) {
-                                        if (trim($capturedArrayValue) != ''){
-                                            $capturedArray[] = trim($capturedArrayValue);
-                                        }
-                                    } 
-                                }          
-                                $array[] =  $capturedArray;              
-                            }else if ($capturedValue != '') {
-                                $array[] = trim($capturedValue);
                             }
+                            $array[] = trim($matches[1]);
+                            $this->map(...$array);
+                            continue;
                         }
-                        $array[] = trim($matches[1]);
-                        $this->map(...$array);
-                        continue;
                     }
                 }
             }
+        }else{
+            throw new RuntimeException('error : configfile is not found');
         }
     }
     
