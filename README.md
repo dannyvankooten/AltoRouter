@@ -42,7 +42,7 @@ echo $router->generate('home'); // Output: "home#index"
 
 You need PHP >= 8.0 to use EdgeAltoRouter, although we highly recommend you [use an officially supported PHP version](https://secure.php.net/supported-versions.php) that is not EOL.
 
-## Offical Documentation of the forked AltoRouter
+## Official Documentation of the forked AltoRouter
 
 - [Install AltoRouter](https://dannyvankooten.github.io/AltoRouter//usage/install.html)
 - [Rewrite all requests to AltoRouter](https://dannyvankooten.github.io/AltoRouter//usage/rewrite-requests.html)
