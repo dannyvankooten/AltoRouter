@@ -70,7 +70,6 @@ class EdgeAltoRouter
      */
     public function setRouteFromConfig($configUrl){
         $file = file($configUrl);
-        print_r($file);
         foreach ($file as $line_num => $line) {
             //searching pattern parameters
             if (preg_match("#[ ]*([a-zA-Z_+ ]*)[:][ ]*([a-zA-Z0-9:\/\\ÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ_+\-'\"\{\,\ \}\(\)\[\]\|=>\#]*[ ]*)#", $line, $matches)) {
@@ -79,12 +78,10 @@ class EdgeAltoRouter
                     if (preg_match_all("#(?<capture>((\[([0-9a-zA-ZÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ_\-=>'\" ]*,?)*\])|([0-9a-zA-Z\/\\ÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ_+\-\[\]:\|\#]*)))#", $matches[2], $arrayMatches)) {
                         $array = array();
                         foreach ($arrayMatches['capture'] as $capturedValue) {
-                            print_r($capturedValue);
                             if(preg_match("#^\[((.*=>.*),?)*\]$#", $capturedValue)){
                                 $capturedArrayIndex = array();
                                 $capturedArray = array();
                                 if (preg_match_all("#(?<capture>[0-9a-zA-Z:ÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ_+\-]*)#", trim($capturedValue), $capturedArrayMatches)) {
-                                    print_r($capturedArrayMatches['capture']);
                                     foreach ($capturedArrayMatches['capture'] as $capturedArrayValue) {
                                         if (trim($capturedArrayValue) !== ''){
                                             $capturedArrayIndex[] = trim($capturedArrayValue);
@@ -117,7 +114,6 @@ class EdgeAltoRouter
                             }
                         }
                         $array[] = $matches[1];
-                        print_r($array);
                         $this->map(...$array);
                         continue;
                     }
