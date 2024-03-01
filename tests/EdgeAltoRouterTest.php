@@ -591,7 +591,7 @@ class EdgeAltoRouterTest extends PHPUnit\Framework\TestCase
 
         print_r($routes);
         print_r($this->router->match('/home#index', 'GET'));
-        print_r($this->router->match('/users/1', 'GET'))
+        print_r($this->router->match('/users/1', 'GET'));
 
         $method = 'GET';
         $route = '/users/';
