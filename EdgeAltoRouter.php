@@ -73,15 +73,15 @@ class EdgeAltoRouter
         print_r($file);
         foreach ($file as $line_num => $line) {
             //searching pattern parameters
-            if (preg_match("#[ ]*([a-zA-Z_+ ]*)[:][ ]*([a-zA-Z0-9:\/\\ÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ_+\-'\{\,\ \}\(\)\[\]\|\#]*[ ]*)#", $line, $matches)) {
+            if (preg_match("#[ ]*([a-zA-Z_+ ]*)[:][ ]*([a-zA-Z0-9:\/\\ÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ_+\-'\"\{\,\ \}\(\)\[\]\|=>\#]*[ ]*)#", $line, $matches)) {
                 //searching array pattern
                 if (preg_match("#{.*}#", $matches[2])) {
-                    if (preg_match_all("#(?<capture>[0-9a-zA-Z:\/\\ÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ_+\- '\[\]\|\#]*)#", $matches[2], $arrayMatches)) {
+                    if (preg_match_all("#(?<capture>[0-9a-zA-Z:\/\\ÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ_+\- \[\]\|\#]*)|(?<capture>[\[][0-9a-zA-Z:\/\\ÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ_+\- \]\|\#]*,?[\]])#", $matches[2], $arrayMatches)) {
                         $array = array();
                         foreach ($arrayMatches['capture'] as $capturedValue) {
                             if(preg_match("#^\[((.*=>.*),?)*\]$#", $capturedValue)){
                                $capturedArray = array();
-                               if (preg_match_all("#(?<capture>[0-9a-zA-Z:ÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ_+\- '\"]*)#", trim($capturedValue), $capturedArrayMatches)) {
+                               if (preg_match_all("#(?<capture>[0-9a-zA-Z:ÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ_+\- ]*)#", trim($capturedValue), $capturedArrayMatches)) {
                                    print_r($capturedArrayMatches['capture']);
                                    if(count($capturedArrayMatches['capture'])%2 == 0){
                                        for($i=0;$i<count($capturedArrayMatches['capture']);$i=$i+2){
