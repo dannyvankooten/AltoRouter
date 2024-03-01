@@ -590,7 +590,7 @@ class EdgeAltoRouterTest extends PHPUnit\Framework\TestCase
         $routes = $this->router->getRoutes();
 
         
-        print_r($this->router);
+        print_r($routes);
 
         $method = 'POST';
         $route = '/[:controller]/[:action]';
