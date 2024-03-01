@@ -73,7 +73,7 @@ class EdgeAltoRouter
         print_r($file);
         foreach ($file as $line_num => $line) {
             //searching pattern parameters
-            if (preg_match("#[ ]*([a-zA-Z_+]*)[ ]*[:][ ]*([a-zA-Z0-9:\/\\ÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ_+\-'\{\,\ \}\(\)\[\]\|\#]*[ ]*)#", $line, $matches)) {
+            if (preg_match("#[ ]*([a-zA-Z_+ ]*)[:][ ]*([a-zA-Z0-9:\/\\ÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ_+\-'\{\,\ \}\(\)\[\]\|\#]*[ ]*)#", $line, $matches)) {
                 //searching array pattern
                 if (preg_match("#{.*}#", $matches[2])) {
                     if (preg_match_all("#(?<capture>[0-9a-zA-Z:\/\\ÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ_+\- '\[\]\|\#]*)#", $matches[2], $arrayMatches)) {
