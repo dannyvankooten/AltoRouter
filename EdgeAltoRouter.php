@@ -100,6 +100,7 @@ class EdgeAltoRouter
                             }
                         }
                         $array[] = $matches[1];
+                        print_r($array);
                         $this->map(...$array);
                         continue;
                     }
