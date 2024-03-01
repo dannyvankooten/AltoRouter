@@ -362,7 +362,7 @@ class EdgeAltoRouterTest extends PHPUnit\Framework\TestCase
      */
     public function testMatchWithPlainRoute()
     {
-        $router = $this->getMockBuilder('AltoRouterDebug')
+        $router = $this->getMockBuilder('EdgeAltoRouterDebug')
             ->setMethods(['compileRoute'])
             ->getMock();
 
@@ -586,8 +586,11 @@ class EdgeAltoRouterTest extends PHPUnit\Framework\TestCase
         $configModelUrl = __DIR__.DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'route.config';
 
         $this->router->setRouteFromConfig($configModelUrl);
-
+        
         $routes = $this->router->getRoutes();
+
+        
+        print_r($routes);
 
         $method = 'POST';
         $route = '/[:controller]/[:action]';
