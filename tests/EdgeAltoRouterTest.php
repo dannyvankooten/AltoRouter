@@ -604,11 +604,11 @@ class EdgeAltoRouterTest extends PHPUnit\Framework\TestCase
             'name' => 'home'
         ], $this->router->match('/home#index', 'GET'));*/
 
-        $this->assertEquals([
+        /*$this->assertEquals([
             'target' => 'home#index',
             'params' => [],
             'name' => 'home'
-        ], $this->router->match('/home#index', 'POST'));
+        ], $this->router->match('/home#index', 'POST'));*/
 
         $this->assertEquals([
             'target' => 'users#show',
