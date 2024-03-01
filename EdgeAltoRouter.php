@@ -81,7 +81,7 @@ class EdgeAltoRouter
                         foreach ($arrayMatches['capture'] as $capturedValue) {
                             if(preg_match("#^\[((.*=>.*),?)*\]$#", $capturedValue)){
                                $capturedArray = array();
-                               if (preg_match_all("#(?<capture>[0-9a-zA-Z:ÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ_+\- ]*)#", trim($capturedValue), $capturedArrayMatches)) {
+                               if (preg_match_all("#(?<capture>[0-9a-zA-Z:ÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ_+\-]*)#", trim($capturedValue), $capturedArrayMatches)) {
                                    print_r($capturedArrayMatches['capture']);
                                    if(count($capturedArrayMatches['capture'])%2 == 0){
                                        for($i=0;$i<count($capturedArrayMatches['capture']);$i=$i+2){
@@ -95,7 +95,7 @@ class EdgeAltoRouter
                                $array[] =  $capturedArray;
                             }else if(preg_match("#^\[((.*),?)*\]$#", $capturedValue)){
                                $capturedArray = array();
-                               if (preg_match_all("#(?<capture>[0-9a-zA-Z:ÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ_+\- '\"]*)#", trim($capturedValue), $capturedArrayMatches)) {
+                               if (preg_match_all("#(?<capture>[0-9a-zA-Z:ÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ_+\-]*)#", trim($capturedValue), $capturedArrayMatches)) {
                                    print_r($capturedArrayMatches['capture']);
                                    foreach ($capturedArrayMatches['capture'] as $capturedArrayValue) {
                                        $capturedArrayValue[] = $capturedArrayValue;
