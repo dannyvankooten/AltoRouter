@@ -93,7 +93,7 @@ class EdgeAltoRouter
                                            throw new RuntimeException('error : some key of the array in configfile has no values');
                                         }else{
                                             for($i = 0; $i < count($capturedArrayIndex) ; $i = $i+2){
-                                                $capturedArray[mb_convert_encoding( trim($capturedArrayIndex[$i], 'UTF-8', mb_detect_encoding( $capturedArrayIndex[$i], 'auto') )] = mb_convert_encoding( trim($capturedArrayIndex[$i+1], 'UTF-8', mb_detect_encoding( $capturedArrayIndex[$i+1], 'auto') );
+                                                $capturedArray[mb_convert_encoding( trim($capturedArrayIndex[$i]), 'UTF-8', mb_detect_encoding( $capturedArrayIndex[$i], 'auto'))] = mb_convert_encoding( trim($capturedArrayIndex[$i+1]), 'UTF-8', mb_detect_encoding( $capturedArrayIndex[$i+1], 'auto'));
                                             }
                                         }
                                     }
