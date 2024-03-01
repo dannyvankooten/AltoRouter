@@ -82,16 +82,22 @@ class EdgeAltoRouter
                             if(preg_match("#\[((.*=>.*),?)*\]#", $capturedValue)){
                                $capturedArray = array();
                                if (preg_match_all("#(?<capture>[0-9a-zA-Z:ÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ_+\- '\"]*)#", trim($capturedValue), $capturedArrayMatches)) {
+                                   print_r($capturedArrayMatches['capture']);
                                    if(count($capturedArrayMatches['capture'])%2 == 0){
                                        for($i=0;$i<count($capturedArrayMatches['capture']);$i=$i+2){
                                            $capturedArray[$capturedArrayMatches['capture'][$i]] = $capturedArrayMatches['capture'][($i+1)];
                                        }
+                                   }else{
+                                       $capturedArray = 'error : some key of the array has no values';
+                                       throw new Exception('error : some key of the array in configfile has no values');
                                    }
                                }
                                $array[] =  $capturedArray;
                             }else if(preg_match("#\[((.*),?)*\]#", $capturedValue)){
                                $capturedArray = array();
-                               if (preg_match_all("#(?<capture>[0-9a-zA-Z:ÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ_+\- '\"]*)#", trim($capturedValue), $capturedArrayMatches)) {                                   foreach ($capturedArrayMatches['capture'] as $capturedArrayValue) {
+                               if (preg_match_all("#(?<capture>[0-9a-zA-Z:ÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ_+\- '\"]*)#", trim($capturedValue), $capturedArrayMatches)) {
+                                   print_r($capturedArrayMatches['capture']);
+                                   foreach ($capturedArrayMatches['capture'] as $capturedArrayValue) {
                                        $capturedArrayValue[] = $capturedArrayValue;
                                    } 
                                }          
