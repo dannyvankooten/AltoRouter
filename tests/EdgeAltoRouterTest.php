@@ -1,6 +1,5 @@
 <?php
 
-require 'AltoRouter.php';
 require 'EdgeAltoRouter.php';
 
 class EdgeAltoRouterDebug extends EdgeAltoRouter
