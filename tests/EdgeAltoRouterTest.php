@@ -72,7 +72,7 @@ class EdgeAltoRouterTest extends PHPUnit\Framework\TestCase
      */
     public function testSetRouteFromConfig()
     {
-        $configModelUrl = __DIR__.DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'route.config';
+        $configModelUrl = __DIR__.DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'route.model';
 
         $this->router->setRouteFromConfig($configModelUrl);
         
