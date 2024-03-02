@@ -4,6 +4,7 @@
     <rule ref="PSR2"/>
     <rule ref="Generic.Arrays.DisallowLongArraySyntax"/>
     <file>tests</file>
+    <file>AltoRouter.php</file>
     <file>EdgeAltoRouter.php</file>
     <file>examples/</file>
     <arg name="colors"/>
