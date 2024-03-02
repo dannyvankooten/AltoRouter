@@ -40,7 +40,7 @@ class EdgeAltoRouter extends AltoRouter
      * @throws Exception
      */
     public function setRouteFromConfig($configUrl){
-        if(file_exists($fileUrl)){
+        if(file_exists($configUrl)){
             $path_parts = pathinfo($configUrl);
             switch($path_parts['extension']){
                 case 'model':
