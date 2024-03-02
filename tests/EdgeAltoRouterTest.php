@@ -15,41 +15,6 @@ class EdgeAltoRouterDebug extends EdgeAltoRouter
     }
 }
 
-class SimpleTraversable implements Iterator
-{
-
-    protected $_position = 0;
-
-    protected $_data = [
-        ['GET', '/foo', 'foo_action', null],
-        ['POST', '/bar', 'bar_action', 'second_route']
-    ];
-
-    #[\ReturnTypeWillChange]
-    public function current()
-    {
-        return $this->_data[$this->_position];
-    }
-
-    #[\ReturnTypeWillChange]
-    public function key()
-    {
-        return $this->_position;
-    }
-    public function next() : void
-    {
-        ++$this->_position;
-    }
-    public function rewind() : void
-    {
-        $this->_position = 0;
-    }
-    public function valid() : bool
-    {
-        return isset($this->_data[$this->_position]);
-    }
-}
-
 class EdgeAltoRouterTest extends PHPUnit\Framework\TestCase
 {
     /**
