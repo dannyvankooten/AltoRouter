@@ -10,7 +10,7 @@ if (file_exists($_SERVER['SCRIPT_FILENAME']) && pathinfo($_SERVER['SCRIPT_FILENA
     return;
 }
 
-$router = new EdgeAltoRouter(configModelUrl: __DIR__.DIRECTORY_SEPARATOR."routes.yml");
+$router = new EdgeAltoRouter(configModelUrl: __DIR__.DIRECTORY_SEPARATOR."routes.csv");
 $router->setBasePath('/EdgeAltoRouter/examples/basic');
 
 // match current request

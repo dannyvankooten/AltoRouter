@@ -1,0 +1,24 @@
+{
+    "routes": {
+        "home": [
+            "GET|POST",
+            "/",
+            "home#index"
+        ],
+        "": [
+            "GET",
+            "/users/",
+            { "c": "UserController", "a": "ListAction" }
+        ],    
+        "users_show": [
+            "GET",
+            "/users/[i:id]",
+            "users#show"
+        ],
+        "users_do": [
+            "POST",
+            "/users/[i:id]/[delete|update:action]",
+            "usersController#doAction"
+        ]
+    }
+}
