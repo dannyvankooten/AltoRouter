@@ -24,6 +24,7 @@ class EdgeAltoRouter extends AltoRouter
      * @param string $basePath
      * @param array $matchTypes
      * @param string $configModelUrl
+     * @param int $usage
      * @throws Exception
      */
     public function __construct(array $routes = [], string $basePath = '', array $matchTypes = [], string $configModelUrl = __DIR__.DIRECTORY_SEPARATOR.'routes.model', int $usage = self::USE_MEMORY)
@@ -40,6 +41,7 @@ class EdgeAltoRouter extends AltoRouter
      * Load all routes in one call from a multiple type of config file.
      *
      * @param string $configUrl
+     * @param int $usage
      * @throws Exception
      */
     public function setRouteFromConfig($configUrl, $usage){
@@ -67,6 +69,7 @@ class EdgeAltoRouter extends AltoRouter
      * @link: .model is a filetype invention of Emmanuel ROY, initialy developed for SAND-framework --> https://github.com/Acksop/SAND-framework
      *
      * @param string $configUrl
+     * @param int $usage
      * @throws Exception
      */
     public function mappingRouteFromConfigModelFile($fileUrl, $usage){
