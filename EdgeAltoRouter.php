@@ -14,6 +14,9 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 class EdgeAltoRouter extends AltoRouter
 {
 
+    static const USE_SPEED = 0; //Need less cpu but consumes more electric energy
+    static const USE_MEMORY = 1; //Need more cpu but consumes less electric energy
+    
     /**
      * Create router in one call from multiple type of configfile.
      *
@@ -23,13 +26,13 @@ class EdgeAltoRouter extends AltoRouter
      * @param string $configModelUrl
      * @throws Exception
      */
-    public function __construct(array $routes = [], string $basePath = '', array $matchTypes = [], string $configModelUrl = __DIR__.DIRECTORY_SEPARATOR.'routes.model')
+    public function __construct(array $routes = [], string $basePath = '', array $matchTypes = [], string $configModelUrl = __DIR__.DIRECTORY_SEPARATOR.'routes.model', int $usage = self::USE_MEMORY)
     {
         $this->addRoutes($routes);
         $this->setBasePath($basePath);
         $this->addMatchTypes($matchTypes);
         if(file_exists($configModelUrl)){
-            $this->setRouteFromConfig($configModelUrl);
+            $this->setRouteFromConfig($configModelUrl,$usage);
         }
     }
 
@@ -39,12 +42,12 @@ class EdgeAltoRouter extends AltoRouter
      * @param string $configUrl
      * @throws Exception
      */
-    public function setRouteFromConfig($configUrl){
+    public function setRouteFromConfig($configUrl, $usage){
         if(file_exists($configUrl)){
             $path_parts = pathinfo($configUrl);
             switch($path_parts['extension']){
                 case 'model':
-                    $this->mappingRouteFromConfigModelFile($configUrl);
+                    $this->mappingRouteFromConfigModelFile($configUrl, $usage);
                 break;
                 case 'csv':
                 case 'json':
@@ -66,9 +69,12 @@ class EdgeAltoRouter extends AltoRouter
      * @param string $configUrl
      * @throws Exception
      */
-    public function mappingRouteFromConfigModelFile($fileUrl){
+    public function mappingRouteFromConfigModelFile($fileUrl, $usage){
         if(file_exists($fileUrl)){
                 $file = file($fileUrl);
+                if($usage == self::USE_MEMORY){
+                    $bigArray = array();
+                 }
                 foreach ($file as $line_num => $line) {
                     //searching pattern parameters
                     if (preg_match("#[ ]*([a-zA-Z_+ ]*)[:][ ]*([a-zA-Z0-9:\/\\ÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ_+\-'\"\{\,\ \}\(\)\[\]\|=>\#]*[ ]*)#", $line, $matches)) {
@@ -111,11 +117,18 @@ class EdgeAltoRouter extends AltoRouter
                                     }
                                 }
                                 $array[] = trim($matches[1]);
-                                $this->map(...$array);
+                                if($usage == self::USE_SPEED){
+                                    $this->map(...$array);
+                                }else{
+                                    $bigArray[] = $array;
+                                }
                                 continue;
                             }
                         }
                     }
+                }
+                if($usage == self::USE_MEMORY){
+                    $this->addRoutes($bigArray);
                 }
             }else{
                 throw new RuntimeException('error : configfile is not found');
