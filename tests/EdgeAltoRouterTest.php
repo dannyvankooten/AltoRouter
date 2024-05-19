@@ -34,7 +34,7 @@ class EdgeAltoRouterTest extends PHPUnit\Framework\TestCase
     /**
      * @covers EdgeAltoRouter::setRouteFromConfig
      */
-    public function testSetRouteFromConfig()
+    public function testSetRouteFromConfigSpeedNeeded()
     {
         $configModelUrl = __DIR__.DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'route.model';
 
@@ -91,4 +91,66 @@ class EdgeAltoRouterTest extends PHPUnit\Framework\TestCase
         ], $this->router->match('/users/1/delete', 'POST'));
 
     }
+
+    /**
+     * @covers EdgeAltoRouter::setRouteFromConfig
+     */
+    public function testSetRouteFromConfigMemoryNeeded()
+    {
+        $configModelUrl = __DIR__.DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'route.model';
+
+        $this->router->setRouteFromConfig($configModelUrl,self::USE_MEMORY);
+        
+        $routes = $this->router->getRoutes();
+
+        /*
+        print_r($routes);
+        print_r($this->router->match('/home#index', 'GET'));
+        print_r($this->router->match('/users/1', 'GET'));
+        */
+
+        $method = 'GET';
+        $route = '/users/';
+        $target = array('c' => 'UserController','a' => 'ListAction')
+        ;
+        $this->assertEquals([$method, $route, $target, ''], $routes[1]);
+
+        $this->assertEquals([
+            'target' => 'home#index',
+            'params' => [],
+            'name' => 'home'
+        ], $this->router->match('/', 'GET'));
+
+        $this->assertEquals([
+            'target' => 'home#index',
+            'params' => [],
+            'name' => 'home'
+        ], $this->router->match('/', 'POST'));
+
+        $this->assertEquals([
+            'target' => ['c' => 'UserController','a' => 'ListAction'],
+            'params' => [],
+            'name' => ''
+        ], $this->router->match('/users/', 'GET'));
+
+
+        $this->assertEquals([
+            'target' => 'users#show',
+            'params' => [
+                'id' => 1
+            ],
+            'name' => 'users_show'
+        ], $this->router->match('/users/1', 'GET'));
+
+        $this->assertEquals([
+            'target' => 'usersController#doAction',
+            'params' => [
+                'id' => 1,
+                'action' => 'delete'
+            ],
+            'name' => 'users_do'
+        ], $this->router->match('/users/1/delete', 'POST'));
+
+    }
+    
 }
