@@ -38,7 +38,7 @@ class EdgeAltoRouterTest extends PHPUnit\Framework\TestCase
     {
         $configModelUrl = __DIR__.DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'route.model';
 
-        $this->router->setRouteFromConfig($configModelUrl,self::USE_SPEED);
+        $this->router->setRouteFromConfig($configModelUrl,EdgeAltoRouter::USE_SPEED);
         
         $routes = $this->router->getRoutes();
 
@@ -99,7 +99,7 @@ class EdgeAltoRouterTest extends PHPUnit\Framework\TestCase
     {
         $configModelUrl = __DIR__.DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'route.model';
 
-        $this->router->setRouteFromConfig($configModelUrl,self::USE_MEMORY);
+        $this->router->setRouteFromConfig($configModelUrl,EdgeAltoRouter::USE_MEMORY);
         
         $routes = $this->router->getRoutes();
 
