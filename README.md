@@ -37,6 +37,7 @@ echo $router->generate('home'); // Output: "home#index"
 * Flexible regular expression routing (inspired by [Sinatra](http://www.sinatrarb.com/))
 * Custom regexes
 * Support a config file who is like Yaml
+* Configure your style of use : Memory or Speed
 
 ## Getting started
 
