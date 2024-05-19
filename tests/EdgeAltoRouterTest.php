@@ -38,7 +38,7 @@ class EdgeAltoRouterTest extends PHPUnit\Framework\TestCase
     {
         $configModelUrl = __DIR__.DIRECTORY_SEPARATOR.'config'.DIRECTORY_SEPARATOR.'route.model';
 
-        $this->router->setRouteFromConfig($configModelUrl);
+        $this->router->setRouteFromConfig($configModelUrl,self::NEED_SPEED);
         
         $routes = $this->router->getRoutes();
 
