@@ -14,8 +14,8 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 class EdgeAltoRouter extends AltoRouter
 {
 
-    static const USE_SPEED = 0; //Need less cpu but consumes more electric energy
-    static const USE_MEMORY = 1; //Need more cpu but consumes less electric energy
+    const USE_SPEED = 0; //Need less cpu but consumes more electric energy
+    const USE_MEMORY = 1; //Need more cpu but consumes less electric energy
     
     /**
      * Create router in one call from multiple type of configfile.
