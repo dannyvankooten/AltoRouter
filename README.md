@@ -1,23 +1,32 @@
-# AltoRouter  ![PHP status](https://github.com/dannyvankooten/AltoRouter/workflows/PHP/badge.svg) [![Latest Stable Version](https://poser.pugx.org/altorouter/altorouter/v/stable.svg)](https://packagist.org/packages/altorouter/altorouter) [![License](https://poser.pugx.org/altorouter/altorouter/license.svg)](https://packagist.org/packages/altorouter/altorouter)
+# EdgeAltoRouter  ![PHP status](https://github.com/Acksop/EdgeAltoRouter/workflows/PHP/badge.svg)
 
-AltoRouter is a small but powerful routing class, heavily inspired by [klein.php](https://github.com/chriso/klein.php/).
+EdgeAltoRouter is a small but powerful routing class, forked from [dannyvankooten.php](https://github.com/dannyvankooten/AltoRouter/) with an important addition : a config model file.
 
 ```php
-$router = new AltoRouter();
+$router = new EdgeAltoRouter(configModelUrl : __DIR__ . DIRECTORY_SEPARATOR . 'route.config');
+$router->setBasePath(BASE_PATH);
 
-// map homepage
-$router->map('GET', '/', function() {
-    require __DIR__ . '/views/home.php';
-});
+$match = $router->match();
 
-// dynamic named route
-$router->map('GET|POST', '/users/[i:id]/', function($id) {
-  $user = .....
-  require __DIR__ . '/views/user/details.php';
-}, 'user-details');
+/*
+ * $match may is like :
+ * [
+ *   'target' => 'home#index',
+ *   'params' => [],
+ *   'name' => 'home'
+ * ]
+ */
 
-// echo URL to user-details page for ID 5
-echo $router->generate('user-details', ['id' => 5]); // Output: "/users/5"
+if( is_array($match) && is_callable( $match['target'] ) ) {
+    call_user_func_array( $match['name'], $match['params'] ); 
+} else {
+    // no route was matched
+    header( $_SERVER["SERVER_PROTOCOL"] . ' 404 Not Found');
+}
+
+
+// echo URL to home at index
+echo $router->generate('home'); // Output: "home#index"
 ```
 
 ## Features
@@ -27,10 +36,14 @@ echo $router->generate('user-details', ['id' => 5]); // Output: "/users/5"
 * Reversed routing
 * Flexible regular expression routing (inspired by [Sinatra](http://www.sinatrarb.com/))
 * Custom regexes
+* Support a config file who is like Yaml
+* Configure your style of use : Memory or Speed
 
 ## Getting started
 
-You need PHP >= 7.3 to use AltoRouter, although we highly recommend you [use an officially supported PHP version](https://secure.php.net/supported-versions.php) that is not EOL.
+You need PHP >= 8.0 to use EdgeAltoRouter, although we highly recommend you [use an officially supported PHP version](https://secure.php.net/supported-versions.php) that is not EOL.
+
+## Official Documentation of the forked AltoRouter
 
 - [Install AltoRouter](https://dannyvankooten.github.io/AltoRouter//usage/install.html)
 - [Rewrite all requests to AltoRouter](https://dannyvankooten.github.io/AltoRouter//usage/rewrite-requests.html)
@@ -43,12 +56,15 @@ You need PHP >= 7.3 to use AltoRouter, although we highly recommend you [use an 
 - [Koen Punt](https://github.com/koenpunt)
 - [John Long](https://github.com/adduc)
 - [Niahoo Osef](https://github.com/niahoo)
+- [Emmanuel ROY](https://github.com/acksop)
 
 ## License
 
 MIT License
 
 Copyright (c) 2012 Danny van Kooten <hi@dannyvankooten.com>
+
+Addition/modification 2024 ROY Emmanuel <emmanuel.roy@infoartsmedia.fr>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 

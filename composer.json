@@ -1,8 +1,8 @@
 {
-   "name": "altorouter/altorouter",
-   "description": "A lightning fast router for PHP",
-   "keywords": ["router", "routing", "lightweight"],
-   "homepage": "https://github.com/dannyvankooten/AltoRouter",
+   "name": "edgealtorouter/edgealtorouter",
+   "description": "A lightning fast router for PHP with config file",
+   "keywords": ["router", "routing", "lightweight","configfile"],
+   "homepage": "https://github.com/Acksop/EdgeAltoRouter",
    "license": "MIT",
    "authors": [
       {
@@ -17,17 +17,21 @@
       {
          "name": "niahoo",
          "homepage": "https://github.com/niahoo"
+      },
+      {
+         "name": "Emmanuel ROY",
+         "homepage": "https://github.com/Acksop"
       }
    ],
    "require": {
-      "php": ">=7.3"
+      "php": ">=8.0.0"
    },
    "require-dev": {
       "phpunit/phpunit": "9.6.*",
       "squizlabs/php_codesniffer": "3.6.2"
    },
    "autoload": {
-      "classmap": ["AltoRouter.php"]
+      "classmap": ["AltoRouter.php","EdgeAltoRouter.php"]
    },
    "scripts": {
      "test": "vendor/bin/phpunit"

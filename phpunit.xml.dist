@@ -3,6 +3,7 @@
   <coverage>
     <include>
       <file>./AltoRouter.php</file>
+      <file>./EdgeAltoRouter.php</file>
     </include>
     <report>
       <clover outputFile="build/logs/clover.xml"/>

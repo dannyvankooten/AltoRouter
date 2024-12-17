@@ -1,0 +1,4 @@
+'GET|POST', '/', 'home#index','home'
+'GET', '/users/', ['c' => 'UserController', 'a' => 'ListAction']
+'GET', '/users/[i:id]', 'users#show','users_show'
+'POST', '/users/[i:id]/[delete|update:action]', 'usersController#doAction','users_do'
