@@ -117,7 +117,7 @@ class AltoRouter
      * @param string $name Optional name of this route. Supply if you want to reverse route this url in your application.
      * @throws Exception
      */
-    public function map(string $method, string $route, $target, string $name = null)
+    public function map(string $method, string $route, $target, ?string $name = null)
     {
 
         $this->routes[] = [$method, $route, $target, $name];
@@ -184,7 +184,7 @@ class AltoRouter
      * @param string $requestMethod
      * @return array|boolean Array with route information on success, false on failure (no match).
      */
-    public function match(string $requestUrl = null, string $requestMethod = null)
+    public function match(?string $requestUrl = null, ?string $requestMethod = null)
     {
 
         $params = [];
