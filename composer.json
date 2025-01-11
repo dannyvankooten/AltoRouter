@@ -30,7 +30,8 @@
       "classmap": ["AltoRouter.php"]
    },
    "scripts": {
-      "test": "vendor/bin/phpunit",
-      "check-syntax": "find . -name '*.php' -not -path './vendor/*' -print0 | xargs -0 -n1 php --define error_reporting=-1 -l"
+      "test": "phpunit",
+      "check-syntax": "find . -name '*.php' -not -path './vendor/*' -print0 | xargs -0 -n1 php --define error_reporting=-1 -l",
+      "check-codestyle": "phpcs -ns"
    }
 }

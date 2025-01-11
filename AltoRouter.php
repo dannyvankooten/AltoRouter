@@ -1,4 +1,5 @@
 <?php
+
 /*
 MIT License
 
@@ -13,7 +14,6 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 class AltoRouter
 {
-
     /**
      * @var array Array of all routes (incl. named routes).
      */
@@ -202,7 +202,7 @@ class AltoRouter
             $requestUrl = substr($requestUrl, 0, $strpos);
         }
 
-        $lastRequestUrlChar = $requestUrl ? $requestUrl[strlen($requestUrl)-1] : '';
+        $lastRequestUrlChar = $requestUrl ? $requestUrl[strlen($requestUrl) - 1] : '';
 
         // set Request Method if it isn't passed as a parameter
         if ($requestMethod === null) {
@@ -232,7 +232,7 @@ class AltoRouter
             } else {
                 // Compare longest non-param string with url before moving on to regex
                 // Check if last character before param is a slash, because it could be optional if param is optional too (see https://github.com/dannyvankooten/AltoRouter/issues/241)
-                if (strncmp($requestUrl, $route, $position) !== 0 && ($lastRequestUrlChar === '/' || $route[$position-1] !== '/')) {
+                if (strncmp($requestUrl, $route, $position) !== 0 && ($lastRequestUrlChar === '/' || $route[$position - 1] !== '/')) {
                     continue;
                 }
 

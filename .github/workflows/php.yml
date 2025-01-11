@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php-versions: [ '7.3', 'highest' ]
+        php-versions: [ '7.3',  'highest' ]
 
     steps:
       - uses: actions/checkout@v2
@@ -34,6 +34,9 @@ jobs:
       - name: Install dependencies
         if: steps.composer-cache.outputs.cache-hit != 'true'
         run: composer install --no-progress
+
+      - name: Check codestyle
+        run: composer run-script check-codestyle
 
       - name: Run test suite
         run: composer run-script test
