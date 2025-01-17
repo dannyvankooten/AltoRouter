@@ -194,6 +194,14 @@ class AltoRouter
             $requestUrl = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '/';
         }
 
+        // check if basePath is in requestUrl 
+        // exemple of problem : space in basePath will be replace be %20 in requestUrl
+        // so next check substr() will not work
+        if (strpos($requestUrl, $this->basePath) !== 0 ){
+            throw new Exception("Error Processing Request : requestUrl is not starting with basePath. Do you forget to use setBasePath() OR basePath contains illegal characters", 1);
+        }
+
+
         // strip base path from request url
         $requestUrl = substr($requestUrl, strlen($this->basePath));
 
